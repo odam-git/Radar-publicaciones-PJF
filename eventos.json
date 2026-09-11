@@ -1,0 +1,189 @@
+[
+  {
+    "id": "cpeum-2024-09-15",
+    "fecha": "2024-09-15",
+    "instrumentos": ["CPEUM"],
+    "tipo": "Reforma constitucional",
+    "titulo": "Reforma constitucional en materia del Poder Judicial de la Federación",
+    "resumen": "Crea el Órgano de Administración Judicial (OAJ) y el Tribunal de Disciplina Judicial en sustitución del Consejo de la Judicatura Federal; introduce la elección popular de personas juzgadoras y reduce a nueve el número de ministros de la SCJN.",
+    "liga": "https://www.dof.gob.mx/nota_detalle.php?codigo=5738985&fecha=15%2F09%2F2024",
+    "fuente": "DOF (edición vespertina)",
+    "confirmado": true
+  },
+  {
+    "id": "cnpp-2024-01-03",
+    "fecha": "2024-01-03",
+    "instrumentos": ["CNPP"],
+    "tipo": "Reforma (decreto 09)",
+    "titulo": "Reforma a los artículos 109 y 113 del Código Nacional de Procedimientos Penales",
+    "resumen": "[DATO FALTANTE: alcance específico del decreto — no se consultó el texto íntegro]",
+    "liga": "https://www.diputados.gob.mx/LeyesBiblio/ref/cnpp/CNPP_ref09_03ene24.pdf",
+    "fuente": "DOF",
+    "confirmado": true
+  },
+  {
+    "id": "cnpp-2024-01-26",
+    "fecha": "2024-01-26",
+    "instrumentos": ["CNPP"],
+    "tipo": "Reforma (decreto 10)",
+    "titulo": "Reforma y adición a los artículos 258 y 467 del CNPP en materia de recurso de apelación",
+    "resumen": "Ajustes al recurso de apelación dentro del procedimiento penal acusatorio.",
+    "liga": "https://www.diputados.gob.mx/LeyesBiblio/ref/cnpp/CNPP_ref10_26ene24.pdf",
+    "fuente": "DOF",
+    "confirmado": true
+  },
+  {
+    "id": "cnpcf-2024-06-04",
+    "fecha": "2024-06-04",
+    "instrumentos": ["CNPCF"],
+    "tipo": "Reforma (decreto 01)",
+    "titulo": "Adición de los artículos 314 y 1144 del Código Nacional de Procedimientos Civiles y Familiares",
+    "resumen": "Primera reforma al CNPCF tras su expedición original (DOF 7-jun-2023).",
+    "liga": "https://www.diputados.gob.mx/LeyesBiblio/ref/cnpcf/CNPCF_ref01_04jun24.pdf",
+    "fuente": "DOF",
+    "confirmado": true
+  },
+  {
+    "id": "lopjf-2024-12-20",
+    "fecha": "2024-12-20",
+    "instrumentos": ["LOPJF"],
+    "tipo": "Publicación original",
+    "titulo": "Se expide la Ley Orgánica del Poder Judicial de la Federación",
+    "resumen": "Ley Orgánica que desarrolla el nuevo diseño institucional del PJF derivado de la reforma constitucional de septiembre de 2024 (OAJ, Tribunal de Disciplina Judicial).",
+    "liga": "https://www.diputados.gob.mx/LeyesBiblio/ref/lopjf.htm",
+    "fuente": "diputados.gob.mx (texto conforme a DOF)",
+    "confirmado": true
+  },
+  {
+    "id": "cnpcf-2024-12-16",
+    "fecha": "2024-12-16",
+    "instrumentos": ["CNPCF"],
+    "tipo": "Reforma (decreto 02)",
+    "titulo": "Reforma a la Ley General para la Igualdad entre Mujeres y Hombres, la Ley General de Acceso de las Mujeres a una Vida Libre de Violencia y el CNPCF",
+    "resumen": "Paquete de reformas en materia de igualdad y acceso a una vida libre de violencia que modifica también el CNPCF.",
+    "liga": "https://www.diputados.gob.mx/LeyesBiblio/ref/cnpcf/CNPCF_ref02_16dic24.pdf",
+    "fuente": "DOF",
+    "confirmado": true
+  },
+  {
+    "id": "cnpp-2024-12-16",
+    "fecha": "2024-12-16",
+    "instrumentos": ["CNPP"],
+    "tipo": "Reforma (decreto 11)",
+    "titulo": "Reforma al CNPP en materia de medidas de protección y derecho de las mujeres a una vida libre de violencia",
+    "resumen": "Decreto publicado el mismo día que la reforma paralela al CNPCF (ver entrada anterior), dentro del mismo paquete legislativo de género.",
+    "liga": "https://www.diputados.gob.mx/LeyesBiblio/ref/cnpp/CNPP_ref11_16dic24.pdf",
+    "fuente": "DOF",
+    "confirmado": true
+  },
+  {
+    "id": "amparo-2025-03-13",
+    "fecha": "2025-03-13",
+    "instrumentos": ["Ley de Amparo"],
+    "tipo": "Reforma (decreto 09)",
+    "titulo": "Reforma y derogación de diversas disposiciones de la Ley de Amparo",
+    "resumen": "[DATO FALTANTE: alcance específico del decreto — no se consultó el texto íntegro]",
+    "liga": "https://www.diputados.gob.mx/LeyesBiblio/ref/lamp/LAmp_ref09_13mar25.pdf",
+    "fuente": "DOF",
+    "confirmado": true
+  },
+  {
+    "id": "amparo-2025-10-16",
+    "fecha": "2025-10-16",
+    "instrumentos": ["Ley de Amparo"],
+    "tipo": "Reforma (decreto 10)",
+    "titulo": "Reforma a la Ley de Amparo, el Código Fiscal de la Federación y la Ley Orgánica del Tribunal Federal de Justicia Administrativa",
+    "resumen": "Decreto multi-ordenamiento; el componente de Ley de Amparo es el relevante para el radar.",
+    "liga": "https://www.diputados.gob.mx/LeyesBiblio/ref/lamp/LAmp_ref10_16oct25.pdf",
+    "fuente": "DOF",
+    "confirmado": true
+  },
+  {
+    "id": "cnpp-2025-11-14",
+    "fecha": "2025-11-14",
+    "instrumentos": ["CNPP"],
+    "tipo": "Reforma (decreto 12)",
+    "titulo": "Reforma al Código Nacional de Procedimientos Penales",
+    "resumen": "[DATO FALTANTE: alcance específico del decreto — no se consultó el texto íntegro]",
+    "liga": "https://www.diputados.gob.mx/LeyesBiblio/ref/cnpp/CNPP_ref12_14nov25.pdf",
+    "fuente": "DOF",
+    "confirmado": true
+  },
+  {
+    "id": "lopjf-cnpp-2025-11-28",
+    "fecha": "2025-11-28",
+    "instrumentos": ["LOPJF", "CNPP"],
+    "tipo": "Reforma (decreto multi-ley)",
+    "titulo": "Ley General para Prevenir, Investigar y Sancionar los Delitos en Materia de Extorsión — reforma también la LOPJF y el CNPP",
+    "resumen": "Decreto que expide la ley general en materia de extorsión y, de manera adicional, reforma la LOPJF, el CNPP (arts. 167 y 277), el Código Penal Federal, la Ley Federal contra la Delincuencia Organizada y la Ley Nacional de Extinción de Dominio.",
+    "liga": "https://www.diputados.gob.mx/LeyesBiblio/ref/lopjf.htm",
+    "fuente": "diputados.gob.mx (texto conforme a DOF)",
+    "confirmado": true
+  },
+  {
+    "id": "oaj-2026-01-12",
+    "fecha": "2026-01-12",
+    "instrumentos": ["OAJ"],
+    "tipo": "Acuerdo General del Pleno",
+    "titulo": "Acuerdo General del Pleno del OAJ en materia de Carrera Judicial y Especialización",
+    "resumen": "[VERIFICAR: alcance exacto del acuerdo — fecha y código DOF confirmados, no se pudo extraer el texto íntegro en esta consulta]",
+    "liga": "https://dof.gob.mx/nota_detalle.php?codigo=5778108&fecha=12%2F01%2F2026",
+    "fuente": "DOF",
+    "confirmado": true
+  },
+  {
+    "id": "cnpcf-2026-01-15",
+    "fecha": "2026-01-15",
+    "instrumentos": ["CNPCF"],
+    "tipo": "Reforma (decreto 03)",
+    "titulo": "Reforma multi-ley (13 ordenamientos) que incluye al CNPCF",
+    "resumen": "Decreto que reforma trece ordenamientos —entre ellos la Ley General para la Igualdad entre Mujeres y Hombres y la Ley General de Acceso de las Mujeres a una Vida Libre de Violencia— e incluye al Código Nacional de Procedimientos Civiles y Familiares. Entrada en vigor escalonada: 1-jun-2026 y 15-nov-2026 según el tipo de procedimiento.",
+    "liga": "https://www.diputados.gob.mx/LeyesBiblio/ref/cnpcf/CNPCF_ref03_15ene26.pdf",
+    "fuente": "DOF",
+    "confirmado": true
+  },
+  {
+    "id": "oaj-2026-04-17",
+    "fecha": "2026-04-17",
+    "instrumentos": ["OAJ"],
+    "tipo": "Acuerdo General AG-POAJ-006/2026",
+    "titulo": "Acuerdo General AG-POAJ-006/2026 del Pleno del OAJ",
+    "resumen": "[VERIFICAR: alcance exacto del acuerdo — fecha confirmada vía publicación del CJF (edición vespertina), contenido específico no verificado en esta consulta]",
+    "liga": "https://apps.cjf.gob.mx/normativa/Recursos/2026-6-11-OAJ_V01.PDF",
+    "fuente": "CJF / DOF (edición vespertina)",
+    "confirmado": true
+  },
+  {
+    "id": "oaj-2026-06-24",
+    "fecha": "2026-06-24",
+    "instrumentos": ["OAJ"],
+    "tipo": "Acuerdo General AG-POAJ-009/2026",
+    "titulo": "Acuerdo General AG-POAJ-009/2026 del Pleno del OAJ sobre archivos judiciales",
+    "resumen": "Establece normas para la organización, administración y custodia de los archivos generados por los órganos jurisdiccionales del PJF.",
+    "liga": "https://apps.cjf.gob.mx/normativa/Recursos/2026-9-14-OAJ_V01.PDF",
+    "fuente": "CJF / DOF",
+    "confirmado": true
+  },
+  {
+    "id": "tdj-2026-07-10",
+    "fecha": "2026-07-10",
+    "instrumentos": ["Tribunal de Disciplina Judicial"],
+    "tipo": "Reglamento Interior",
+    "titulo": "Reglamento Interior del Tribunal de Disciplina Judicial",
+    "resumen": "Regula la organización y funcionamiento del Tribunal de Disciplina Judicial, órgano creado por la reforma constitucional de 2024. No es un órgano del OAJ pero forma parte del nuevo diseño institucional del PJF.",
+    "liga": "https://dof.gob.mx/nota_detalle.php?codigo=5793283&fecha=10%2F07%2F2026",
+    "fuente": "DOF",
+    "confirmado": true
+  },
+  {
+    "id": "oaj-reglamento-interior-pendiente",
+    "fecha": null,
+    "instrumentos": ["OAJ"],
+    "tipo": "Reglamento Interior (borrador — no confirmado en DOF)",
+    "titulo": "Reglamento Interior del Órgano de Administración Judicial",
+    "resumen": "[DATO FALTANTE: fecha de publicación en el DOF. Solo se localizó una nota periodística (abril de 2026) que reporta la presentación del proyecto en sesión extraordinaria del Pleno del OAJ; no se encontró evidencia de que ya haya sido publicado en el DOF. Verificar directamente en dof.gob.mx antes de tratarlo como vigente.]",
+    "liga": "https://nayaritnoticias.com/2026/04/07/presentan-el-reglamento-interior-del-organo-de-administracion-judicial/",
+    "fuente": "Nota periodística (NO oficial) — pendiente de verificación en DOF",
+    "confirmado": false
+  }
+]
