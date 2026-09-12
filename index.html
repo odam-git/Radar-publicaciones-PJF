@@ -231,6 +231,66 @@
     .layout{grid-template-columns:1fr;}
     aside{position:static;}
   }
+  #preview-flotante{
+    position:fixed;
+    z-index:1000;
+    width:360px;
+    max-width:90vw;
+    background:var(--tarjeta);
+    border:1px solid var(--borde);
+    border-radius:8px;
+    box-shadow:0 8px 24px rgba(13,43,90,0.18);
+    display:none;
+    overflow:hidden;
+  }
+  #preview-flotante.visible{display:block;}
+  .preview-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:8px;
+    padding:10px 12px;
+    border-bottom:1px solid var(--borde);
+    background:var(--fondo);
+  }
+  .preview-titulo{
+    font-size:12.5px;
+    font-weight:600;
+    line-height:1.35;
+    margin:0;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .preview-abrir{
+    font-size:11.5px;
+    color:var(--azul-claro);
+    text-decoration:none;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .preview-abrir:hover{text-decoration:underline;}
+  .preview-cuerpo{
+    height:280px;
+    background:#EEF1F5;
+  }
+  .preview-iframe{
+    width:100%;
+    height:100%;
+    border:0;
+  }
+  .preview-nota{
+    font-size:11px;
+    color:var(--gris);
+    padding:8px 12px;
+    border-top:1px solid var(--borde);
+    background:var(--fondo);
+    line-height:1.4;
+  }
+  @media (max-width:760px){
+    #preview-flotante{display:none !important;}
+  }
 </style>
 </head>
 <body>
@@ -267,6 +327,17 @@
 
 <footer>Radar de normativa PJF/OAJ — dataset en <code>data/eventos.json</code>. Verificar siempre contra la fuente oficial antes de citar.</footer>
 
+<div id="preview-flotante">
+  <div class="preview-header">
+    <p class="preview-titulo"></p>
+    <a class="preview-abrir" href="#" target="_blank" rel="noopener">Abrir ↗</a>
+  </div>
+  <div class="preview-cuerpo">
+    <iframe class="preview-iframe" src="" loading="lazy"></iframe>
+  </div>
+  <div class="preview-nota">Algunos sitios oficiales no permiten mostrarse aquí dentro. Si el recuadro aparece en blanco, usa "Abrir ↗" para ver el documento directamente.</div>
+</div>
+
 <script>
 const EVENTOS_EMBEBIDOS = [
   {"id":"cpeum-2024-09-15","fecha":"2024-09-15","instrumentos":["CPEUM"],"tipo":"Reforma constitucional","titulo":"Reforma constitucional en materia del Poder Judicial de la Federación","resumen":"Crea el Órgano de Administración Judicial (OAJ) y el Tribunal de Disciplina Judicial en sustitución del Consejo de la Judicatura Federal; introduce la elección popular de personas juzgadoras y reduce a nueve el número de ministros de la SCJN.","liga":"https://www.dof.gob.mx/nota_detalle.php?codigo=5738985&fecha=15%2F09%2F2024","fuente":"DOF (edición vespertina)","confirmado":true},
@@ -284,13 +355,13 @@ const EVENTOS_EMBEBIDOS = [
   {"id":"cnpcf-2026-01-15","fecha":"2026-01-15","instrumentos":["CNPCF"],"tipo":"Reforma (decreto 03)","titulo":"Reforma multi-ley (13 ordenamientos) que incluye al CNPCF","resumen":"Decreto que reforma trece ordenamientos —entre ellos la Ley General para la Igualdad entre Mujeres y Hombres y la Ley General de Acceso de las Mujeres a una Vida Libre de Violencia— e incluye al Código Nacional de Procedimientos Civiles y Familiares. Entrada en vigor escalonada: 1-jun-2026 y 15-nov-2026 según el tipo de procedimiento.","liga":"https://www.diputados.gob.mx/LeyesBiblio/ref/cnpcf/CNPCF_ref03_15ene26.pdf","fuente":"DOF","confirmado":true},
   {"id":"oaj-2026-04-17","fecha":"2026-04-17","instrumentos":["OAJ"],"tipo":"Acuerdo General AG-POAJ-006/2026","titulo":"Acuerdo General AG-POAJ-006/2026 del Pleno del OAJ","resumen":"[VERIFICAR: alcance exacto del acuerdo — fecha confirmada vía publicación del CJF (edición vespertina), contenido específico no verificado en esta consulta]","liga":"https://apps.cjf.gob.mx/normativa/Recursos/2026-6-11-OAJ_V01.PDF","fuente":"CJF / DOF (edición vespertina)","confirmado":true},
   {"id":"oaj-2026-06-24","fecha":"2026-06-24","instrumentos":["OAJ"],"tipo":"Acuerdo General AG-POAJ-009/2026","titulo":"Acuerdo General AG-POAJ-009/2026 del Pleno del OAJ sobre archivos judiciales","resumen":"Establece normas para la organización, administración y custodia de los archivos generados por los órganos jurisdiccionales del PJF.","liga":"https://apps.cjf.gob.mx/normativa/Recursos/2026-9-14-OAJ_V01.PDF","fuente":"CJF / DOF","confirmado":true},
-  {"id":"tdj-2026-07-10","fecha":"2026-07-10","instrumentos":["Tribunal de Disciplina Judicial"],"tipo":"Reglamento Interior","titulo":"Reglamento Interior del Tribunal de Disciplina Judicial","resumen":"Regula la organización y funcionamiento del Tribunal de Disciplina Judicial, órgano creado por la reforma constitucional de 2024. No es un órgano del OAJ pero forma parte del nuevo diseño institucional del PJF.","liga":"https://dof.gob.mx/nota_detalle.php?codigo=5793283&fecha=10%2F07%2F2026","fuente":"DOF","confirmado":true},
-  {"id":"oaj-reglamento-interior-pendiente","fecha":null,"instrumentos":["OAJ"],"tipo":"Reglamento Interior (borrador — no confirmado en DOF)","titulo":"Reglamento Interior del Órgano de Administración Judicial","resumen":"[DATO FALTANTE: fecha de publicación en el DOF. Solo se localizó una nota periodística (abril de 2026) que reporta la presentación del proyecto en sesión extraordinaria del Pleno del OAJ; no se encontró evidencia de que ya haya sido publicado en el DOF. Verificar directamente en dof.gob.mx antes de tratarlo como vigente.]","liga":"https://nayaritnoticias.com/2026/04/07/presentan-el-reglamento-interior-del-organo-de-administracion-judicial/","fuente":"Nota periodística (NO oficial) — pendiente de verificación en DOF","confirmado":false}
+  {"id":"tdj-2026-07-10","fecha":"2026-07-10","instrumentos":["Tribunal de Disciplina Judicial"],"tipo":"Reglamento Interior","titulo":"Reglamento Interior del Tribunal de Disciplina Judicial","resumen":"Regula la organización y funcionamiento del Tribunal de Disciplina Judicial, órgano creado por la reforma constitucional de 2024. No es un órgano del OAJ pero forma parte del nuevo diseño institucional del PJF.","liga":"https://dof.gob.mx/nota_detalle.php?codigo=5793283&fecha=10%2F07%2F2026","fuente":"DOF","confirmado":true}
 ];
 
 let eventos = [];
 let filtroInstrumento = "TODOS";
 let orden = "desc";
+let listaActual = [];
 
 function fechaLegible(iso){
   if(!iso) return "Sin fecha (no confirmado)";
@@ -342,16 +413,18 @@ function render(){
 
   document.getElementById("conteo").textContent = `${lista.length} publicación${lista.length===1?"":"es"}`;
 
+  listaActual = lista;
+
   const cont = document.getElementById("lista");
   if(lista.length === 0){
     cont.innerHTML = `<div class="vacio">Sin resultados para este filtro/búsqueda.</div>`;
     return;
   }
 
-  cont.innerHTML = lista.map(e => {
+  cont.innerHTML = lista.map((e, idx) => {
     const esDatoFaltante = /\[DATO FALTANTE|\[VERIFICAR/.test(e.resumen);
     return `
-    <article class="evento ${e.confirmado ? '' : 'no-confirmado'}">
+    <article class="evento ${e.confirmado ? '' : 'no-confirmado'}" data-idx="${idx}">
       <div class="evento-cab">
         <span class="fecha">${fechaLegible(e.fecha)}</span>
         ${e.instrumentos.map(i => `<span class="instrumento">${i}</span>`).join("")}
@@ -380,6 +453,67 @@ fetch("./data/eventos.json")
   .then(r => { if(!r.ok) throw new Error("no ok"); return r.json(); })
   .then(data => { eventos = data; render(); })
   .catch(() => { eventos = EVENTOS_EMBEBIDOS; render(); });
+
+// Vista previa flotante del documento oficial al posicionar el cursor sobre una tarjeta.
+const previewEl = document.getElementById("preview-flotante");
+const previewTitulo = previewEl.querySelector(".preview-titulo");
+const previewAbrir = previewEl.querySelector(".preview-abrir");
+const previewIframe = previewEl.querySelector(".preview-iframe");
+let previewTimeout = null;
+
+function posicionarPreview(card){
+  const rect = card.getBoundingClientRect();
+  const margen = 12;
+  const anchoPreview = previewEl.offsetWidth || 360;
+  const altoPreview = previewEl.offsetHeight || 340;
+
+  let izquierda = rect.right + margen;
+  if(izquierda + anchoPreview > window.innerWidth - margen){
+    izquierda = rect.left - anchoPreview - margen;
+  }
+  if(izquierda < margen) izquierda = margen;
+
+  let arriba = rect.top;
+  if(arriba + altoPreview > window.innerHeight - margen){
+    arriba = window.innerHeight - altoPreview - margen;
+  }
+  if(arriba < margen) arriba = margen;
+
+  previewEl.style.left = `${izquierda}px`;
+  previewEl.style.top = `${arriba}px`;
+}
+
+function mostrarPreview(card){
+  const idx = Number(card.dataset.idx);
+  const evento = listaActual[idx];
+  if(!evento) return;
+  previewTitulo.textContent = evento.titulo;
+  previewAbrir.href = evento.liga;
+  if(previewIframe.src !== evento.liga){
+    previewIframe.src = evento.liga;
+  }
+  previewEl.classList.add("visible");
+  posicionarPreview(card);
+}
+
+function ocultarPreview(){
+  previewEl.classList.remove("visible");
+  previewIframe.src = "";
+}
+
+const listaEl = document.getElementById("lista");
+listaEl.addEventListener("mouseover", (ev) => {
+  const card = ev.target.closest(".evento");
+  if(!card || card.contains(ev.relatedTarget)) return;
+  clearTimeout(previewTimeout);
+  previewTimeout = setTimeout(() => mostrarPreview(card), 350);
+});
+listaEl.addEventListener("mouseout", (ev) => {
+  const card = ev.target.closest(".evento");
+  if(!card || card.contains(ev.relatedTarget)) return;
+  clearTimeout(previewTimeout);
+  ocultarPreview();
+});
 </script>
 </body>
 </html>
