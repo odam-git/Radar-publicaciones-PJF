@@ -14,6 +14,12 @@ Aplicación web estática que se ejecuta en la propia computadora. No requiere I
 
 Funciona sin Internet. Los datos se leen de `datos/datos_ppl_ficticios.js`, una copia del CSV.
 
+### Para compartir: un solo archivo
+`CAUSAS_PENALES_PPL.html` contiene la aplicación completa (diseño, código y los 150 registros). Se envía por correo o WhatsApp y quien lo recibe solo lo descarga y le da doble clic. Se recomienda abrirlo en computadora. Para regenerarlo tras cambiar datos o código:
+```
+python herramientas/empaquetar_un_archivo.py
+```
+
 ### Opción B — Servidor local (lee el CSV directamente)
 Útil cuando se quiera actualizar la hoja y pulsar **Recargar datos** sin regenerar nada.
 
@@ -32,6 +38,7 @@ Funciona sin Internet. Los datos se leen de `datos/datos_ppl_ficticios.js`, una 
 
 ```
 causas-penales-ppl/
+├── CAUSAS_PENALES_PPL.html     Versión de un solo archivo, para compartir
 ├── index.html                  Interfaz (estructura de la pantalla)
 ├── css/estilos.css             Diseño accesible (texto grande, alto contraste)
 ├── js/
@@ -45,7 +52,8 @@ causas-penales-ppl/
 │   └── datos_ppl_ficticios.js    Copia para el modo doble clic (generada)
 ├── herramientas/
 │   ├── generar_datos_ficticios.py  Genera los 150 registros ficticios
-│   └── csv_a_js.py                 Convierte un CSV/Excel en la copia embebida
+│   ├── csv_a_js.py                 Convierte un CSV/Excel en la copia embebida
+│   └── empaquetar_un_archivo.py    Genera CAUSAS_PENALES_PPL.html (versión de un solo archivo)
 ├── pruebas/
 │   ├── pruebas_logica.js        27 pruebas de datos y lógica (Node)
 │   └── pruebas_interfaz.js      23 pruebas en navegador real (Playwright)

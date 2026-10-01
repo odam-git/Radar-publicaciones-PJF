@@ -1,0 +1,3543 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Seguridad: la página solo puede cargar archivos propios; no puede conectarse a servidores externos. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'sha256-T/ikMzno9xBX78wW/tvOznkqZr4hNCUscAMCIX2/RDc=' 'sha256-Mwbo/dle1KcRDHvkFICuwSb5oiHQ+ye3fV+VwdI++Ys=' 'sha256-AuBSXWBLb2pMoCMStWZeVqRtJilMlaT80QcXm4pOfgA=' 'sha256-JS2l0S3ty/ra8kLfoY7flzXOWH+3+2ARwydTrJG8bEY=' 'sha256-WyUE40yzdfBwSJPQlmJ9y0YDu1xJPasgu5+CizcbE9c='; style-src 'sha256-l8fseRPY3P0E8c/VEEd1l4APc+oWGnag4MU0N7kIu0o='; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>CAUSAS PENALES PPL</title>
+  <style>
+/* CAUSAS PENALES PPL — estilos
+   Prioridad: legibilidad. Texto base 18 px, alto contraste, áreas de clic grandes.
+   Tipografía del sistema (no se descargan fuentes de Internet). */
+
+:root {
+  color-scheme: light;
+  --institucional: #1f3a5f;
+  --institucional-oscuro: #142840;
+  --institucional-claro: #e8eef6;
+  --texto: #111111;
+  --texto-secundario: #333a44;
+  --borde: #5b6573;
+  --borde-suave: #c4cad3;
+  --fondo: #f4f6f9;
+  --superficie: #ffffff;
+  --foco: #ffbf00;
+
+  --amarillo: #ffd43b;  --amarillo-borde: #8a6a00;
+  --naranja: #f08c00;   --naranja-borde: #7a4300;
+  --rojo: #b3131b;      --rojo-borde: #6e0b10;
+
+  --radio: 10px;
+  --fuente: "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { font-size: 18px; }
+body {
+  margin: 0;
+  font-family: var(--fuente);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--texto);
+  background: var(--fondo);
+}
+
+.oculto { display: none; }
+.oculto-visual {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0; padding: 0; margin: -1px;
+}
+[hidden] { display: none !important; }
+
+:focus-visible { outline: 4px solid var(--foco); outline-offset: 2px; }
+
+.saltar {
+  position: absolute; left: 16px; top: -80px; z-index: 10;
+  background: var(--foco); color: #000; padding: 12px 18px; font-weight: 700; border-radius: var(--radio);
+}
+.saltar:focus { top: 12px; }
+
+.contenedor { width: 100%; max-width: 1480px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- Encabezado ---------- */
+.encabezado {
+  background: var(--institucional);
+  color: #fff;
+  border-bottom: 6px solid var(--institucional-oscuro);
+}
+.encabezado__fila {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap; padding-top: 20px; padding-bottom: 20px;
+}
+.encabezado h1 { margin: 0; font-size: 1.7rem; letter-spacing: 0.04em; line-height: 1.2; }
+.subtitulo { margin: 4px 0 0; font-size: 1.05rem; color: #dce5f0; }
+.aviso-ficticio {
+  margin: 0; padding: 8px 16px; border: 2px solid #fff; border-radius: var(--radio);
+  font-weight: 700; font-size: 1rem; letter-spacing: 0.03em;
+}
+
+/* ---------- Fuente de datos ---------- */
+.fuente {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 16px 0 8px;
+}
+.fuente__texto { margin: 0; color: var(--texto-secundario); font-size: 1rem; }
+.fuente__acciones { display: flex; flex-wrap: wrap; gap: 10px; }
+.avisos {
+  margin: 0 0 8px; padding: 12px 16px; border-left: 6px solid var(--naranja-borde);
+  background: #fff4e0; border-radius: 4px;
+}
+
+/* ---------- Panel de búsqueda ---------- */
+.panel {
+  background: var(--superficie);
+  border: 1px solid var(--borde-suave);
+  border-radius: var(--radio);
+  padding: 24px;
+  margin: 8px 0 24px;
+}
+.etiqueta { display: block; font-weight: 700; font-size: 1rem; margin-bottom: 6px; }
+.etiqueta--grande { font-size: 1.1rem; }
+
+.buscador { position: relative; }
+.buscador__icono {
+  position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  width: 32px; height: 32px; color: var(--institucional); pointer-events: none;
+}
+.buscador input {
+  width: 100%; min-height: 64px; padding: 12px 16px 12px 62px;
+  font-size: 1.15rem; font-family: inherit; color: var(--texto);
+  border: 2px solid var(--borde); border-radius: var(--radio); background: #fff;
+}
+.buscador input::placeholder { color: #4d5562; opacity: 1; }
+
+.filtros {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px 20px; margin-top: 22px;
+}
+.campo select, .campo input {
+  width: 100%; min-height: 56px; padding: 10px 14px;
+  font-size: 1rem; font-family: inherit; color: var(--texto);
+  border: 2px solid var(--borde); border-radius: var(--radio); background-color: #fff;
+}
+.campo input::placeholder { color: #4d5562; opacity: 1; }
+.campo select:disabled { background: #eceff3; color: #555; }
+
+.acciones { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 24px; }
+
+/* ---------- Botones ---------- */
+.boton {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 56px; padding: 10px 26px;
+  font-family: inherit; font-size: 1rem; font-weight: 700; letter-spacing: 0.03em;
+  border-radius: var(--radio); border: 2px solid var(--institucional);
+  cursor: pointer; text-decoration: none;
+}
+.boton--primario { background: var(--institucional); color: #fff; min-width: 200px; }
+.boton--primario:hover { background: var(--institucional-oscuro); }
+.boton--secundario { background: #fff; color: var(--institucional); min-width: 240px; }
+.boton--secundario:hover { background: var(--institucional-claro); }
+.boton--terciario {
+  min-height: 48px; padding: 8px 16px; background: #fff; color: var(--institucional);
+  font-weight: 600; letter-spacing: 0;
+}
+.boton--terciario:hover { background: var(--institucional-claro); }
+input[type="file"]:focus-visible + .boton, .fuente__acciones input:focus + label { outline: 4px solid var(--foco); }
+.icono { width: 24px; height: 24px; flex: none; }
+.icono--grande { width: 30px; height: 30px; }
+
+/* ---------- Resultados ---------- */
+.resultados { margin-bottom: 40px; }
+.resultados:focus { outline: none; }
+.resultados__barra {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: 8px 24px; margin-bottom: 12px;
+}
+.contador { margin: 0; font-size: 1.4rem; font-weight: 600; }
+.contador strong { font-size: 1.6rem; color: var(--institucional); }
+.conteo-rangos { margin: 0; font-size: 1.15rem; font-weight: 600; }
+.conteo-rangos .separador { color: var(--borde); margin: 0 10px; }
+
+/* ---------- Tabla ---------- */
+.tabla-contenedor {
+  overflow: auto; max-height: 72vh;
+  background: var(--superficie);
+  border: 1px solid var(--borde-suave); border-radius: var(--radio);
+}
+.tabla { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 1rem; min-width: 1280px; }
+.tabla thead th {
+  position: sticky; top: 0; z-index: 2;
+  background: var(--institucional); color: #fff;
+  text-align: left; font-size: 1rem; font-weight: 700;
+  padding: 0; border-bottom: 3px solid var(--institucional-oscuro);
+  white-space: nowrap;
+}
+.tabla thead th.col-ver { padding: 14px 16px; text-align: center; }
+.ordenar {
+  all: unset; box-sizing: border-box; display: flex; align-items: center; gap: 8px;
+  width: 100%; padding: 14px 16px; cursor: pointer;
+}
+.ordenar:hover { background: var(--institucional-oscuro); }
+.ordenar:focus-visible { outline: 4px solid var(--foco); outline-offset: -4px; }
+.flecha { font-size: 0.9rem; min-width: 1em; }
+th[aria-sort="ascending"] .flecha::after { content: "▲"; }
+th[aria-sort="descending"] .flecha::after { content: "▼"; }
+th:not([aria-sort]) .flecha::after { content: "⇅"; opacity: 0.6; }
+
+.tabla td {
+  padding: 14px 16px; vertical-align: middle;
+  border-bottom: 1px solid var(--borde-suave);
+}
+.tabla tbody tr:nth-child(even) td { background: #f7f9fb; }
+.tabla tbody tr:hover td { background: var(--institucional-claro); }
+.tabla td.col-juzgado { min-width: 300px; }
+.tabla td.col-lugar { min-width: 240px; }
+.tabla td.col-nombre { font-weight: 600; min-width: 220px; }
+.tabla td.col-causa, .tabla td.col-circuito, .tabla td.col-entidad { white-space: nowrap; }
+.tabla td.col-pena { white-space: nowrap; }
+.tabla td.col-ver { text-align: center; width: 96px; }
+
+/* Chips de clasificación (no se colorea la fila completa). */
+.chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 14px; border-radius: 999px; border: 2px solid;
+  font-weight: 700; white-space: nowrap; line-height: 1.3;
+}
+.chip::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: currentColor; flex: none; }
+.chip--amarillo { background: var(--amarillo); border-color: var(--amarillo-borde); color: #1a1400; }
+.chip--naranja  { background: var(--naranja);  border-color: var(--naranja-borde);  color: #1a0d00; }
+.chip--rojo     { background: var(--rojo);     border-color: var(--rojo-borde);     color: #fff; }
+.chip--amarillo::before { background: var(--amarillo-borde); }
+.chip--naranja::before  { background: var(--naranja-borde); }
+.chip--rojo::before     { background: #fff; }
+.chip--grande { font-size: 1.15rem; padding: 8px 18px; }
+
+.boton-ojo {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 64px; height: 56px; border-radius: var(--radio);
+  border: 2px solid var(--institucional); background: #fff; color: var(--institucional);
+  cursor: pointer;
+}
+.boton-ojo svg { width: 36px; height: 36px; }
+.boton-ojo:hover { background: var(--institucional); color: #fff; }
+
+.vacio { padding: 40px 24px; text-align: center; font-size: 1.15rem; }
+
+/* ---------- Tarjeta de detalle ---------- */
+.detalle {
+  width: min(920px, calc(100vw - 24px)); max-height: calc(100vh - 32px);
+  padding: 0; border: 0; border-radius: 14px;
+  background: var(--superficie); color: var(--texto);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+.detalle::backdrop { background: rgba(10, 20, 35, 0.72); }
+.detalle__caja { display: flex; flex-direction: column; max-height: calc(100vh - 32px); }
+.detalle__cabecera {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 16px 16px 16px 28px; background: var(--institucional); color: #fff;
+}
+.detalle__cabecera h2 { margin: 0; font-size: 1.4rem; letter-spacing: 0.04em; }
+.boton-x {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 60px; height: 60px; border-radius: var(--radio);
+  border: 2px solid #fff; background: transparent; color: #fff; cursor: pointer; flex: none;
+}
+.boton-x svg { width: 30px; height: 30px; }
+.boton-x:hover { background: #fff; color: var(--institucional); }
+
+.detalle__cuerpo { padding: 24px 28px; overflow-y: auto; }
+.datos {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 32px; margin: 0;
+}
+.datos div { padding: 12px 0; border-top: 1px solid var(--borde-suave); }
+.datos .completo { grid-column: 1 / -1; }
+.datos dt {
+  font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--texto-secundario);
+}
+.datos dd { margin: 2px 0 0; font-size: 1.15rem; font-weight: 500; overflow-wrap: anywhere; }
+.datos .destacado { border-top: 0; padding-top: 0; }
+.datos .destacado dd { font-size: 1.6rem; font-weight: 700; line-height: 1.25; }
+.detalle__pie {
+  display: flex; justify-content: flex-end; padding: 16px 28px 20px;
+  border-top: 1px solid var(--borde-suave);
+}
+
+/* ---------- Pantallas pequeñas ---------- */
+@media (max-width: 1000px) {
+  .filtros { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .contenedor { padding: 0 16px; }
+  .panel { padding: 18px 16px; }
+  .filtros { grid-template-columns: 1fr; }
+  .acciones .boton { width: 100%; }
+  .datos { grid-template-columns: 1fr; }
+  .detalle__cuerpo { padding: 20px 18px; }
+  .encabezado h1 { font-size: 1.45rem; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .boton, .boton-ojo, .boton-x { transition: background-color 0.12s, color 0.12s; }
+}
+
+@media print {
+  .fuente, .panel, .col-ver, .saltar { display: none !important; }
+  .tabla-contenedor { max-height: none; overflow: visible; }
+}
+</style>
+</head>
+<body>
+  <!-- Íconos (SVG locales, sin dependencias externas) -->
+  <svg class="oculto" aria-hidden="true" focusable="false">
+    <symbol id="i-buscar" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-limpiar" viewBox="0 0 24 24"><path d="M4 5h16l-6.5 7.5V19l-3 1.5v-8z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="m15.5 15.5 5 5m0-5-5 5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-ojo" viewBox="0 0 24 24"><path d="M1.5 12S5.5 4.5 12 4.5 22.5 12 22.5 12 18.5 19.5 12 19.5 1.5 12 1.5 12z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.6" fill="currentColor"/></symbol>
+    <symbol id="i-cerrar" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
+    <symbol id="i-recargar" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M20 3.5v5h-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-archivo" viewBox="0 0 24 24"><path d="M6 2.5h8l5 5v14H6z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M14 2.5v5h5M9.5 13h6M9.5 17h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  </svg>
+
+  <a class="saltar" href="#resultados">Saltar a los resultados</a>
+
+  <header class="encabezado">
+    <div class="contenedor encabezado__fila">
+      <div>
+        <h1>CAUSAS PENALES PPL</h1>
+        <p class="subtitulo">Sistema de consulta y seguimiento</p>
+      </div>
+      <p class="aviso-ficticio" id="aviso-ficticio" hidden>DATOS FICTICIOS DE PRUEBA</p>
+    </div>
+  </header>
+
+  <main class="contenedor">
+    <!-- Fuente de datos -->
+    <section class="fuente" aria-label="Fuente de datos">
+      <p id="fuente-texto" class="fuente__texto">Cargando datos…</p>
+      <div class="fuente__acciones">
+        <button type="button" class="boton boton--terciario" id="btn-recargar">
+          <svg class="icono" aria-hidden="true"><use href="#i-recargar"/></svg> Recargar datos
+        </button>
+        <label class="boton boton--terciario" for="archivo-csv">
+          <svg class="icono" aria-hidden="true"><use href="#i-archivo"/></svg> Cargar archivo CSV
+        </label>
+        <input type="file" id="archivo-csv" accept=".csv,text/csv" class="oculto-visual">
+      </div>
+    </section>
+    <p id="avisos-datos" class="avisos" role="status" hidden></p>
+
+    <!-- Buscador y filtros -->
+    <section class="panel" aria-labelledby="titulo-busqueda">
+      <h2 id="titulo-busqueda" class="oculto-visual">Búsqueda y filtros</h2>
+      <form id="formulario" autocomplete="off" novalidate>
+        <label for="buscador" class="etiqueta etiqueta--grande">Buscador</label>
+        <div class="buscador">
+          <svg class="buscador__icono" aria-hidden="true"><use href="#i-buscar"/></svg>
+          <input type="search" id="buscador" name="texto"
+                 placeholder="Buscar por nombre, expediente, causa penal, entidad, circuito, juzgado, delito o lugar…">
+        </div>
+
+        <div class="filtros">
+          <div class="campo">
+            <label for="f-entidad" class="etiqueta">Entidad Federativa</label>
+            <select id="f-entidad" name="entidad"></select>
+          </div>
+          <div class="campo">
+            <label for="f-circuito" class="etiqueta">Circuito</label>
+            <select id="f-circuito" name="circuito"></select>
+          </div>
+          <div class="campo">
+            <label for="f-juzgado" class="etiqueta">Juzgado de Distrito</label>
+            <select id="f-juzgado" name="juzgado"></select>
+          </div>
+          <div class="campo">
+            <label for="f-causa" class="etiqueta">Causa Penal</label>
+            <input type="text" id="f-causa" name="causa" list="l-causas" placeholder="Todas">
+            <datalist id="l-causas"></datalist>
+          </div>
+          <div class="campo">
+            <label for="f-nombre" class="etiqueta">Nombre de la Persona</label>
+            <input type="text" id="f-nombre" name="nombre" list="l-nombres" placeholder="Todas">
+            <datalist id="l-nombres"></datalist>
+          </div>
+          <div class="campo">
+            <label for="f-rango" class="etiqueta">Rango de Pena</label>
+            <select id="f-rango" name="rango">
+              <option value="">Todos</option>
+              <option value="amarillo">🟡 Menos de 10 años</option>
+              <option value="naranja">🟠 De 10 a 20 años</option>
+              <option value="rojo">🔴 Más de 20 años</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="acciones">
+          <button type="submit" class="boton boton--primario" id="btn-buscar">
+            <svg class="icono icono--grande" aria-hidden="true"><use href="#i-buscar"/></svg> BUSCAR
+          </button>
+          <button type="button" class="boton boton--secundario" id="btn-limpiar">
+            <svg class="icono icono--grande" aria-hidden="true"><use href="#i-limpiar"/></svg> LIMPIAR FILTROS
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Resultados -->
+    <section id="resultados" class="resultados" aria-labelledby="contador" tabindex="-1">
+      <div class="resultados__barra">
+        <h2 id="contador" class="contador" aria-live="polite">Resultados encontrados: <strong id="total">0</strong> PPL</h2>
+        <p class="conteo-rangos" id="conteo-rangos"></p>
+      </div>
+
+      <div class="tabla-contenedor" id="tabla-contenedor">
+        <table class="tabla" id="tabla">
+          <caption class="oculto-visual">Personas privadas de la libertad. Use los encabezados para ordenar.</caption>
+          <thead>
+            <tr>
+              <th scope="col" data-clave="entidad"><button type="button" class="ordenar">Entidad Federativa<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="circuito"><button type="button" class="ordenar">Circuito<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="juzgado"><button type="button" class="ordenar">Juzgado de Distrito<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="causa"><button type="button" class="ordenar">Causa Penal<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="nombre"><button type="button" class="ordenar">Nombre de la Persona<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="lugar"><button type="button" class="ordenar">Lugar donde se encuentra<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="pena"><button type="button" class="ordenar">Pena<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" class="col-ver">Ver</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla"></tbody>
+        </table>
+        <div class="vacio" id="vacio" hidden>
+          <p>No se encontraron resultados con los criterios seleccionados.</p>
+          <button type="button" class="boton boton--secundario" id="btn-limpiar-vacio">
+            <svg class="icono icono--grande" aria-hidden="true"><use href="#i-limpiar"/></svg> LIMPIAR FILTROS
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Tarjeta de detalle -->
+  <dialog id="detalle" class="detalle" aria-labelledby="detalle-titulo">
+    <div class="detalle__caja">
+      <div class="detalle__cabecera">
+        <h2 id="detalle-titulo">DATOS DE LA PERSONA</h2>
+        <button type="button" class="boton-x" id="btn-x" aria-label="Cerrar">
+          <svg aria-hidden="true"><use href="#i-cerrar"/></svg>
+        </button>
+      </div>
+      <div class="detalle__cuerpo" id="detalle-cuerpo"></div>
+      <div class="detalle__pie">
+        <button type="button" class="boton boton--primario" id="btn-cerrar">CERRAR</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Orden de carga: configuración → datos → procesamiento → interfaz -->
+  <script>
+/*
+ * CONFIGURACIÓN — CAUSAS PENALES PPL
+ * Único archivo que se edita para cambiar la fuente de datos o activar
+ * medidas de privacidad. La interfaz no necesita modificarse.
+ */
+window.CONFIG_PPL = {
+  fuente: {
+    /*
+     * "auto"          → Si la app se abre con un servidor local, lee el CSV de `rutaCSV`;
+     *                    si se abre con doble clic, usa la copia embebida (datos/*.js).
+     * "embebida"      → Siempre usa la copia embebida (datos_ppl_ficticios.js).
+     * "csv"           → Siempre lee el CSV de `rutaCSV` (requiere servidor local).
+     * "google-sheets" → PREPARADO, NO ACTIVO. Ver README, sección Google Sheets.
+     */
+    tipo: "auto",
+    rutaCSV: "datos/datos_ppl_ficticios.csv",
+    urlGoogleSheets: "", // Vacío a propósito: esta versión no se conecta a Google Sheets.
+    esFicticia: true,    // Muestra la etiqueta "Datos ficticios" en el encabezado.
+  },
+
+  privacidad: {
+    /*
+     * Seudonimización: si es true, en lugar del nombre se muestra un
+     * identificador (p. ej. "PPL-0042") en tabla, filtros, buscador y detalle.
+     */
+    seudonimizarNombres: false,
+    prefijoSeudonimo: "PPL-",
+    /*
+     * Campos que la interfaz NO mostrará en la tarjeta de detalle
+     * (minimización). Usar las claves internas: ver MAPA_COLUMNAS en datos.js.
+     */
+    camposOcultos: [],
+  },
+};
+</script>
+  <script>
+// ARCHIVO GENERADO AUTOMÁTICAMENTE. No editar a mano.
+// Fuente: datos_ppl_ficticios.csv  —  DATOS 100 % FICTICIOS.
+// Para regenerarlo: python3 herramientas/csv_a_js.py
+window.FUENTE_PPL_EMBEBIDA = [
+ {
+  "ID": 1,
+  "Nombre completo": "Karina Garza Villaseñor",
+  "Expediente": "EXP-FIC-1000/2020",
+  "Causa penal": "CP-FIC-100/2020",
+  "Delito": "Secuestro",
+  "Entidad Federativa": "Ciudad de México",
+  "Circuito": "Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito de Procesos Penales Federales en la Ciudad de México",
+  "Lugar donde se encuentra": "Centro de Reinserción Norte (ficticio)",
+  "Pena en años": 9,
+  "Fecha de sentencia": "2023-02-17",
+  "Fecha de inicio": "2020-10-23",
+  "Fecha de cumplimiento": "2029-10-23",
+  "Observaciones": "Sentencia firme. Registro de prueba."
+ },
+ {
+  "ID": 2,
+  "Nombre completo": "Fabiola Tapia Sandoval",
+  "Expediente": "EXP-FIC-1007/2013",
+  "Causa penal": "CP-FIC-101/2013",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Estado de México",
+  "Circuito": "Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en el Estado de México",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Región Centro (ficticio)",
+  "Pena en años": 10,
+  "Fecha de sentencia": "2013-11-04",
+  "Fecha de inicio": "2013-03-11",
+  "Fecha de cumplimiento": "2023-03-11",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 3,
+  "Nombre completo": "Gerardo Galindo Contreras",
+  "Expediente": "EXP-FIC-1014/2021",
+  "Causa penal": "CP-FIC-102/2021",
+  "Delito": "Secuestro",
+  "Entidad Federativa": "Jalisco",
+  "Circuito": "Tercer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Jalisco",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Occidente (ficticio)",
+  "Pena en años": 15,
+  "Fecha de sentencia": "2022-08-21",
+  "Fecha de inicio": "2021-05-18",
+  "Fecha de cumplimiento": "2036-05-18",
+  "Observaciones": "Solicitó beneficio de libertad anticipada (dato ficticio)."
+ },
+ {
+  "ID": 4,
+  "Nombre completo": "Alma Delia Zavala Delgado",
+  "Expediente": "EXP-FIC-1021/2020",
+  "Causa penal": "CP-FIC-103/2020",
+  "Delito": "Robo de hidrocarburos",
+  "Entidad Federativa": "Nuevo León",
+  "Circuito": "Cuarto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Nuevo León",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noreste (ficticio)",
+  "Pena en años": 20,
+  "Fecha de sentencia": "2021-08-19",
+  "Fecha de inicio": "2020-05-07",
+  "Fecha de cumplimiento": "2040-05-07",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 5,
+  "Nombre completo": "Marco Antonio Guerrero Mejía",
+  "Expediente": "EXP-FIC-1028/2023",
+  "Causa penal": "CP-FIC-104/2023",
+  "Delito": "Secuestro",
+  "Entidad Federativa": "Sonora",
+  "Circuito": "Quinto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sonora",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Desierto (ficticio)",
+  "Pena en años": 21,
+  "Fecha de sentencia": "2024-11-20",
+  "Fecha de inicio": "2023-01-30",
+  "Fecha de cumplimiento": "2044-01-28",
+  "Observaciones": "Requiere verificación de domicilio procesal (dato ficticio)."
+ },
+ {
+  "ID": 6,
+  "Nombre completo": "Claudia Cabrera Villaseñor",
+  "Expediente": "EXP-FIC-1035/2022",
+  "Causa penal": "CP-FIC-105/2022",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Puebla",
+  "Circuito": "Sexto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Puebla",
+  "Lugar donde se encuentra": "Centro Regional de Reinserción Sur (ficticio)",
+  "Pena en años": 9.5,
+  "Fecha de sentencia": "2024-04-22",
+  "Fecha de inicio": "2022-09-10",
+  "Fecha de cumplimiento": "2032-03-10",
+  "Observaciones": "Promovió juicio de amparo directo (dato ficticio)."
+ },
+ {
+  "ID": 7,
+  "Nombre completo": "Samuel Estrada Barrios",
+  "Expediente": "EXP-FIC-1042/2019",
+  "Causa penal": "CP-FIC-106/2019",
+  "Delito": "Delitos contra el ambiente",
+  "Entidad Federativa": "Veracruz",
+  "Circuito": "Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Veracruz",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Golfo (ficticio)",
+  "Pena en años": 20.5,
+  "Fecha de sentencia": "2020-03-19",
+  "Fecha de inicio": "2019-08-16",
+  "Fecha de cumplimiento": "2040-02-16",
+  "Observaciones": "Requiere verificación de domicilio procesal (dato ficticio)."
+ },
+ {
+  "ID": 8,
+  "Nombre completo": "Omar Rangel Orozco",
+  "Expediente": "EXP-FIC-1049/2020",
+  "Causa penal": "CP-FIC-107/2020",
+  "Delito": "Delitos contra el ambiente",
+  "Entidad Federativa": "Michoacán",
+  "Circuito": "Décimo Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Michoacán",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Tierra Caliente (ficticio)",
+  "Pena en años": 17,
+  "Fecha de sentencia": "2022-01-23",
+  "Fecha de inicio": "2020-03-09",
+  "Fecha de cumplimiento": "2037-03-09",
+  "Observaciones": "Se encuentra en trámite un incidente de traslado (dato ficticio)."
+ },
+ {
+  "ID": 9,
+  "Nombre completo": "Hilda Benítez Contreras",
+  "Expediente": "EXP-FIC-1056/2015",
+  "Causa penal": "CP-FIC-108/2015",
+  "Delito": "Operaciones con recursos de procedencia ilícita",
+  "Entidad Federativa": "Sinaloa",
+  "Circuito": "Décimo Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sinaloa",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Pacífico (ficticio)",
+  "Pena en años": 27,
+  "Fecha de sentencia": "2017-03-19",
+  "Fecha de inicio": "2015-01-27",
+  "Fecha de cumplimiento": "2042-01-27",
+  "Observaciones": "Solicitó beneficio de libertad anticipada (dato ficticio)."
+ },
+ {
+  "ID": 10,
+  "Nombre completo": "César Garza Fuentes",
+  "Expediente": "EXP-FIC-1063/2021",
+  "Causa penal": "CP-FIC-109/2021",
+  "Delito": "Tráfico de personas",
+  "Entidad Federativa": "Chihuahua",
+  "Circuito": "Décimo Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Chihuahua",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Frontera (ficticio)",
+  "Pena en años": 3,
+  "Fecha de sentencia": "2023-01-04",
+  "Fecha de inicio": "2021-03-17",
+  "Fecha de cumplimiento": "2024-03-17",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 11,
+  "Nombre completo": "Salvador Garza Medina",
+  "Expediente": "EXP-FIC-1070/2016",
+  "Causa penal": "CP-FIC-110/2016",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Ciudad de México",
+  "Circuito": "Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito de Procesos Penales Federales en la Ciudad de México",
+  "Lugar donde se encuentra": "Centro de Reinserción Oriente (ficticio)",
+  "Pena en años": 18,
+  "Fecha de sentencia": "2017-09-21",
+  "Fecha de inicio": "2016-10-07",
+  "Fecha de cumplimiento": "2034-10-07",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 12,
+  "Nombre completo": "Araceli Maldonado Tapia",
+  "Expediente": "EXP-FIC-1077/2015",
+  "Causa penal": "CP-FIC-111/2015",
+  "Delito": "Defraudación fiscal",
+  "Entidad Federativa": "Estado de México",
+  "Circuito": "Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en el Estado de México",
+  "Lugar donde se encuentra": "Centro Estatal Valle Alto (ficticio)",
+  "Pena en años": 28,
+  "Fecha de sentencia": "2016-06-18",
+  "Fecha de inicio": "2015-10-06",
+  "Fecha de cumplimiento": "2043-10-06",
+  "Observaciones": "Promovió juicio de amparo directo (dato ficticio)."
+ },
+ {
+  "ID": 13,
+  "Nombre completo": "Cristian Bautista Delgado",
+  "Expediente": "EXP-FIC-1084/2014",
+  "Causa penal": "CP-FIC-112/2014",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Jalisco",
+  "Circuito": "Tercer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Jalisco",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Occidente (ficticio)",
+  "Pena en años": 9,
+  "Fecha de sentencia": "2016-03-09",
+  "Fecha de inicio": "2014-10-10",
+  "Fecha de cumplimiento": "2023-10-10",
+  "Observaciones": "Persona ficticia con dos causas penales distintas."
+ },
+ {
+  "ID": 14,
+  "Nombre completo": "Salvador Gallardo Zamora",
+  "Expediente": "EXP-FIC-1091/2017",
+  "Causa penal": "CP-FIC-113/2017",
+  "Delito": "Defraudación fiscal",
+  "Entidad Federativa": "Nuevo León",
+  "Circuito": "Cuarto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Nuevo León",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Sierra Madre (ficticio)",
+  "Pena en años": 19,
+  "Fecha de sentencia": "2019-12-18",
+  "Fecha de inicio": "2017-11-20",
+  "Fecha de cumplimiento": "2036-11-20",
+  "Observaciones": "Solicitó beneficio de libertad anticipada (dato ficticio)."
+ },
+ {
+  "ID": 15,
+  "Nombre completo": "Javier Castañeda Cabrera",
+  "Expediente": "EXP-FIC-1098/2019",
+  "Causa penal": "CP-FIC-114/2019",
+  "Delito": "Tráfico de personas",
+  "Entidad Federativa": "Sonora",
+  "Circuito": "Quinto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Sonora",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Desierto (ficticio)",
+  "Pena en años": 36,
+  "Fecha de sentencia": "2020-04-25",
+  "Fecha de inicio": "2019-04-04",
+  "Fecha de cumplimiento": "2055-04-04",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 16,
+  "Nombre completo": "Sergio Fuentes Velasco",
+  "Expediente": "EXP-FIC-1105/2018",
+  "Causa penal": "CP-FIC-115/2018",
+  "Delito": "Falsificación de moneda",
+  "Entidad Federativa": "Puebla",
+  "Circuito": "Sexto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Puebla",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Volcanes (ficticio)",
+  "Pena en años": 6,
+  "Fecha de sentencia": "2020-05-14",
+  "Fecha de inicio": "2018-01-19",
+  "Fecha de cumplimiento": "2024-01-19",
+  "Observaciones": "Solicitó beneficio de libertad anticipada (dato ficticio)."
+ },
+ {
+  "ID": 17,
+  "Nombre completo": "Alfonso Palacios Ibarra",
+  "Expediente": "EXP-FIC-1112/2012",
+  "Causa penal": "CP-FIC-116/2012",
+  "Delito": "Defraudación fiscal",
+  "Entidad Federativa": "Veracruz",
+  "Circuito": "Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Veracruz",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Golfo (ficticio)",
+  "Pena en años": 20,
+  "Fecha de sentencia": "2014-06-23",
+  "Fecha de inicio": "2012-04-20",
+  "Fecha de cumplimiento": "2032-04-20",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 18,
+  "Nombre completo": "Edgar Villaseñor Montes",
+  "Expediente": "EXP-FIC-1119/2019",
+  "Causa penal": "CP-FIC-117/2019",
+  "Delito": "Operaciones con recursos de procedencia ilícita",
+  "Entidad Federativa": "Michoacán",
+  "Circuito": "Décimo Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Michoacán",
+  "Lugar donde se encuentra": "Centro Regional Lago Azul (ficticio)",
+  "Pena en años": 24,
+  "Fecha de sentencia": "2021-09-06",
+  "Fecha de inicio": "2019-09-17",
+  "Fecha de cumplimiento": "2043-09-17",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 19,
+  "Nombre completo": "Jesús Manuel Estrada Montes",
+  "Expediente": "EXP-FIC-1126/2022",
+  "Causa penal": "CP-FIC-118/2022",
+  "Delito": "Tráfico de personas",
+  "Entidad Federativa": "Sinaloa",
+  "Circuito": "Décimo Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Sinaloa",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noroeste (ficticio)",
+  "Pena en años": 8,
+  "Fecha de sentencia": "2023-11-08",
+  "Fecha de inicio": "2022-04-14",
+  "Fecha de cumplimiento": "2030-04-14",
+  "Observaciones": "Solicitó beneficio de libertad anticipada (dato ficticio)."
+ },
+ {
+  "ID": 20,
+  "Nombre completo": "Adrián Sandoval Fuentes",
+  "Expediente": "EXP-FIC-1133/2015",
+  "Causa penal": "CP-FIC-119/2015",
+  "Delito": "Tráfico de personas",
+  "Entidad Federativa": "Chihuahua",
+  "Circuito": "Décimo Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Chihuahua",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Frontera (ficticio)",
+  "Pena en años": 17,
+  "Fecha de sentencia": "2016-10-02",
+  "Fecha de inicio": "2015-11-19",
+  "Fecha de cumplimiento": "2032-11-19",
+  "Observaciones": "Promovió juicio de amparo directo (dato ficticio)."
+ },
+ {
+  "ID": 21,
+  "Nombre completo": "José Luis Hernández Ruiz",
+  "Expediente": "EXP-FIC-1140/2017",
+  "Causa penal": "CP-FIC-120/2017",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Ciudad de México",
+  "Circuito": "Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito de Procesos Penales Federales en la Ciudad de México",
+  "Lugar donde se encuentra": "Centro de Reinserción Oriente (ficticio)",
+  "Pena en años": 32,
+  "Fecha de sentencia": "2018-09-16",
+  "Fecha de inicio": "2017-10-20",
+  "Fecha de cumplimiento": "2049-10-20",
+  "Observaciones": "Homonimia ficticia de prueba: existe otro registro con el mismo nombre y distinta causa."
+ },
+ {
+  "ID": 22,
+  "Nombre completo": "Yolanda Castañeda Trejo",
+  "Expediente": "EXP-FIC-1147/2012",
+  "Causa penal": "CP-FIC-121/2012",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Estado de México",
+  "Circuito": "Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito en Materia Penal en el Estado de México",
+  "Lugar donde se encuentra": "Centro Estatal Valle Alto (ficticio)",
+  "Pena en años": 8,
+  "Fecha de sentencia": "2015-02-07",
+  "Fecha de inicio": "2012-11-12",
+  "Fecha de cumplimiento": "2020-11-12",
+  "Observaciones": "Sentencia firme. Registro de prueba."
+ },
+ {
+  "ID": 23,
+  "Nombre completo": "Marco Antonio Escobar Lozano",
+  "Expediente": "EXP-FIC-1154/2015",
+  "Causa penal": "CP-FIC-122/2015",
+  "Delito": "Delitos contra el ambiente",
+  "Entidad Federativa": "Jalisco",
+  "Circuito": "Tercer Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito en Materia Penal en Jalisco",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Altos (ficticio)",
+  "Pena en años": 12,
+  "Fecha de sentencia": "2017-05-05",
+  "Fecha de inicio": "2015-02-14",
+  "Fecha de cumplimiento": "2027-02-14",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 24,
+  "Nombre completo": "Daniela Castañeda Rangel",
+  "Expediente": "EXP-FIC-1161/2017",
+  "Causa penal": "CP-FIC-123/2017",
+  "Delito": "Contra la salud (posesión con fines de comercio)",
+  "Entidad Federativa": "Nuevo León",
+  "Circuito": "Cuarto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Nuevo León",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Sierra Madre (ficticio)",
+  "Pena en años": 41,
+  "Fecha de sentencia": "2019-02-03",
+  "Fecha de inicio": "2017-05-10",
+  "Fecha de cumplimiento": "2058-05-10",
+  "Observaciones": "Pendiente de actualizar cómputo de la pena (dato ficticio)."
+ },
+ {
+  "ID": 25,
+  "Nombre completo": "Diego Solís Velasco",
+  "Expediente": "EXP-FIC-1168/2016",
+  "Causa penal": "CP-FIC-124/2016",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Sonora",
+  "Circuito": "Quinto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sonora",
+  "Lugar donde se encuentra": "Centro Estatal Costa Norte (ficticio)",
+  "Pena en años": 8,
+  "Fecha de sentencia": "2018-06-22",
+  "Fecha de inicio": "2016-01-10",
+  "Fecha de cumplimiento": "2024-01-10",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 26,
+  "Nombre completo": "Isaac Velasco Figueroa",
+  "Expediente": "EXP-FIC-1175/2022",
+  "Causa penal": "CP-FIC-125/2022",
+  "Delito": "Robo de hidrocarburos",
+  "Entidad Federativa": "Puebla",
+  "Circuito": "Sexto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Puebla",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Volcanes (ficticio)",
+  "Pena en años": 17,
+  "Fecha de sentencia": "2022-10-20",
+  "Fecha de inicio": "2022-03-26",
+  "Fecha de cumplimiento": "2039-03-26",
+  "Observaciones": "Requiere verificación de domicilio procesal (dato ficticio)."
+ },
+ {
+  "ID": 27,
+  "Nombre completo": "Carlos Iván Orozco Cárdenas",
+  "Expediente": "EXP-FIC-1182/2013",
+  "Causa penal": "CP-FIC-126/2013",
+  "Delito": "Contra la salud (posesión con fines de comercio)",
+  "Entidad Federativa": "Veracruz",
+  "Circuito": "Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito en Veracruz",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Golfo (ficticio)",
+  "Pena en años": 40,
+  "Fecha de sentencia": "2014-01-29",
+  "Fecha de inicio": "2013-01-10",
+  "Fecha de cumplimiento": "2053-01-10",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 28,
+  "Nombre completo": "Hilda Valdez Trejo",
+  "Expediente": "EXP-FIC-1189/2022",
+  "Causa penal": "CP-FIC-127/2022",
+  "Delito": "Delitos contra el ambiente",
+  "Entidad Federativa": "Michoacán",
+  "Circuito": "Décimo Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Michoacán",
+  "Lugar donde se encuentra": "Centro Regional Lago Azul (ficticio)",
+  "Pena en años": 7,
+  "Fecha de sentencia": "2024-09-20",
+  "Fecha de inicio": "2022-09-20",
+  "Fecha de cumplimiento": "2029-09-20",
+  "Observaciones": "Solicitó beneficio de libertad anticipada (dato ficticio)."
+ },
+ {
+  "ID": 29,
+  "Nombre completo": "Araceli Rosales Garza",
+  "Expediente": "EXP-FIC-1196/2022",
+  "Causa penal": "CP-FIC-128/2022",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Sinaloa",
+  "Circuito": "Décimo Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sinaloa",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Pacífico (ficticio)",
+  "Pena en años": 11,
+  "Fecha de sentencia": "2023-05-20",
+  "Fecha de inicio": "2022-09-12",
+  "Fecha de cumplimiento": "2033-09-12",
+  "Observaciones": "Pendiente de actualizar cómputo de la pena (dato ficticio)."
+ },
+ {
+  "ID": 30,
+  "Nombre completo": "Manuel Cervantes Rosales",
+  "Expediente": "EXP-FIC-1203/2018",
+  "Causa penal": "CP-FIC-129/2018",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Chihuahua",
+  "Circuito": "Décimo Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Chihuahua",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Barrancas (ficticio)",
+  "Pena en años": 35,
+  "Fecha de sentencia": "2020-12-05",
+  "Fecha de inicio": "2018-07-25",
+  "Fecha de cumplimiento": "2053-07-25",
+  "Observaciones": "Se encuentra en trámite un incidente de traslado (dato ficticio)."
+ },
+ {
+  "ID": 31,
+  "Nombre completo": "Rocío Lozano Figueroa",
+  "Expediente": "EXP-FIC-1210/2022",
+  "Causa penal": "CP-FIC-130/2022",
+  "Delito": "Operaciones con recursos de procedencia ilícita",
+  "Entidad Federativa": "Ciudad de México",
+  "Circuito": "Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito de Procesos Penales Federales en la Ciudad de México",
+  "Lugar donde se encuentra": "Centro de Reinserción Oriente (ficticio)",
+  "Pena en años": 3,
+  "Fecha de sentencia": "2024-04-12",
+  "Fecha de inicio": "2022-03-01",
+  "Fecha de cumplimiento": "2025-03-01",
+  "Observaciones": "Promovió juicio de amparo directo (dato ficticio)."
+ },
+ {
+  "ID": 32,
+  "Nombre completo": "María Fernanda López Castro",
+  "Expediente": "EXP-FIC-1217/2022",
+  "Causa penal": "CP-FIC-131/2022",
+  "Delito": "Tráfico de personas",
+  "Entidad Federativa": "Estado de México",
+  "Circuito": "Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en el Estado de México",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Región Centro (ficticio)",
+  "Pena en años": 12,
+  "Fecha de sentencia": "2023-06-08",
+  "Fecha de inicio": "2022-02-10",
+  "Fecha de cumplimiento": "2034-02-10",
+  "Observaciones": "Homonimia ficticia de prueba: existe otro registro con el mismo nombre y distinta causa."
+ },
+ {
+  "ID": 33,
+  "Nombre completo": "Rocío Cabrera Aguilar",
+  "Expediente": "EXP-FIC-1224/2021",
+  "Causa penal": "CP-FIC-132/2021",
+  "Delito": "Falsificación de moneda",
+  "Entidad Federativa": "Jalisco",
+  "Circuito": "Tercer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Jalisco",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Altos (ficticio)",
+  "Pena en años": 27,
+  "Fecha de sentencia": "2023-11-05",
+  "Fecha de inicio": "2021-09-03",
+  "Fecha de cumplimiento": "2048-09-03",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 34,
+  "Nombre completo": "Ulises Zamora Benítez",
+  "Expediente": "EXP-FIC-1231/2021",
+  "Causa penal": "CP-FIC-133/2021",
+  "Delito": "Robo de hidrocarburos",
+  "Entidad Federativa": "Nuevo León",
+  "Circuito": "Cuarto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Nuevo León",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Sierra Madre (ficticio)",
+  "Pena en años": 7,
+  "Fecha de sentencia": "2022-05-15",
+  "Fecha de inicio": "2021-06-04",
+  "Fecha de cumplimiento": "2028-06-04",
+  "Observaciones": "Sentencia firme. Registro de prueba."
+ },
+ {
+  "ID": 35,
+  "Nombre completo": "Jorge Alberto Navarro Salazar",
+  "Expediente": "EXP-FIC-1238/2013",
+  "Causa penal": "CP-FIC-134/2013",
+  "Delito": "Operaciones con recursos de procedencia ilícita",
+  "Entidad Federativa": "Sonora",
+  "Circuito": "Quinto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Sonora",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Desierto (ficticio)",
+  "Pena en años": 15,
+  "Fecha de sentencia": "2014-01-19",
+  "Fecha de inicio": "2013-04-06",
+  "Fecha de cumplimiento": "2028-04-06",
+  "Observaciones": "Promovió juicio de amparo directo (dato ficticio)."
+ },
+ {
+  "ID": 36,
+  "Nombre completo": "Leonardo Figueroa Robles",
+  "Expediente": "EXP-FIC-1245/2022",
+  "Causa penal": "CP-FIC-135/2022",
+  "Delito": "Defraudación fiscal",
+  "Entidad Federativa": "Puebla",
+  "Circuito": "Sexto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Puebla",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Volcanes (ficticio)",
+  "Pena en años": 42,
+  "Fecha de sentencia": "2024-08-19",
+  "Fecha de inicio": "2022-10-17",
+  "Fecha de cumplimiento": "2064-10-17",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 37,
+  "Nombre completo": "Cristian Barrios Ibarra",
+  "Expediente": "EXP-FIC-1252/2017",
+  "Causa penal": "CP-FIC-136/2017",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Veracruz",
+  "Circuito": "Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Veracruz",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Sureste (ficticio)",
+  "Pena en años": 5,
+  "Fecha de sentencia": "2018-08-30",
+  "Fecha de inicio": "2017-08-30",
+  "Fecha de cumplimiento": "2022-08-28",
+  "Observaciones": "Sentencia firme. Registro de prueba."
+ },
+ {
+  "ID": 38,
+  "Nombre completo": "Rodrigo Cordero Garza",
+  "Expediente": "EXP-FIC-1259/2020",
+  "Causa penal": "CP-FIC-137/2020",
+  "Delito": "Operaciones con recursos de procedencia ilícita",
+  "Entidad Federativa": "Michoacán",
+  "Circuito": "Décimo Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Michoacán",
+  "Lugar donde se encuentra": "Centro Regional Lago Azul (ficticio)",
+  "Pena en años": 15,
+  "Fecha de sentencia": "2023-01-30",
+  "Fecha de inicio": "2020-10-30",
+  "Fecha de cumplimiento": "2035-10-28",
+  "Observaciones": "Sin observaciones adicionales."
+ },
+ {
+  "ID": 39,
+  "Nombre completo": "Beatriz Ochoa Navarro",
+  "Expediente": "EXP-FIC-1266/2016",
+  "Causa penal": "CP-FIC-138/2016",
+  "Delito": "Operaciones con recursos de procedencia ilícita",
+  "Entidad Federativa": "Sinaloa",
+  "Circuito": "Décimo Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Sinaloa",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noroeste (ficticio)",
+  "Pena en años": 29,
+  "Fecha de sentencia": "2018-04-17",
+  "Fecha de inicio": "2016-06-02",
+  "Fecha de cumplimiento": "2045-06-02",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 40,
+  "Nombre completo": "Alma Delia Cervantes Valencia",
+  "Expediente": "EXP-FIC-1273/2017",
+  "Causa penal": "CP-FIC-139/2017",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Chihuahua",
+  "Circuito": "Décimo Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Chihuahua",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Frontera (ficticio)",
+  "Pena en años": 6,
+  "Fecha de sentencia": "2020-01-08",
+  "Fecha de inicio": "2017-08-27",
+  "Fecha de cumplimiento": "2023-08-27",
+  "Observaciones": "Sentencia firme. Registro de prueba."
+ },
+ {
+  "ID": 41,
+  "Nombre completo": "Esteban Maldonado Camacho",
+  "Expediente": "EXP-FIC-1280/2016",
+  "Causa penal": "CP-FIC-140/2016",
+  "Delito": "Defraudación fiscal",
+  "Entidad Federativa": "Ciudad de México",
+  "Circuito": "Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito de Procesos Penales Federales en la Ciudad de México",
+  "Lugar donde se encuentra": "Centro de Reinserción Oriente (ficticio)",
+  "Pena en años": 11,
+  "Fecha de sentencia": "2018-05-28",
+  "Fecha de inicio": "2016-10-09",
+  "Fecha de cumplimiento": "2027-10-09",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 42,
+  "Nombre completo": "Jesús Manuel Rangel Zavala",
+  "Expediente": "EXP-FIC-1287/2012",
+  "Causa penal": "CP-FIC-141/2012",
+  "Delito": "Contra la salud (posesión con fines de comercio)",
+  "Entidad Federativa": "Estado de México",
+  "Circuito": "Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en el Estado de México",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Región Centro (ficticio)",
+  "Pena en años": 36,
+  "Fecha de sentencia": "2013-07-23",
+  "Fecha de inicio": "2012-05-19",
+  "Fecha de cumplimiento": "2048-05-19",
+  "Observaciones": "Pendiente de actualizar cómputo de la pena (dato ficticio)."
+ },
+ {
+  "ID": 43,
+  "Nombre completo": "Juan Pablo Ramírez Soto",
+  "Expediente": "EXP-FIC-1294/2020",
+  "Causa penal": "CP-FIC-142/2020",
+  "Delito": "Contra la salud (posesión con fines de comercio)",
+  "Entidad Federativa": "Jalisco",
+  "Circuito": "Tercer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Jalisco",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Altos (ficticio)",
+  "Pena en años": 5,
+  "Fecha de sentencia": "2021-11-10",
+  "Fecha de inicio": "2020-03-16",
+  "Fecha de cumplimiento": "2025-03-16",
+  "Observaciones": "Homonimia ficticia de prueba: existe otro registro con el mismo nombre y distinta causa."
+ },
+ {
+  "ID": 44,
+  "Nombre completo": "Cecilia Lozano Domínguez",
+  "Expediente": "EXP-FIC-1301/2017",
+  "Causa penal": "CP-FIC-143/2017",
+  "Delito": "Tráfico de personas",
+  "Entidad Federativa": "Nuevo León",
+  "Circuito": "Cuarto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Nuevo León",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Sierra Madre (ficticio)",
+  "Pena en años": 15,
+  "Fecha de sentencia": "2018-10-17",
+  "Fecha de inicio": "2017-11-06",
+  "Fecha de cumplimiento": "2032-11-06",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 45,
+  "Nombre completo": "Karina Zamora Velasco",
+  "Expediente": "EXP-FIC-1308/2014",
+  "Causa penal": "CP-FIC-144/2014",
+  "Delito": "Secuestro",
+  "Entidad Federativa": "Sonora",
+  "Circuito": "Quinto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sonora",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Desierto (ficticio)",
+  "Pena en años": 28,
+  "Fecha de sentencia": "2016-01-06",
+  "Fecha de inicio": "2014-08-18",
+  "Fecha de cumplimiento": "2042-08-18",
+  "Observaciones": "Pendiente de actualizar cómputo de la pena (dato ficticio)."
+ },
+ {
+  "ID": 46,
+  "Nombre completo": "Karina Ochoa Rangel",
+  "Expediente": "EXP-FIC-1315/2012",
+  "Causa penal": "CP-FIC-145/2012",
+  "Delito": "Secuestro",
+  "Entidad Federativa": "Puebla",
+  "Circuito": "Sexto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Puebla",
+  "Lugar donde se encuentra": "Centro Regional de Reinserción Sur (ficticio)",
+  "Pena en años": 7,
+  "Fecha de sentencia": "2013-12-29",
+  "Fecha de inicio": "2012-10-26",
+  "Fecha de cumplimiento": "2019-10-26",
+  "Observaciones": "Requiere verificación de domicilio procesal (dato ficticio)."
+ },
+ {
+  "ID": 47,
+  "Nombre completo": "Lorena Medina Sandoval",
+  "Expediente": "EXP-FIC-1322/2013",
+  "Causa penal": "CP-FIC-146/2013",
+  "Delito": "Contra la salud (transporte)",
+  "Entidad Federativa": "Veracruz",
+  "Circuito": "Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Veracruz",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Sureste (ficticio)",
+  "Pena en años": 12,
+  "Fecha de sentencia": "2015-07-15",
+  "Fecha de inicio": "2013-03-10",
+  "Fecha de cumplimiento": "2025-03-10",
+  "Observaciones": "Se encuentra en trámite un incidente de traslado (dato ficticio)."
+ },
+ {
+  "ID": 48,
+  "Nombre completo": "Samuel Zavala Galindo",
+  "Expediente": "EXP-FIC-1329/2023",
+  "Causa penal": "CP-FIC-147/2023",
+  "Delito": "Defraudación fiscal",
+  "Entidad Federativa": "Michoacán",
+  "Circuito": "Décimo Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Michoacán",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Tierra Caliente (ficticio)",
+  "Pena en años": 50,
+  "Fecha de sentencia": "2025-03-25",
+  "Fecha de inicio": "2023-01-20",
+  "Fecha de cumplimiento": "2073-01-20",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 49,
+  "Nombre completo": "Salvador Rosales Velasco",
+  "Expediente": "EXP-FIC-1336/2012",
+  "Causa penal": "CP-FIC-148/2012",
+  "Delito": "Operaciones con recursos de procedencia ilícita",
+  "Entidad Federativa": "Sinaloa",
+  "Circuito": "Décimo Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sinaloa",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noroeste (ficticio)",
+  "Pena en años": 8,
+  "Fecha de sentencia": "2013-09-18",
+  "Fecha de inicio": "2012-09-04",
+  "Fecha de cumplimiento": "2020-09-04",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 50,
+  "Nombre completo": "Gloria Alvarado Campos",
+  "Expediente": "EXP-FIC-1343/2021",
+  "Causa penal": "CP-FIC-149/2021",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Chihuahua",
+  "Circuito": "Décimo Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Chihuahua",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Frontera (ficticio)",
+  "Pena en años": 12,
+  "Fecha de sentencia": "2022-08-21",
+  "Fecha de inicio": "2021-05-15",
+  "Fecha de cumplimiento": "2033-05-15",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 51,
+  "Nombre completo": "Jesús Manuel Leyva Alvarado",
+  "Expediente": "EXP-FIC-1350/2016",
+  "Causa penal": "CP-FIC-150/2016",
+  "Delito": "Tráfico de personas",
+  "Entidad Federativa": "Ciudad de México",
+  "Circuito": "Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito de Procesos Penales Federales en la Ciudad de México",
+  "Lugar donde se encuentra": "Centro de Reinserción Oriente (ficticio)",
+  "Pena en años": 43,
+  "Fecha de sentencia": "2018-02-24",
+  "Fecha de inicio": "2016-07-31",
+  "Fecha de cumplimiento": "2059-07-28",
+  "Observaciones": "Sentencia firme. Registro de prueba."
+ },
+ {
+  "ID": 52,
+  "Nombre completo": "Luis Enrique Orozco Contreras",
+  "Expediente": "EXP-FIC-1357/2021",
+  "Causa penal": "CP-FIC-151/2021",
+  "Delito": "Secuestro",
+  "Entidad Federativa": "Estado de México",
+  "Circuito": "Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito en Materia Penal en el Estado de México",
+  "Lugar donde se encuentra": "Centro Estatal Valle Alto (ficticio)",
+  "Pena en años": 3,
+  "Fecha de sentencia": "2023-02-06",
+  "Fecha de inicio": "2021-03-25",
+  "Fecha de cumplimiento": "2024-03-25",
+  "Observaciones": "Pendiente de actualizar cómputo de la pena (dato ficticio)."
+ },
+ {
+  "ID": 53,
+  "Nombre completo": "Emilio Benítez Trejo",
+  "Expediente": "EXP-FIC-1364/2022",
+  "Causa penal": "CP-FIC-152/2022",
+  "Delito": "Operaciones con recursos de procedencia ilícita",
+  "Entidad Federativa": "Jalisco",
+  "Circuito": "Tercer Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito en Materia Penal en Jalisco",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Altos (ficticio)",
+  "Pena en años": 15,
+  "Fecha de sentencia": "2023-05-14",
+  "Fecha de inicio": "2022-07-10",
+  "Fecha de cumplimiento": "2037-07-10",
+  "Observaciones": "Promovió juicio de amparo directo (dato ficticio)."
+ },
+ {
+  "ID": 54,
+  "Nombre completo": "Adrián Galindo Aguilar",
+  "Expediente": "EXP-FIC-1371/2016",
+  "Causa penal": "CP-FIC-153/2016",
+  "Delito": "Defraudación fiscal",
+  "Entidad Federativa": "Nuevo León",
+  "Circuito": "Cuarto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Nuevo León",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noreste (ficticio)",
+  "Pena en años": 49,
+  "Fecha de sentencia": "2017-05-27",
+  "Fecha de inicio": "2016-02-18",
+  "Fecha de cumplimiento": "2065-02-18",
+  "Observaciones": "Sentencia firme. Registro de prueba."
+ },
+ {
+  "ID": 55,
+  "Nombre completo": "Blanca Estela Villaseñor Contreras",
+  "Expediente": "EXP-FIC-1378/2020",
+  "Causa penal": "CP-FIC-154/2020",
+  "Delito": "Delitos contra el ambiente",
+  "Entidad Federativa": "Sonora",
+  "Circuito": "Quinto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Sonora",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Desierto (ficticio)",
+  "Pena en años": 4,
+  "Fecha de sentencia": "2023-05-02",
+  "Fecha de inicio": "2020-11-14",
+  "Fecha de cumplimiento": "2024-11-14",
+  "Observaciones": "Pendiente de actualizar cómputo de la pena (dato ficticio)."
+ },
+ {
+  "ID": 56,
+  "Nombre completo": "María Fernanda Garza Contreras",
+  "Expediente": "EXP-FIC-1385/2022",
+  "Causa penal": "CP-FIC-155/2022",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Puebla",
+  "Circuito": "Sexto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Puebla",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Volcanes (ficticio)",
+  "Pena en años": 18,
+  "Fecha de sentencia": "2024-08-21",
+  "Fecha de inicio": "2022-05-16",
+  "Fecha de cumplimiento": "2040-05-16",
+  "Observaciones": "Requiere verificación de domicilio procesal (dato ficticio)."
+ },
+ {
+  "ID": 57,
+  "Nombre completo": "Diego Aguilar Montes",
+  "Expediente": "EXP-FIC-1392/2013",
+  "Causa penal": "CP-FIC-156/2013",
+  "Delito": "Tráfico de personas",
+  "Entidad Federativa": "Veracruz",
+  "Circuito": "Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito en Veracruz",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Sureste (ficticio)",
+  "Pena en años": 43,
+  "Fecha de sentencia": "2015-05-04",
+  "Fecha de inicio": "2013-09-18",
+  "Fecha de cumplimiento": "2056-09-18",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 58,
+  "Nombre completo": "Gabriel Valencia Camacho",
+  "Expediente": "EXP-FIC-1399/2021",
+  "Causa penal": "CP-FIC-157/2021",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Michoacán",
+  "Circuito": "Décimo Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Michoacán",
+  "Lugar donde se encuentra": "Centro Regional Lago Azul (ficticio)",
+  "Pena en años": 5,
+  "Fecha de sentencia": "2022-05-17",
+  "Fecha de inicio": "2021-01-06",
+  "Fecha de cumplimiento": "2026-01-06",
+  "Observaciones": "Promovió juicio de amparo directo (dato ficticio)."
+ },
+ {
+  "ID": 59,
+  "Nombre completo": "Julián Benítez Navarro",
+  "Expediente": "EXP-FIC-1406/2017",
+  "Causa penal": "CP-FIC-158/2017",
+  "Delito": "Delincuencia organizada",
+  "Entidad Federativa": "Sinaloa",
+  "Circuito": "Décimo Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Sinaloa",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noroeste (ficticio)",
+  "Pena en años": 19,
+  "Fecha de sentencia": "2018-06-08",
+  "Fecha de inicio": "2017-05-06",
+  "Fecha de cumplimiento": "2036-05-06",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 60,
+  "Nombre completo": "Isaac Contreras Medina",
+  "Expediente": "EXP-FIC-1413/2023",
+  "Causa penal": "CP-FIC-159/2023",
+  "Delito": "Falsificación de moneda",
+  "Entidad Federativa": "Chihuahua",
+  "Circuito": "Décimo Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Chihuahua",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Barrancas (ficticio)",
+  "Pena en años": 44,
+  "Fecha de sentencia": "2025-11-01",
+  "Fecha de inicio": "2023-05-23",
+  "Fecha de cumplimiento": "2067-05-23",
+  "Observaciones": "Promovió juicio de amparo directo (dato ficticio)."
+ },
+ {
+  "ID": 61,
+  "Nombre completo": "Isaac Palacios Maldonado",
+  "Expediente": "EXP-FIC-1420/2020",
+  "Causa penal": "CP-FIC-160/2020",
+  "Delito": "Robo de hidrocarburos",
+  "Entidad Federativa": "Ciudad de México",
+  "Circuito": "Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito de Procesos Penales Federales en la Ciudad de México",
+  "Lugar donde se encuentra": "Centro de Reinserción Oriente (ficticio)",
+  "Pena en años": 8,
+  "Fecha de sentencia": "2022-01-21",
+  "Fecha de inicio": "2020-02-26",
+  "Fecha de cumplimiento": "2028-02-26",
+  "Observaciones": "Solicitó beneficio de libertad anticipada (dato ficticio)."
+ },
+ {
+  "ID": 62,
+  "Nombre completo": "Luis Enrique Quintero Arellano",
+  "Expediente": "EXP-FIC-1427/2015",
+  "Causa penal": "CP-FIC-161/2015",
+  "Delito": "Robo de hidrocarburos",
+  "Entidad Federativa": "Estado de México",
+  "Circuito": "Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en el Estado de México",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Región Centro (ficticio)",
+  "Pena en años": 15,
+  "Fecha de sentencia": "2017-08-04",
+  "Fecha de inicio": "2015-05-14",
+  "Fecha de cumplimiento": "2030-05-14",
+  "Observaciones": "Sentencia firme. Registro de prueba."
+ },
+ {
+  "ID": 63,
+  "Nombre completo": "Ángel Aguilar Peña",
+  "Expediente": "EXP-FIC-1434/2015",
+  "Causa penal": "CP-FIC-162/2015",
+  "Delito": "Delincuencia organizada",
+  "Entidad Federativa": "Jalisco",
+  "Circuito": "Tercer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Jalisco",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Altos (ficticio)",
+  "Pena en años": 47,
+  "Fecha de sentencia": "2015-08-22",
+  "Fecha de inicio": "2015-01-30",
+  "Fecha de cumplimiento": "2062-01-28",
+  "Observaciones": "Pendiente de actualizar cómputo de la pena (dato ficticio)."
+ },
+ {
+  "ID": 64,
+  "Nombre completo": "Lorena Pacheco Zavala",
+  "Expediente": "EXP-FIC-1441/2018",
+  "Causa penal": "CP-FIC-163/2018",
+  "Delito": "Operaciones con recursos de procedencia ilícita",
+  "Entidad Federativa": "Nuevo León",
+  "Circuito": "Cuarto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Nuevo León",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Sierra Madre (ficticio)",
+  "Pena en años": 2,
+  "Fecha de sentencia": "2019-12-07",
+  "Fecha de inicio": "2018-09-07",
+  "Fecha de cumplimiento": "2020-09-07",
+  "Observaciones": "Sin observaciones adicionales."
+ },
+ {
+  "ID": 65,
+  "Nombre completo": "Noemí Espinoza Estrada",
+  "Expediente": "EXP-FIC-1448/2013",
+  "Causa penal": "CP-FIC-164/2013",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Sonora",
+  "Circuito": "Quinto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sonora",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Desierto (ficticio)",
+  "Pena en años": 15,
+  "Fecha de sentencia": "2014-03-29",
+  "Fecha de inicio": "2013-02-07",
+  "Fecha de cumplimiento": "2028-02-07",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 66,
+  "Nombre completo": "Bruno Bautista Salazar",
+  "Expediente": "EXP-FIC-1455/2019",
+  "Causa penal": "CP-FIC-165/2019",
+  "Delito": "Defraudación fiscal",
+  "Entidad Federativa": "Puebla",
+  "Circuito": "Sexto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Puebla",
+  "Lugar donde se encuentra": "Centro Regional de Reinserción Sur (ficticio)",
+  "Pena en años": 21,
+  "Fecha de sentencia": "2021-12-05",
+  "Fecha de inicio": "2019-11-02",
+  "Fecha de cumplimiento": "2040-11-02",
+  "Observaciones": "Promovió juicio de amparo directo (dato ficticio)."
+ },
+ {
+  "ID": 67,
+  "Nombre completo": "Valeria Leyva Miranda",
+  "Expediente": "EXP-FIC-1462/2018",
+  "Causa penal": "CP-FIC-166/2018",
+  "Delito": "Operaciones con recursos de procedencia ilícita",
+  "Entidad Federativa": "Veracruz",
+  "Circuito": "Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Veracruz",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Golfo (ficticio)",
+  "Pena en años": 9,
+  "Fecha de sentencia": "2020-06-09",
+  "Fecha de inicio": "2018-02-22",
+  "Fecha de cumplimiento": "2027-02-22",
+  "Observaciones": "Requiere verificación de domicilio procesal (dato ficticio)."
+ },
+ {
+  "ID": 68,
+  "Nombre completo": "José Luis Hernández Ruiz",
+  "Expediente": "EXP-FIC-1469/2017",
+  "Causa penal": "CP-FIC-167/2017",
+  "Delito": "Falsificación de moneda",
+  "Entidad Federativa": "Michoacán",
+  "Circuito": "Décimo Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Michoacán",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Tierra Caliente (ficticio)",
+  "Pena en años": 11,
+  "Fecha de sentencia": "2018-11-26",
+  "Fecha de inicio": "2017-04-22",
+  "Fecha de cumplimiento": "2028-04-22",
+  "Observaciones": "Homonimia ficticia de prueba: existe otro registro con el mismo nombre y distinta causa."
+ },
+ {
+  "ID": 69,
+  "Nombre completo": "María Fernanda Ochoa Robles",
+  "Expediente": "EXP-FIC-1476/2015",
+  "Causa penal": "CP-FIC-168/2015",
+  "Delito": "Secuestro",
+  "Entidad Federativa": "Sinaloa",
+  "Circuito": "Décimo Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sinaloa",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Pacífico (ficticio)",
+  "Pena en años": 30,
+  "Fecha de sentencia": "2018-03-18",
+  "Fecha de inicio": "2015-10-19",
+  "Fecha de cumplimiento": "2045-10-19",
+  "Observaciones": "Sin observaciones adicionales."
+ },
+ {
+  "ID": 70,
+  "Nombre completo": "Pablo Cervantes Cabrera",
+  "Expediente": "EXP-FIC-1483/2021",
+  "Causa penal": "CP-FIC-169/2021",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Chihuahua",
+  "Circuito": "Décimo Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Chihuahua",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Frontera (ficticio)",
+  "Pena en años": 7,
+  "Fecha de sentencia": "2022-06-14",
+  "Fecha de inicio": "2021-08-19",
+  "Fecha de cumplimiento": "2028-08-19",
+  "Observaciones": "Pendiente de actualizar cómputo de la pena (dato ficticio)."
+ },
+ {
+  "ID": 71,
+  "Nombre completo": "Ramiro Mejía Miranda",
+  "Expediente": "EXP-FIC-1490/2022",
+  "Causa penal": "CP-FIC-170/2022",
+  "Delito": "Contra la salud (transporte)",
+  "Entidad Federativa": "Ciudad de México",
+  "Circuito": "Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito de Procesos Penales Federales en la Ciudad de México",
+  "Lugar donde se encuentra": "Centro de Reinserción Norte (ficticio)",
+  "Pena en años": 15,
+  "Fecha de sentencia": "2024-02-12",
+  "Fecha de inicio": "2022-06-22",
+  "Fecha de cumplimiento": "2037-06-22",
+  "Observaciones": "Pendiente de actualizar cómputo de la pena (dato ficticio)."
+ },
+ {
+  "ID": 72,
+  "Nombre completo": "Elena Solís Tapia",
+  "Expediente": "EXP-FIC-1497/2021",
+  "Causa penal": "CP-FIC-171/2021",
+  "Delito": "Robo de hidrocarburos",
+  "Entidad Federativa": "Estado de México",
+  "Circuito": "Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en el Estado de México",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Región Centro (ficticio)",
+  "Pena en años": 36,
+  "Fecha de sentencia": "2023-12-29",
+  "Fecha de inicio": "2021-09-02",
+  "Fecha de cumplimiento": "2057-09-02",
+  "Observaciones": "Sentencia firme. Registro de prueba."
+ },
+ {
+  "ID": 73,
+  "Nombre completo": "Mario Palacios Galindo",
+  "Expediente": "EXP-FIC-1504/2023",
+  "Causa penal": "CP-FIC-172/2023",
+  "Delito": "Delitos contra el ambiente",
+  "Entidad Federativa": "Jalisco",
+  "Circuito": "Tercer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Jalisco",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Occidente (ficticio)",
+  "Pena en años": 8,
+  "Fecha de sentencia": "2025-08-01",
+  "Fecha de inicio": "2023-08-24",
+  "Fecha de cumplimiento": "2031-08-24",
+  "Observaciones": "Se encuentra en trámite un incidente de traslado (dato ficticio)."
+ },
+ {
+  "ID": 74,
+  "Nombre completo": "Emilio Tapia Zavala",
+  "Expediente": "EXP-FIC-1511/2017",
+  "Causa penal": "CP-FIC-173/2017",
+  "Delito": "Delincuencia organizada",
+  "Entidad Federativa": "Nuevo León",
+  "Circuito": "Cuarto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Nuevo León",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Sierra Madre (ficticio)",
+  "Pena en años": 11,
+  "Fecha de sentencia": "2019-06-05",
+  "Fecha de inicio": "2017-02-17",
+  "Fecha de cumplimiento": "2028-02-17",
+  "Observaciones": "Sin observaciones adicionales."
+ },
+ {
+  "ID": 75,
+  "Nombre completo": "Patricia Cabrera Camacho",
+  "Expediente": "EXP-FIC-1518/2017",
+  "Causa penal": "CP-FIC-174/2017",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Sonora",
+  "Circuito": "Quinto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Sonora",
+  "Lugar donde se encuentra": "Centro Estatal Costa Norte (ficticio)",
+  "Pena en años": 41,
+  "Fecha de sentencia": "2019-01-18",
+  "Fecha de inicio": "2017-10-27",
+  "Fecha de cumplimiento": "2058-10-27",
+  "Observaciones": "Promovió juicio de amparo directo (dato ficticio)."
+ },
+ {
+  "ID": 76,
+  "Nombre completo": "Beatriz Márquez Navarro",
+  "Expediente": "EXP-FIC-1525/2022",
+  "Causa penal": "CP-FIC-175/2022",
+  "Delito": "Delincuencia organizada",
+  "Entidad Federativa": "Puebla",
+  "Circuito": "Sexto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Puebla",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Volcanes (ficticio)",
+  "Pena en años": 7,
+  "Fecha de sentencia": "2023-08-15",
+  "Fecha de inicio": "2022-07-23",
+  "Fecha de cumplimiento": "2029-07-23",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 77,
+  "Nombre completo": "César Figueroa Márquez",
+  "Expediente": "EXP-FIC-1532/2023",
+  "Causa penal": "CP-FIC-176/2023",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Veracruz",
+  "Circuito": "Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Veracruz",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Sureste (ficticio)",
+  "Pena en años": 16,
+  "Fecha de sentencia": "2026-01-27",
+  "Fecha de inicio": "2023-10-18",
+  "Fecha de cumplimiento": "2039-10-18",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 78,
+  "Nombre completo": "Emilio Aguilar Escobar",
+  "Expediente": "EXP-FIC-1539/2017",
+  "Causa penal": "CP-FIC-177/2017",
+  "Delito": "Contra la salud (transporte)",
+  "Entidad Federativa": "Michoacán",
+  "Circuito": "Décimo Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Michoacán",
+  "Lugar donde se encuentra": "Centro Regional Lago Azul (ficticio)",
+  "Pena en años": 33,
+  "Fecha de sentencia": "2018-08-30",
+  "Fecha de inicio": "2017-04-16",
+  "Fecha de cumplimiento": "2050-04-16",
+  "Observaciones": "Se encuentra en trámite un incidente de traslado (dato ficticio)."
+ },
+ {
+  "ID": 79,
+  "Nombre completo": "María Fernanda López Castro",
+  "Expediente": "EXP-FIC-1546/2021",
+  "Causa penal": "CP-FIC-178/2021",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Sinaloa",
+  "Circuito": "Décimo Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Sinaloa",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noroeste (ficticio)",
+  "Pena en años": 2,
+  "Fecha de sentencia": "2022-06-19",
+  "Fecha de inicio": "2021-02-12",
+  "Fecha de cumplimiento": "2023-02-12",
+  "Observaciones": "Homonimia ficticia de prueba: existe otro registro con el mismo nombre y distinta causa."
+ },
+ {
+  "ID": 80,
+  "Nombre completo": "César Castañeda Cabrera",
+  "Expediente": "EXP-FIC-1553/2017",
+  "Causa penal": "CP-FIC-179/2017",
+  "Delito": "Delincuencia organizada",
+  "Entidad Federativa": "Chihuahua",
+  "Circuito": "Décimo Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Chihuahua",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Barrancas (ficticio)",
+  "Pena en años": 19,
+  "Fecha de sentencia": "2019-05-15",
+  "Fecha de inicio": "2017-08-02",
+  "Fecha de cumplimiento": "2036-08-02",
+  "Observaciones": "Promovió juicio de amparo directo (dato ficticio)."
+ },
+ {
+  "ID": 81,
+  "Nombre completo": "Omar Lara Espinoza",
+  "Expediente": "EXP-FIC-1560/2023",
+  "Causa penal": "CP-FIC-180/2023",
+  "Delito": "Robo de hidrocarburos",
+  "Entidad Federativa": "Ciudad de México",
+  "Circuito": "Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito de Procesos Penales Federales en la Ciudad de México",
+  "Lugar donde se encuentra": "Centro de Reinserción Oriente (ficticio)",
+  "Pena en años": 40,
+  "Fecha de sentencia": "2026-01-05",
+  "Fecha de inicio": "2023-11-07",
+  "Fecha de cumplimiento": "2063-11-07",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 82,
+  "Nombre completo": "Hilda Arellano Cervantes",
+  "Expediente": "EXP-FIC-1567/2023",
+  "Causa penal": "CP-FIC-181/2023",
+  "Delito": "Delincuencia organizada",
+  "Entidad Federativa": "Estado de México",
+  "Circuito": "Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito en Materia Penal en el Estado de México",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Región Centro (ficticio)",
+  "Pena en años": 6,
+  "Fecha de sentencia": "2023-11-24",
+  "Fecha de inicio": "2023-02-28",
+  "Fecha de cumplimiento": "2029-02-28",
+  "Observaciones": "Solicitó beneficio de libertad anticipada (dato ficticio)."
+ },
+ {
+  "ID": 83,
+  "Nombre completo": "Raúl Ochoa Miranda",
+  "Expediente": "EXP-FIC-1574/2023",
+  "Causa penal": "CP-FIC-182/2023",
+  "Delito": "Robo de hidrocarburos",
+  "Entidad Federativa": "Jalisco",
+  "Circuito": "Tercer Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito en Materia Penal en Jalisco",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Occidente (ficticio)",
+  "Pena en años": 11,
+  "Fecha de sentencia": "2023-10-26",
+  "Fecha de inicio": "2023-01-30",
+  "Fecha de cumplimiento": "2034-01-28",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 84,
+  "Nombre completo": "Araceli Alvarado Garza",
+  "Expediente": "EXP-FIC-1581/2020",
+  "Causa penal": "CP-FIC-183/2020",
+  "Delito": "Falsificación de moneda",
+  "Entidad Federativa": "Nuevo León",
+  "Circuito": "Cuarto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Nuevo León",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noreste (ficticio)",
+  "Pena en años": 37,
+  "Fecha de sentencia": "2021-06-02",
+  "Fecha de inicio": "2020-10-12",
+  "Fecha de cumplimiento": "2057-10-12",
+  "Observaciones": "Promovió juicio de amparo directo (dato ficticio)."
+ },
+ {
+  "ID": 85,
+  "Nombre completo": "Karina Barrios Villaseñor",
+  "Expediente": "EXP-FIC-1588/2018",
+  "Causa penal": "CP-FIC-184/2018",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Sonora",
+  "Circuito": "Quinto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sonora",
+  "Lugar donde se encuentra": "Centro Estatal Costa Norte (ficticio)",
+  "Pena en años": 9,
+  "Fecha de sentencia": "2018-12-14",
+  "Fecha de inicio": "2018-05-03",
+  "Fecha de cumplimiento": "2027-05-03",
+  "Observaciones": "Se encuentra en trámite un incidente de traslado (dato ficticio)."
+ },
+ {
+  "ID": 86,
+  "Nombre completo": "Alma Delia Palacios Miranda",
+  "Expediente": "EXP-FIC-1595/2012",
+  "Causa penal": "CP-FIC-185/2012",
+  "Delito": "Operaciones con recursos de procedencia ilícita",
+  "Entidad Federativa": "Puebla",
+  "Circuito": "Sexto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Puebla",
+  "Lugar donde se encuentra": "Centro Regional de Reinserción Sur (ficticio)",
+  "Pena en años": 10,
+  "Fecha de sentencia": "2014-06-08",
+  "Fecha de inicio": "2012-08-18",
+  "Fecha de cumplimiento": "2022-08-18",
+  "Observaciones": "Sin observaciones adicionales."
+ },
+ {
+  "ID": 87,
+  "Nombre completo": "Cristian Arellano Palacios",
+  "Expediente": "EXP-FIC-1602/2016",
+  "Causa penal": "CP-FIC-186/2016",
+  "Delito": "Robo de hidrocarburos",
+  "Entidad Federativa": "Veracruz",
+  "Circuito": "Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito en Veracruz",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Sureste (ficticio)",
+  "Pena en años": 37,
+  "Fecha de sentencia": "2018-07-20",
+  "Fecha de inicio": "2016-03-18",
+  "Fecha de cumplimiento": "2053-03-18",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 88,
+  "Nombre completo": "César Medina Lara",
+  "Expediente": "EXP-FIC-1609/2018",
+  "Causa penal": "CP-FIC-187/2018",
+  "Delito": "Contra la salud (posesión con fines de comercio)",
+  "Entidad Federativa": "Michoacán",
+  "Circuito": "Décimo Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Michoacán",
+  "Lugar donde se encuentra": "Centro Regional Lago Azul (ficticio)",
+  "Pena en años": 3,
+  "Fecha de sentencia": "2020-05-14",
+  "Fecha de inicio": "2018-07-23",
+  "Fecha de cumplimiento": "2021-07-23",
+  "Observaciones": "Sentencia firme. Registro de prueba."
+ },
+ {
+  "ID": 89,
+  "Nombre completo": "Víctor Hugo Lozano Salazar",
+  "Expediente": "EXP-FIC-1616/2017",
+  "Causa penal": "CP-FIC-188/2017",
+  "Delito": "Delitos contra el ambiente",
+  "Entidad Federativa": "Sinaloa",
+  "Circuito": "Décimo Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sinaloa",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noroeste (ficticio)",
+  "Pena en años": 11,
+  "Fecha de sentencia": "2017-12-08",
+  "Fecha de inicio": "2017-03-21",
+  "Fecha de cumplimiento": "2028-03-21",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 90,
+  "Nombre completo": "Juan Pablo Ramírez Soto",
+  "Expediente": "EXP-FIC-1623/2012",
+  "Causa penal": "CP-FIC-189/2012",
+  "Delito": "Tráfico de personas",
+  "Entidad Federativa": "Chihuahua",
+  "Circuito": "Décimo Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Chihuahua",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Barrancas (ficticio)",
+  "Pena en años": 28,
+  "Fecha de sentencia": "2013-11-24",
+  "Fecha de inicio": "2012-03-10",
+  "Fecha de cumplimiento": "2040-03-10",
+  "Observaciones": "Homonimia ficticia de prueba: existe otro registro con el mismo nombre y distinta causa."
+ },
+ {
+  "ID": 91,
+  "Nombre completo": "Javier Aguilar Figueroa",
+  "Expediente": "EXP-FIC-1630/2020",
+  "Causa penal": "CP-FIC-190/2020",
+  "Delito": "Contra la salud (posesión con fines de comercio)",
+  "Entidad Federativa": "Ciudad de México",
+  "Circuito": "Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito de Procesos Penales Federales en la Ciudad de México",
+  "Lugar donde se encuentra": "Centro de Reinserción Oriente (ficticio)",
+  "Pena en años": 7,
+  "Fecha de sentencia": "2022-05-21",
+  "Fecha de inicio": "2020-10-01",
+  "Fecha de cumplimiento": "2027-10-01",
+  "Observaciones": "Pendiente de actualizar cómputo de la pena (dato ficticio)."
+ },
+ {
+  "ID": 92,
+  "Nombre completo": "Raúl Valdez Delgado",
+  "Expediente": "EXP-FIC-1637/2019",
+  "Causa penal": "CP-FIC-191/2019",
+  "Delito": "Delincuencia organizada",
+  "Entidad Federativa": "Estado de México",
+  "Circuito": "Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en el Estado de México",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Región Centro (ficticio)",
+  "Pena en años": 14,
+  "Fecha de sentencia": "2020-08-02",
+  "Fecha de inicio": "2019-10-26",
+  "Fecha de cumplimiento": "2033-10-26",
+  "Observaciones": "Sin observaciones adicionales."
+ },
+ {
+  "ID": 93,
+  "Nombre completo": "Valeria Cárdenas Miranda",
+  "Expediente": "EXP-FIC-1644/2015",
+  "Causa penal": "CP-FIC-192/2015",
+  "Delito": "Contra la salud (posesión con fines de comercio)",
+  "Entidad Federativa": "Jalisco",
+  "Circuito": "Tercer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Jalisco",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Altos (ficticio)",
+  "Pena en años": 40,
+  "Fecha de sentencia": "2016-08-24",
+  "Fecha de inicio": "2015-02-05",
+  "Fecha de cumplimiento": "2055-02-05",
+  "Observaciones": "Pendiente de actualizar cómputo de la pena (dato ficticio)."
+ },
+ {
+  "ID": 94,
+  "Nombre completo": "Marco Antonio Cárdenas Pacheco",
+  "Expediente": "EXP-FIC-1651/2018",
+  "Causa penal": "CP-FIC-193/2018",
+  "Delito": "Delitos contra el ambiente",
+  "Entidad Federativa": "Nuevo León",
+  "Circuito": "Cuarto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Nuevo León",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noreste (ficticio)",
+  "Pena en años": 7,
+  "Fecha de sentencia": "2020-06-11",
+  "Fecha de inicio": "2018-08-07",
+  "Fecha de cumplimiento": "2025-08-07",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 95,
+  "Nombre completo": "Arturo Rosales Márquez",
+  "Expediente": "EXP-FIC-1658/2023",
+  "Causa penal": "CP-FIC-194/2023",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Sonora",
+  "Circuito": "Quinto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Sonora",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Desierto (ficticio)",
+  "Pena en años": 16,
+  "Fecha de sentencia": "2024-07-28",
+  "Fecha de inicio": "2023-03-18",
+  "Fecha de cumplimiento": "2039-03-18",
+  "Observaciones": "Requiere verificación de domicilio procesal (dato ficticio)."
+ },
+ {
+  "ID": 96,
+  "Nombre completo": "José Luis Hernández Ríos",
+  "Expediente": "EXP-FIC-1665/2012",
+  "Causa penal": "CP-FIC-195/2012",
+  "Delito": "Secuestro",
+  "Entidad Federativa": "Puebla",
+  "Circuito": "Sexto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Puebla",
+  "Lugar donde se encuentra": "Centro Regional de Reinserción Sur (ficticio)",
+  "Pena en años": 47,
+  "Fecha de sentencia": "2013-08-08",
+  "Fecha de inicio": "2012-11-15",
+  "Fecha de cumplimiento": "2059-11-15",
+  "Observaciones": "Nombre ficticio similar a otro registro, para probar búsquedas ambiguas."
+ },
+ {
+  "ID": 97,
+  "Nombre completo": "Sergio Valencia Contreras",
+  "Expediente": "EXP-FIC-1672/2014",
+  "Causa penal": "CP-FIC-196/2014",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Veracruz",
+  "Circuito": "Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Veracruz",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Golfo (ficticio)",
+  "Pena en años": 8,
+  "Fecha de sentencia": "2016-06-25",
+  "Fecha de inicio": "2014-03-28",
+  "Fecha de cumplimiento": "2022-03-28",
+  "Observaciones": "Pendiente de actualizar cómputo de la pena (dato ficticio)."
+ },
+ {
+  "ID": 98,
+  "Nombre completo": "Sergio Velasco Camacho",
+  "Expediente": "EXP-FIC-1679/2016",
+  "Causa penal": "CP-FIC-197/2016",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Michoacán",
+  "Circuito": "Décimo Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Michoacán",
+  "Lugar donde se encuentra": "Centro Regional Lago Azul (ficticio)",
+  "Pena en años": 17,
+  "Fecha de sentencia": "2018-08-02",
+  "Fecha de inicio": "2016-09-23",
+  "Fecha de cumplimiento": "2033-09-23",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 99,
+  "Nombre completo": "Víctor Hugo Camacho Cárdenas",
+  "Expediente": "EXP-FIC-1686/2018",
+  "Causa penal": "CP-FIC-198/2018",
+  "Delito": "Contra la salud (transporte)",
+  "Entidad Federativa": "Sinaloa",
+  "Circuito": "Décimo Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Sinaloa",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noroeste (ficticio)",
+  "Pena en años": 49,
+  "Fecha de sentencia": "2020-03-03",
+  "Fecha de inicio": "2018-04-12",
+  "Fecha de cumplimiento": "2067-04-12",
+  "Observaciones": "Sentencia firme. Registro de prueba."
+ },
+ {
+  "ID": 100,
+  "Nombre completo": "Ricardo Cárdenas Sandoval",
+  "Expediente": "EXP-FIC-1693/2015",
+  "Causa penal": "CP-FIC-199/2015",
+  "Delito": "Operaciones con recursos de procedencia ilícita",
+  "Entidad Federativa": "Chihuahua",
+  "Circuito": "Décimo Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Chihuahua",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Frontera (ficticio)",
+  "Pena en años": 6,
+  "Fecha de sentencia": "2017-08-04",
+  "Fecha de inicio": "2015-11-12",
+  "Fecha de cumplimiento": "2021-11-12",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 101,
+  "Nombre completo": "Benito Valdez Cabrera",
+  "Expediente": "EXP-FIC-1700/2016",
+  "Causa penal": "CP-FIC-200/2016",
+  "Delito": "Defraudación fiscal",
+  "Entidad Federativa": "Ciudad de México",
+  "Circuito": "Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito de Procesos Penales Federales en la Ciudad de México",
+  "Lugar donde se encuentra": "Centro de Reinserción Oriente (ficticio)",
+  "Pena en años": 19,
+  "Fecha de sentencia": "2017-11-07",
+  "Fecha de inicio": "2016-08-18",
+  "Fecha de cumplimiento": "2035-08-18",
+  "Observaciones": "Se encuentra en trámite un incidente de traslado (dato ficticio)."
+ },
+ {
+  "ID": 102,
+  "Nombre completo": "Bruno Barrios Rosales",
+  "Expediente": "EXP-FIC-1707/2016",
+  "Causa penal": "CP-FIC-201/2016",
+  "Delito": "Delitos contra el ambiente",
+  "Entidad Federativa": "Estado de México",
+  "Circuito": "Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en el Estado de México",
+  "Lugar donde se encuentra": "Centro Estatal Valle Alto (ficticio)",
+  "Pena en años": 39,
+  "Fecha de sentencia": "2018-10-04",
+  "Fecha de inicio": "2016-07-27",
+  "Fecha de cumplimiento": "2055-07-27",
+  "Observaciones": "Requiere verificación de domicilio procesal (dato ficticio)."
+ },
+ {
+  "ID": 103,
+  "Nombre completo": "Isaac Villaseñor Cárdenas",
+  "Expediente": "EXP-FIC-1714/2012",
+  "Causa penal": "CP-FIC-202/2012",
+  "Delito": "Contra la salud (transporte)",
+  "Entidad Federativa": "Jalisco",
+  "Circuito": "Tercer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Jalisco",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Altos (ficticio)",
+  "Pena en años": 6,
+  "Fecha de sentencia": "2014-07-02",
+  "Fecha de inicio": "2012-10-26",
+  "Fecha de cumplimiento": "2018-10-26",
+  "Observaciones": "Solicitó beneficio de libertad anticipada (dato ficticio)."
+ },
+ {
+  "ID": 104,
+  "Nombre completo": "Néstor Villaseñor Garza",
+  "Expediente": "EXP-FIC-1721/2019",
+  "Causa penal": "CP-FIC-203/2019",
+  "Delito": "Secuestro",
+  "Entidad Federativa": "Nuevo León",
+  "Circuito": "Cuarto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Nuevo León",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noreste (ficticio)",
+  "Pena en años": 11,
+  "Fecha de sentencia": "2021-06-15",
+  "Fecha de inicio": "2019-06-26",
+  "Fecha de cumplimiento": "2030-06-26",
+  "Observaciones": "Solicitó beneficio de libertad anticipada (dato ficticio)."
+ },
+ {
+  "ID": 105,
+  "Nombre completo": "José Luis Fernández Ruiz",
+  "Expediente": "EXP-FIC-1728/2016",
+  "Causa penal": "CP-FIC-204/2016",
+  "Delito": "Tráfico de personas",
+  "Entidad Federativa": "Sonora",
+  "Circuito": "Quinto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sonora",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Desierto (ficticio)",
+  "Pena en años": 21,
+  "Fecha de sentencia": "2017-02-05",
+  "Fecha de inicio": "2016-07-09",
+  "Fecha de cumplimiento": "2037-07-09",
+  "Observaciones": "Nombre ficticio similar a otro registro, para probar búsquedas ambiguas."
+ },
+ {
+  "ID": 106,
+  "Nombre completo": "Tomás Delgado Sandoval",
+  "Expediente": "EXP-FIC-1735/2012",
+  "Causa penal": "CP-FIC-205/2012",
+  "Delito": "Falsificación de moneda",
+  "Entidad Federativa": "Puebla",
+  "Circuito": "Sexto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Puebla",
+  "Lugar donde se encuentra": "Centro Regional de Reinserción Sur (ficticio)",
+  "Pena en años": 6,
+  "Fecha de sentencia": "2015-01-08",
+  "Fecha de inicio": "2012-08-15",
+  "Fecha de cumplimiento": "2018-08-15",
+  "Observaciones": "Sin observaciones adicionales."
+ },
+ {
+  "ID": 107,
+  "Nombre completo": "Blanca Estela Gallardo Quintero",
+  "Expediente": "EXP-FIC-1742/2020",
+  "Causa penal": "CP-FIC-206/2020",
+  "Delito": "Falsificación de moneda",
+  "Entidad Federativa": "Veracruz",
+  "Circuito": "Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Veracruz",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Sureste (ficticio)",
+  "Pena en años": 18,
+  "Fecha de sentencia": "2022-08-11",
+  "Fecha de inicio": "2020-09-12",
+  "Fecha de cumplimiento": "2038-09-12",
+  "Observaciones": "Solicitó beneficio de libertad anticipada (dato ficticio)."
+ },
+ {
+  "ID": 108,
+  "Nombre completo": "Gustavo Cervantes Lara",
+  "Expediente": "EXP-FIC-1749/2018",
+  "Causa penal": "CP-FIC-207/2018",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Michoacán",
+  "Circuito": "Décimo Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Michoacán",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Tierra Caliente (ficticio)",
+  "Pena en años": 48,
+  "Fecha de sentencia": "2020-02-19",
+  "Fecha de inicio": "2018-04-25",
+  "Fecha de cumplimiento": "2066-04-25",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 109,
+  "Nombre completo": "Gloria Ibarra Figueroa",
+  "Expediente": "EXP-FIC-1756/2021",
+  "Causa penal": "CP-FIC-208/2021",
+  "Delito": "Robo de hidrocarburos",
+  "Entidad Federativa": "Sinaloa",
+  "Circuito": "Décimo Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sinaloa",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Pacífico (ficticio)",
+  "Pena en años": 6,
+  "Fecha de sentencia": "2023-03-25",
+  "Fecha de inicio": "2021-04-26",
+  "Fecha de cumplimiento": "2027-04-26",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 110,
+  "Nombre completo": "Ricardo Mejía Valencia",
+  "Expediente": "EXP-FIC-1763/2012",
+  "Causa penal": "CP-FIC-209/2012",
+  "Delito": "Defraudación fiscal",
+  "Entidad Federativa": "Chihuahua",
+  "Circuito": "Décimo Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Chihuahua",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Barrancas (ficticio)",
+  "Pena en años": 11,
+  "Fecha de sentencia": "2013-11-26",
+  "Fecha de inicio": "2012-07-03",
+  "Fecha de cumplimiento": "2023-07-03",
+  "Observaciones": "Solicitó beneficio de libertad anticipada (dato ficticio)."
+ },
+ {
+  "ID": 111,
+  "Nombre completo": "Cecilia Miranda Cárdenas",
+  "Expediente": "EXP-FIC-1770/2018",
+  "Causa penal": "CP-FIC-210/2018",
+  "Delito": "Contra la salud (posesión con fines de comercio)",
+  "Entidad Federativa": "Ciudad de México",
+  "Circuito": "Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito de Procesos Penales Federales en la Ciudad de México",
+  "Lugar donde se encuentra": "Centro de Reinserción Oriente (ficticio)",
+  "Pena en años": 37,
+  "Fecha de sentencia": "2020-07-13",
+  "Fecha de inicio": "2018-10-01",
+  "Fecha de cumplimiento": "2055-10-01",
+  "Observaciones": "Pendiente de actualizar cómputo de la pena (dato ficticio)."
+ },
+ {
+  "ID": 112,
+  "Nombre completo": "Karina Mejía Maldonado",
+  "Expediente": "EXP-FIC-1777/2020",
+  "Causa penal": "CP-FIC-211/2020",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Estado de México",
+  "Circuito": "Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito en Materia Penal en el Estado de México",
+  "Lugar donde se encuentra": "Centro Estatal Valle Alto (ficticio)",
+  "Pena en años": 9,
+  "Fecha de sentencia": "2020-08-01",
+  "Fecha de inicio": "2020-01-07",
+  "Fecha de cumplimiento": "2029-01-07",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 113,
+  "Nombre completo": "Pablo Zavala Palacios",
+  "Expediente": "EXP-FIC-1784/2018",
+  "Causa penal": "CP-FIC-212/2018",
+  "Delito": "Operaciones con recursos de procedencia ilícita",
+  "Entidad Federativa": "Jalisco",
+  "Circuito": "Tercer Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito en Materia Penal en Jalisco",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Altos (ficticio)",
+  "Pena en años": 18,
+  "Fecha de sentencia": "2020-01-16",
+  "Fecha de inicio": "2018-04-24",
+  "Fecha de cumplimiento": "2036-04-24",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 114,
+  "Nombre completo": "María Fernanda López Castillo",
+  "Expediente": "EXP-FIC-1791/2015",
+  "Causa penal": "CP-FIC-213/2015",
+  "Delito": "Falsificación de moneda",
+  "Entidad Federativa": "Nuevo León",
+  "Circuito": "Cuarto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Nuevo León",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noreste (ficticio)",
+  "Pena en años": 30,
+  "Fecha de sentencia": "2015-12-21",
+  "Fecha de inicio": "2015-04-02",
+  "Fecha de cumplimiento": "2045-04-02",
+  "Observaciones": "Nombre ficticio similar a otro registro, para probar búsquedas ambiguas."
+ },
+ {
+  "ID": 115,
+  "Nombre completo": "Noemí Figueroa Garza",
+  "Expediente": "EXP-FIC-1798/2014",
+  "Causa penal": "CP-FIC-214/2014",
+  "Delito": "Robo de hidrocarburos",
+  "Entidad Federativa": "Sonora",
+  "Circuito": "Quinto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Sonora",
+  "Lugar donde se encuentra": "Centro Estatal Costa Norte (ficticio)",
+  "Pena en años": 8,
+  "Fecha de sentencia": "2015-01-22",
+  "Fecha de inicio": "2014-04-06",
+  "Fecha de cumplimiento": "2022-04-06",
+  "Observaciones": "Solicitó beneficio de libertad anticipada (dato ficticio)."
+ },
+ {
+  "ID": 116,
+  "Nombre completo": "Octavio Espinoza Barrios",
+  "Expediente": "EXP-FIC-1805/2013",
+  "Causa penal": "CP-FIC-215/2013",
+  "Delito": "Delitos contra el ambiente",
+  "Entidad Federativa": "Puebla",
+  "Circuito": "Sexto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Puebla",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Volcanes (ficticio)",
+  "Pena en años": 20,
+  "Fecha de sentencia": "2014-10-27",
+  "Fecha de inicio": "2013-09-23",
+  "Fecha de cumplimiento": "2033-09-23",
+  "Observaciones": "Requiere verificación de domicilio procesal (dato ficticio)."
+ },
+ {
+  "ID": 117,
+  "Nombre completo": "Gabriel Cordero Fuentes",
+  "Expediente": "EXP-FIC-1812/2023",
+  "Causa penal": "CP-FIC-216/2023",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Veracruz",
+  "Circuito": "Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito en Veracruz",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Golfo (ficticio)",
+  "Pena en años": 50,
+  "Fecha de sentencia": "2024-11-03",
+  "Fecha de inicio": "2023-10-30",
+  "Fecha de cumplimiento": "2073-10-28",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 118,
+  "Nombre completo": "Elena Benítez Guerrero",
+  "Expediente": "EXP-FIC-1819/2022",
+  "Causa penal": "CP-FIC-217/2022",
+  "Delito": "Secuestro",
+  "Entidad Federativa": "Michoacán",
+  "Circuito": "Décimo Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Michoacán",
+  "Lugar donde se encuentra": "Centro Regional Lago Azul (ficticio)",
+  "Pena en años": 5,
+  "Fecha de sentencia": "2023-09-08",
+  "Fecha de inicio": "2022-10-10",
+  "Fecha de cumplimiento": "2027-10-10",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 119,
+  "Nombre completo": "Elena Figueroa Zamora",
+  "Expediente": "EXP-FIC-1826/2021",
+  "Causa penal": "CP-FIC-218/2021",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Sinaloa",
+  "Circuito": "Décimo Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Sinaloa",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Pacífico (ficticio)",
+  "Pena en años": 14,
+  "Fecha de sentencia": "2022-04-28",
+  "Fecha de inicio": "2021-08-15",
+  "Fecha de cumplimiento": "2035-08-15",
+  "Observaciones": "Pendiente de actualizar cómputo de la pena (dato ficticio)."
+ },
+ {
+  "ID": 120,
+  "Nombre completo": "Alma Delia Zavala Maldonado",
+  "Expediente": "EXP-FIC-1833/2013",
+  "Causa penal": "CP-FIC-219/2013",
+  "Delito": "Robo de hidrocarburos",
+  "Entidad Federativa": "Chihuahua",
+  "Circuito": "Décimo Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Chihuahua",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Frontera (ficticio)",
+  "Pena en años": 50,
+  "Fecha de sentencia": "2014-10-16",
+  "Fecha de inicio": "2013-01-18",
+  "Fecha de cumplimiento": "2063-01-18",
+  "Observaciones": "Requiere verificación de domicilio procesal (dato ficticio)."
+ },
+ {
+  "ID": 121,
+  "Nombre completo": "Néstor Sandoval Trejo",
+  "Expediente": "EXP-FIC-1840/2015",
+  "Causa penal": "CP-FIC-220/2015",
+  "Delito": "Secuestro",
+  "Entidad Federativa": "Ciudad de México",
+  "Circuito": "Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito de Procesos Penales Federales en la Ciudad de México",
+  "Lugar donde se encuentra": "Centro de Reinserción Norte (ficticio)",
+  "Pena en años": 7,
+  "Fecha de sentencia": "2017-07-27",
+  "Fecha de inicio": "2015-09-25",
+  "Fecha de cumplimiento": "2022-09-25",
+  "Observaciones": "Requiere verificación de domicilio procesal (dato ficticio)."
+ },
+ {
+  "ID": 122,
+  "Nombre completo": "Beatriz Camacho Orozco",
+  "Expediente": "EXP-FIC-1847/2021",
+  "Causa penal": "CP-FIC-221/2021",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Estado de México",
+  "Circuito": "Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en el Estado de México",
+  "Lugar donde se encuentra": "Centro Estatal Valle Alto (ficticio)",
+  "Pena en años": 13,
+  "Fecha de sentencia": "2022-11-25",
+  "Fecha de inicio": "2021-10-02",
+  "Fecha de cumplimiento": "2034-10-02",
+  "Observaciones": "Solicitó beneficio de libertad anticipada (dato ficticio)."
+ },
+ {
+  "ID": 123,
+  "Nombre completo": "Alfonso Orozco Tapia",
+  "Expediente": "EXP-FIC-1854/2018",
+  "Causa penal": "CP-FIC-222/2018",
+  "Delito": "Falsificación de moneda",
+  "Entidad Federativa": "Jalisco",
+  "Circuito": "Tercer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Jalisco",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Altos (ficticio)",
+  "Pena en años": 21,
+  "Fecha de sentencia": "2019-10-23",
+  "Fecha de inicio": "2018-11-08",
+  "Fecha de cumplimiento": "2039-11-08",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 124,
+  "Nombre completo": "Sergio Cabrera Aguilar",
+  "Expediente": "EXP-FIC-1861/2020",
+  "Causa penal": "CP-FIC-223/2020",
+  "Delito": "Contra la salud (posesión con fines de comercio)",
+  "Entidad Federativa": "Nuevo León",
+  "Circuito": "Cuarto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Nuevo León",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noreste (ficticio)",
+  "Pena en años": 2,
+  "Fecha de sentencia": "2020-11-02",
+  "Fecha de inicio": "2020-03-16",
+  "Fecha de cumplimiento": "2022-03-16",
+  "Observaciones": "Se encuentra en trámite un incidente de traslado (dato ficticio)."
+ },
+ {
+  "ID": 125,
+  "Nombre completo": "Edgar Cárdenas Domínguez",
+  "Expediente": "EXP-FIC-1868/2012",
+  "Causa penal": "CP-FIC-224/2012",
+  "Delito": "Contra la salud (posesión con fines de comercio)",
+  "Entidad Federativa": "Sonora",
+  "Circuito": "Quinto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sonora",
+  "Lugar donde se encuentra": "Centro Estatal Costa Norte (ficticio)",
+  "Pena en años": 19,
+  "Fecha de sentencia": "2013-08-23",
+  "Fecha de inicio": "2012-04-09",
+  "Fecha de cumplimiento": "2031-04-09",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 126,
+  "Nombre completo": "Juan Pablo Pacheco Arellano",
+  "Expediente": "EXP-FIC-1875/2019",
+  "Causa penal": "CP-FIC-225/2019",
+  "Delito": "Tráfico de personas",
+  "Entidad Federativa": "Puebla",
+  "Circuito": "Sexto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Puebla",
+  "Lugar donde se encuentra": "Centro Regional de Reinserción Sur (ficticio)",
+  "Pena en años": 31,
+  "Fecha de sentencia": "2020-12-01",
+  "Fecha de inicio": "2019-01-23",
+  "Fecha de cumplimiento": "2050-01-23",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 127,
+  "Nombre completo": "Octavio Barrios Solís",
+  "Expediente": "EXP-FIC-1882/2013",
+  "Causa penal": "CP-FIC-226/2013",
+  "Delito": "Falsificación de moneda",
+  "Entidad Federativa": "Veracruz",
+  "Circuito": "Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Veracruz",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Golfo (ficticio)",
+  "Pena en años": 8,
+  "Fecha de sentencia": "2014-05-14",
+  "Fecha de inicio": "2013-05-20",
+  "Fecha de cumplimiento": "2021-05-20",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 128,
+  "Nombre completo": "Luis Enrique Aguilar Villaseñor",
+  "Expediente": "EXP-FIC-1889/2019",
+  "Causa penal": "CP-FIC-227/2019",
+  "Delito": "Tráfico de personas",
+  "Entidad Federativa": "Michoacán",
+  "Circuito": "Décimo Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Michoacán",
+  "Lugar donde se encuentra": "Centro Regional Lago Azul (ficticio)",
+  "Pena en años": 10,
+  "Fecha de sentencia": "2020-07-16",
+  "Fecha de inicio": "2019-07-22",
+  "Fecha de cumplimiento": "2029-07-22",
+  "Observaciones": "Se encuentra en trámite un incidente de traslado (dato ficticio)."
+ },
+ {
+  "ID": 129,
+  "Nombre completo": "Hugo Valdez Galindo",
+  "Expediente": "EXP-FIC-1896/2013",
+  "Causa penal": "CP-FIC-228/2013",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Sinaloa",
+  "Circuito": "Décimo Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sinaloa",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noroeste (ficticio)",
+  "Pena en años": 41,
+  "Fecha de sentencia": "2015-05-02",
+  "Fecha de inicio": "2013-03-08",
+  "Fecha de cumplimiento": "2054-03-08",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 130,
+  "Nombre completo": "Ángel Salazar Figueroa",
+  "Expediente": "EXP-FIC-1903/2013",
+  "Causa penal": "CP-FIC-229/2013",
+  "Delito": "Contra la salud (posesión con fines de comercio)",
+  "Entidad Federativa": "Chihuahua",
+  "Circuito": "Décimo Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Chihuahua",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Barrancas (ficticio)",
+  "Pena en años": 9,
+  "Fecha de sentencia": "2014-06-24",
+  "Fecha de inicio": "2013-09-24",
+  "Fecha de cumplimiento": "2022-09-24",
+  "Observaciones": "Se encuentra en trámite un incidente de traslado (dato ficticio)."
+ },
+ {
+  "ID": 131,
+  "Nombre completo": "Ricardo Rangel Contreras",
+  "Expediente": "EXP-FIC-1910/2012",
+  "Causa penal": "CP-FIC-230/2012",
+  "Delito": "Defraudación fiscal",
+  "Entidad Federativa": "Ciudad de México",
+  "Circuito": "Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito de Procesos Penales Federales en la Ciudad de México",
+  "Lugar donde se encuentra": "Centro de Reinserción Norte (ficticio)",
+  "Pena en años": 10,
+  "Fecha de sentencia": "2014-05-25",
+  "Fecha de inicio": "2012-03-25",
+  "Fecha de cumplimiento": "2022-03-25",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 132,
+  "Nombre completo": "Héctor Espinoza Lozano",
+  "Expediente": "EXP-FIC-1917/2023",
+  "Causa penal": "CP-FIC-231/2023",
+  "Delito": "Delincuencia organizada",
+  "Entidad Federativa": "Estado de México",
+  "Circuito": "Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en el Estado de México",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Región Centro (ficticio)",
+  "Pena en años": 42,
+  "Fecha de sentencia": "2024-10-22",
+  "Fecha de inicio": "2023-05-27",
+  "Fecha de cumplimiento": "2065-05-27",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 133,
+  "Nombre completo": "Hugo Castañeda Valencia",
+  "Expediente": "EXP-FIC-1924/2021",
+  "Causa penal": "CP-FIC-232/2021",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Jalisco",
+  "Circuito": "Tercer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Jalisco",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Altos (ficticio)",
+  "Pena en años": 8,
+  "Fecha de sentencia": "2022-10-04",
+  "Fecha de inicio": "2021-08-21",
+  "Fecha de cumplimiento": "2029-08-21",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 134,
+  "Nombre completo": "Esteban Ochoa Castañeda",
+  "Expediente": "EXP-FIC-1931/2018",
+  "Causa penal": "CP-FIC-233/2018",
+  "Delito": "Defraudación fiscal",
+  "Entidad Federativa": "Nuevo León",
+  "Circuito": "Cuarto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Nuevo León",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Sierra Madre (ficticio)",
+  "Pena en años": 13,
+  "Fecha de sentencia": "2020-07-15",
+  "Fecha de inicio": "2018-11-19",
+  "Fecha de cumplimiento": "2031-11-19",
+  "Observaciones": "Requiere verificación de domicilio procesal (dato ficticio)."
+ },
+ {
+  "ID": 135,
+  "Nombre completo": "Fabiola Cárdenas Arellano",
+  "Expediente": "EXP-FIC-1938/2016",
+  "Causa penal": "CP-FIC-234/2016",
+  "Delito": "Delitos contra el ambiente",
+  "Entidad Federativa": "Sonora",
+  "Circuito": "Quinto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Sonora",
+  "Lugar donde se encuentra": "Centro Estatal Costa Norte (ficticio)",
+  "Pena en años": 26,
+  "Fecha de sentencia": "2017-06-08",
+  "Fecha de inicio": "2016-09-17",
+  "Fecha de cumplimiento": "2042-09-17",
+  "Observaciones": "Se encuentra en trámite un incidente de traslado (dato ficticio)."
+ },
+ {
+  "ID": 136,
+  "Nombre completo": "Arturo Salazar Zavala",
+  "Expediente": "EXP-FIC-1945/2012",
+  "Causa penal": "CP-FIC-235/2012",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Puebla",
+  "Circuito": "Sexto Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Materia Penal en Puebla",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Volcanes (ficticio)",
+  "Pena en años": 8,
+  "Fecha de sentencia": "2014-05-09",
+  "Fecha de inicio": "2012-02-26",
+  "Fecha de cumplimiento": "2020-02-26",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 137,
+  "Nombre completo": "Samuel Sandoval Guerrero",
+  "Expediente": "EXP-FIC-1952/2021",
+  "Causa penal": "CP-FIC-236/2021",
+  "Delito": "Delitos contra el ambiente",
+  "Entidad Federativa": "Veracruz",
+  "Circuito": "Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Veracruz",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Golfo (ficticio)",
+  "Pena en años": 13,
+  "Fecha de sentencia": "2022-06-05",
+  "Fecha de inicio": "2021-01-22",
+  "Fecha de cumplimiento": "2034-01-22",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 138,
+  "Nombre completo": "Marco Antonio Salazar Figueroa",
+  "Expediente": "EXP-FIC-1959/2016",
+  "Causa penal": "CP-FIC-237/2016",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Michoacán",
+  "Circuito": "Décimo Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Michoacán",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Tierra Caliente (ficticio)",
+  "Pena en años": 40,
+  "Fecha de sentencia": "2018-10-24",
+  "Fecha de inicio": "2016-09-29",
+  "Fecha de cumplimiento": "2056-09-28",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 139,
+  "Nombre completo": "María Fernanda Espinoza Barrios",
+  "Expediente": "EXP-FIC-1966/2023",
+  "Causa penal": "CP-FIC-238/2023",
+  "Delito": "Contra la salud (posesión con fines de comercio)",
+  "Entidad Federativa": "Sinaloa",
+  "Circuito": "Décimo Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Sinaloa",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noroeste (ficticio)",
+  "Pena en años": 5,
+  "Fecha de sentencia": "2024-08-03",
+  "Fecha de inicio": "2023-05-23",
+  "Fecha de cumplimiento": "2028-05-23",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 140,
+  "Nombre completo": "Cristian Bautista Delgado",
+  "Expediente": "EXP-FIC-1973/2015",
+  "Causa penal": "CP-FIC-239/2015",
+  "Delito": "Tráfico de personas",
+  "Entidad Federativa": "Chihuahua",
+  "Circuito": "Décimo Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Segundo de Distrito en Chihuahua",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Frontera (ficticio)",
+  "Pena en años": 19,
+  "Fecha de sentencia": "2017-03-12",
+  "Fecha de inicio": "2015-01-27",
+  "Fecha de cumplimiento": "2034-01-27",
+  "Observaciones": "Persona ficticia con dos causas penales distintas."
+ },
+ {
+  "ID": 141,
+  "Nombre completo": "Daniela Cárdenas Galindo",
+  "Expediente": "EXP-FIC-1980/2013",
+  "Causa penal": "CP-FIC-240/2013",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Ciudad de México",
+  "Circuito": "Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito de Procesos Penales Federales en la Ciudad de México",
+  "Lugar donde se encuentra": "Centro de Reinserción Norte (ficticio)",
+  "Pena en años": 30,
+  "Fecha de sentencia": "2015-07-22",
+  "Fecha de inicio": "2013-08-03",
+  "Fecha de cumplimiento": "2043-08-03",
+  "Observaciones": "Solicitó beneficio de libertad anticipada (dato ficticio)."
+ },
+ {
+  "ID": 142,
+  "Nombre completo": "Samuel Garza Montes",
+  "Expediente": "EXP-FIC-1987/2017",
+  "Causa penal": "CP-FIC-241/2017",
+  "Delito": "Contra la salud (transporte)",
+  "Entidad Federativa": "Estado de México",
+  "Circuito": "Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito en Materia Penal en el Estado de México",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Región Centro (ficticio)",
+  "Pena en años": 4,
+  "Fecha de sentencia": "2019-05-31",
+  "Fecha de inicio": "2017-05-29",
+  "Fecha de cumplimiento": "2021-05-28",
+  "Observaciones": "Sentencia firme. Registro de prueba."
+ },
+ {
+  "ID": 143,
+  "Nombre completo": "Karina Quintero Valencia",
+  "Expediente": "EXP-FIC-1994/2015",
+  "Causa penal": "CP-FIC-242/2015",
+  "Delito": "Tráfico de personas",
+  "Entidad Federativa": "Jalisco",
+  "Circuito": "Tercer Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito en Materia Penal en Jalisco",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Occidente (ficticio)",
+  "Pena en años": 15,
+  "Fecha de sentencia": "2017-04-24",
+  "Fecha de inicio": "2015-01-11",
+  "Fecha de cumplimiento": "2030-01-11",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 144,
+  "Nombre completo": "Isaac Fuentes Palacios",
+  "Expediente": "EXP-FIC-2001/2022",
+  "Causa penal": "CP-FIC-243/2022",
+  "Delito": "Acopio de armas",
+  "Entidad Federativa": "Nuevo León",
+  "Circuito": "Cuarto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Nuevo León",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noreste (ficticio)",
+  "Pena en años": 26,
+  "Fecha de sentencia": "2022-10-30",
+  "Fecha de inicio": "2022-02-03",
+  "Fecha de cumplimiento": "2048-02-03",
+  "Observaciones": "Requiere verificación de domicilio procesal (dato ficticio)."
+ },
+ {
+  "ID": 145,
+  "Nombre completo": "Cecilia Galindo Mejía",
+  "Expediente": "EXP-FIC-2008/2023",
+  "Causa penal": "CP-FIC-244/2023",
+  "Delito": "Delincuencia organizada",
+  "Entidad Federativa": "Sonora",
+  "Circuito": "Quinto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sonora",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Desierto (ficticio)",
+  "Pena en años": 9,
+  "Fecha de sentencia": "2024-04-09",
+  "Fecha de inicio": "2023-04-27",
+  "Fecha de cumplimiento": "2032-04-27",
+  "Observaciones": "Sentencia firme. Registro de prueba."
+ },
+ {
+  "ID": 146,
+  "Nombre completo": "Silvia Palacios Lozano",
+  "Expediente": "EXP-FIC-2015/2017",
+  "Causa penal": "CP-FIC-245/2017",
+  "Delito": "Delincuencia organizada",
+  "Entidad Federativa": "Puebla",
+  "Circuito": "Sexto Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Materia Penal en Puebla",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Los Volcanes (ficticio)",
+  "Pena en años": 17,
+  "Fecha de sentencia": "2018-07-17",
+  "Fecha de inicio": "2017-08-25",
+  "Fecha de cumplimiento": "2034-08-25",
+  "Observaciones": "Pena compurgada parcialmente en prisión preventiva (dato ficticio)."
+ },
+ {
+  "ID": 147,
+  "Nombre completo": "Gerardo Bautista Robles",
+  "Expediente": "EXP-FIC-2022/2021",
+  "Causa penal": "CP-FIC-246/2021",
+  "Delito": "Falsificación de moneda",
+  "Entidad Federativa": "Veracruz",
+  "Circuito": "Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Tercero de Distrito en Veracruz",
+  "Lugar donde se encuentra": "Centro Estatal de Reinserción Golfo (ficticio)",
+  "Pena en años": 29,
+  "Fecha de sentencia": "2023-06-05",
+  "Fecha de inicio": "2021-07-08",
+  "Fecha de cumplimiento": "2050-07-08",
+  "Observaciones": "Se encuentra en trámite un incidente de traslado (dato ficticio)."
+ },
+ {
+  "ID": 148,
+  "Nombre completo": "Juan Pablo Barrios Medina",
+  "Expediente": "EXP-FIC-2029/2012",
+  "Causa penal": "CP-FIC-247/2012",
+  "Delito": "Portación de arma de fuego de uso exclusivo",
+  "Entidad Federativa": "Michoacán",
+  "Circuito": "Décimo Primer Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Michoacán",
+  "Lugar donde se encuentra": "Centro Regional Lago Azul (ficticio)",
+  "Pena en años": 2,
+  "Fecha de sentencia": "2014-02-05",
+  "Fecha de inicio": "2012-06-05",
+  "Fecha de cumplimiento": "2014-06-05",
+  "Observaciones": "Interpuso recurso de apelación; pendiente de resolución (dato ficticio)."
+ },
+ {
+  "ID": 149,
+  "Nombre completo": "Adrián Miranda Cabrera",
+  "Expediente": "EXP-FIC-2036/2016",
+  "Causa penal": "CP-FIC-248/2016",
+  "Delito": "Delincuencia organizada",
+  "Entidad Federativa": "Sinaloa",
+  "Circuito": "Décimo Segundo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Sinaloa",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Noroeste (ficticio)",
+  "Pena en años": 20,
+  "Fecha de sentencia": "2018-01-10",
+  "Fecha de inicio": "2016-11-20",
+  "Fecha de cumplimiento": "2036-11-20",
+  "Observaciones": "Cuenta con otra causa penal en trámite (dato ficticio)."
+ },
+ {
+  "ID": 150,
+  "Nombre completo": "Yolanda Zamora Zavala",
+  "Expediente": "EXP-FIC-2043/2014",
+  "Causa penal": "CP-FIC-249/2014",
+  "Delito": "Delincuencia organizada",
+  "Entidad Federativa": "Chihuahua",
+  "Circuito": "Décimo Séptimo Circuito",
+  "Juzgado de Distrito": "Juzgado Primero de Distrito en Chihuahua",
+  "Lugar donde se encuentra": "Centro Federal de Reinserción Frontera (ficticio)",
+  "Pena en años": 22,
+  "Fecha de sentencia": "2015-09-11",
+  "Fecha de inicio": "2014-11-21",
+  "Fecha de cumplimiento": "2036-11-21",
+  "Observaciones": "Requiere verificación de domicilio procesal (dato ficticio)."
+ }
+];
+</script>
+  <script>
+/*
+ * CAPA DE DATOS — CAUSAS PENALES PPL
+ *
+ *   FUENTE (CSV / Excel→CSV / copia embebida / futuro Google Sheets)
+ *     → lectura → normalización → privacidad → registros para la interfaz
+ *
+ * Este módulo no sabe nada de la interfaz. Para cambiar la fuente de datos
+ * basta con editar js/config.js o sustituir el archivo de datos.
+ * Ninguna función de este archivo envía información a servidores externos.
+ */
+(function (raiz, fabrica) {
+  if (typeof module === "object" && module.exports) module.exports = fabrica();
+  else raiz.DatosPPL = fabrica();
+})(typeof self !== "undefined" ? self : this, function () {
+  "use strict";
+
+  /*
+   * Columnas de la hoja → claves internas. Se aceptan variantes con o sin
+   * acentos y mayúsculas, para tolerar pequeñas diferencias en el Excel.
+   * `identificativo: true` marca los datos que identifican a la persona
+   * (base para separar datos identificativos de datos operativos).
+   */
+  const MAPA_COLUMNAS = [
+    { clave: "id",           columna: "ID",                        alias: ["id", "folio"] },
+    { clave: "nombre",       columna: "Nombre completo",           alias: ["nombre", "nombre de la persona"], identificativo: true },
+    { clave: "expediente",   columna: "Expediente",                alias: [] },
+    { clave: "causa",        columna: "Causa penal",               alias: ["causa"] },
+    { clave: "delito",       columna: "Delito",                    alias: ["delitos"] },
+    { clave: "entidad",      columna: "Entidad Federativa",        alias: ["entidad", "estado"] },
+    { clave: "circuito",     columna: "Circuito",                  alias: [] },
+    { clave: "juzgado",      columna: "Juzgado de Distrito",       alias: ["juzgado", "organo jurisdiccional"] },
+    { clave: "lugar",        columna: "Lugar donde se encuentra",  alias: ["lugar", "centro penitenciario", "lugar de reclusion"] },
+    { clave: "pena",         columna: "Pena en años",              alias: ["pena", "pena (anos)", "pena anos"] },
+    { clave: "fechaSentencia",    columna: "Fecha de sentencia",    alias: [] },
+    { clave: "fechaInicio",       columna: "Fecha de inicio",       alias: ["fecha de inicio de la pena"] },
+    { clave: "fechaCumplimiento", columna: "Fecha de cumplimiento", alias: ["fecha estimada de cumplimiento"] },
+    { clave: "observaciones",     columna: "Observaciones",         alias: [] },
+  ];
+
+  const sinAcentos = (t) =>
+    String(t == null ? "" : t).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
+
+  /* ---------- Lectura de CSV (coma o punto y coma; comillas; BOM) -------- */
+  function parsearCSV(texto) {
+    texto = String(texto).replace(/^﻿/, "");
+    const primeraLinea = texto.split(/\r?\n/, 1)[0];
+    const sep = (primeraLinea.match(/;/g) || []).length > (primeraLinea.match(/,/g) || []).length ? ";" : ",";
+    const filas = [];
+    let fila = [], campo = "", comillas = false;
+    for (let i = 0; i < texto.length; i++) {
+      const c = texto[i];
+      if (comillas) {
+        if (c === '"' && texto[i + 1] === '"') { campo += '"'; i++; }
+        else if (c === '"') comillas = false;
+        else campo += c;
+      } else if (c === '"') comillas = true;
+      else if (c === sep) { fila.push(campo); campo = ""; }
+      else if (c === "\n" || c === "\r") {
+        if (c === "\r" && texto[i + 1] === "\n") i++;
+        fila.push(campo); filas.push(fila); fila = []; campo = "";
+      } else campo += c;
+    }
+    if (campo !== "" || fila.length) { fila.push(campo); filas.push(fila); }
+    if (!filas.length) return [];
+    const encabezados = filas[0].map((h) => h.trim());
+    return filas.slice(1)
+      .filter((f) => f.some((v) => String(v).trim() !== ""))
+      .map((f) => Object.fromEntries(encabezados.map((h, i) => [h, f[i] == null ? "" : f[i]])));
+  }
+
+  /* ---------- Normalización de valores ---------------------------------- */
+  function aNumeroPena(v) {
+    if (typeof v === "number") return v;
+    const m = String(v).replace(",", ".").match(/-?\d+(\.\d+)?/);
+    return m ? parseFloat(m[0]) : NaN;
+  }
+
+  // Acepta AAAA-MM-DD o DD/MM/AAAA. Devuelve AAAA-MM-DD o "" si no es válida.
+  function aFechaISO(v) {
+    const t = String(v == null ? "" : v).trim();
+    let m = t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (m) return `${m[1]}-${m[2].padStart(2, "0")}-${m[3].padStart(2, "0")}`;
+    m = t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (m) return `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}`;
+    return "";
+  }
+
+  function resolverColumnas(encabezados) {
+    const normal = encabezados.map((h) => [sinAcentos(h), h]);
+    const mapa = {};
+    for (const def of MAPA_COLUMNAS) {
+      const buscados = [sinAcentos(def.columna), ...def.alias.map(sinAcentos)];
+      const hallado = normal.find(([n]) => buscados.includes(n));
+      if (hallado) mapa[def.clave] = hallado[1];
+    }
+    return mapa;
+  }
+
+  /*
+   * Convierte filas "tal como vienen de la hoja" en registros internos.
+   * Devuelve { registros, avisos } — los avisos describen filas omitidas.
+   */
+  function normalizarFilas(filas) {
+    const avisos = [];
+    if (!filas.length) return { registros: [], avisos: ["La fuente no contiene filas."] };
+    const mapa = resolverColumnas(Object.keys(filas[0]));
+    const faltantes = MAPA_COLUMNAS.filter((d) => !mapa[d.clave]).map((d) => d.columna);
+    if (faltantes.length) avisos.push("Columnas no encontradas: " + faltantes.join(", "));
+
+    const registros = [];
+    filas.forEach((fila, i) => {
+      const r = {};
+      for (const def of MAPA_COLUMNAS) {
+        const v = mapa[def.clave] ? fila[mapa[def.clave]] : "";
+        r[def.clave] = typeof v === "string" ? v.trim() : v == null ? "" : v;
+      }
+      r.id = String(r.id || i + 1);
+      r.pena = aNumeroPena(r.pena);
+      r.fechaSentencia = aFechaISO(r.fechaSentencia);
+      r.fechaInicio = aFechaISO(r.fechaInicio);
+      r.fechaCumplimiento = aFechaISO(r.fechaCumplimiento);
+      if (Number.isNaN(r.pena)) { avisos.push(`Fila ${i + 2}: pena no válida; se omitió.`); return; }
+      registros.push(r);
+    });
+    return { registros, avisos };
+  }
+
+  /* ---------- Privacidad (minimización / seudonimización) ---------------- */
+  function aplicarPrivacidad(registros, privacidad) {
+    const p = privacidad || {};
+    return registros.map((r) => {
+      const copia = { ...r };
+      if (p.seudonimizarNombres) {
+        copia.nombre = (p.prefijoSeudonimo || "PPL-") + String(r.id).padStart(4, "0");
+      }
+      for (const campo of p.camposOcultos || []) delete copia[campo];
+      return Object.freeze(copia);
+    });
+  }
+
+  /* ---------- Fuentes --------------------------------------------------- */
+  async function leerCSVLocal(ruta) {
+    const resp = await fetch(ruta, { cache: "no-store" });
+    if (!resp.ok) throw new Error(`No se pudo leer ${ruta} (${resp.status})`);
+    return parsearCSV(await resp.text());
+  }
+
+  function leerEmbebida(global) {
+    const datos = global && global.FUENTE_PPL_EMBEBIDA;
+    if (!Array.isArray(datos)) throw new Error("No se encontró la copia embebida de datos (datos/datos_ppl_ficticios.js).");
+    return datos;
+  }
+
+  // PREPARADO PARA EL FUTURO — deliberadamente desactivado en esta versión.
+  async function leerGoogleSheets(/* url */) {
+    throw new Error("La conexión con Google Sheets no está habilitada en esta versión.");
+  }
+
+  /*
+   * Punto de entrada único. La interfaz solo llama a esta función.
+   * `global` es window en el navegador.
+   */
+  async function cargarDatos(config, global) {
+    const f = config.fuente;
+    let filas, origen;
+    const conServidor = global && global.location && /^https?:$/.test(global.location.protocol);
+    if (f.tipo === "csv" || (f.tipo === "auto" && conServidor)) {
+      try {
+        filas = await leerCSVLocal(f.rutaCSV);
+        origen = "Archivo " + f.rutaCSV.split("/").pop();
+      } catch (e) {
+        if (f.tipo === "csv") throw e;
+      }
+    } else if (f.tipo === "google-sheets") {
+      filas = await leerGoogleSheets(f.urlGoogleSheets);
+      origen = "Google Sheets";
+    }
+    if (!filas) {
+      filas = leerEmbebida(global);
+      origen = "Copia local embebida";
+    }
+    return prepararRegistros(filas, origen, config);
+  }
+
+  // Para archivos que la persona usuaria elige con "Cargar archivo CSV".
+  // Se leen en el navegador; no se suben a ningún lugar.
+  function cargarDesdeTextoCSV(texto, nombreArchivo, config) {
+    return prepararRegistros(parsearCSV(texto), "Archivo " + nombreArchivo, config);
+  }
+
+  function prepararRegistros(filas, origen, config) {
+    const { registros, avisos } = normalizarFilas(filas);
+    return { registros: aplicarPrivacidad(registros, config.privacidad), origen, avisos };
+  }
+
+  return {
+    MAPA_COLUMNAS, parsearCSV, normalizarFilas, aplicarPrivacidad,
+    cargarDatos, cargarDesdeTextoCSV, aFechaISO, aNumeroPena,
+  };
+});
+</script>
+  <script>
+/*
+ * PROCESAMIENTO — CAUSAS PENALES PPL
+ * Funciones puras: clasificación, búsqueda, filtros, orden y formato.
+ * No tocan la pantalla ni la fuente de datos (se prueban con Node).
+ */
+(function (raiz, fabrica) {
+  if (typeof module === "object" && module.exports) module.exports = fabrica();
+  else raiz.LogicaPPL = fabrica();
+})(typeof self !== "undefined" ? self : this, function () {
+  "use strict";
+
+  /* ---------- Clasificación por pena ------------------------------------
+   *   < 10           → amarillo
+   *   >= 10 y <= 20  → naranja
+   *   > 20           → rojo
+   */
+  const RANGOS = {
+    amarillo: { clave: "amarillo", etiqueta: "Amarillo", descripcion: "Menos de 10 años", emoji: "🟡" },
+    naranja:  { clave: "naranja",  etiqueta: "Naranja",  descripcion: "De 10 a 20 años",  emoji: "🟠" },
+    rojo:     { clave: "rojo",     etiqueta: "Rojo",     descripcion: "Más de 20 años",   emoji: "🔴" },
+  };
+
+  function clasificarPena(anios) {
+    if (anios < 10) return "amarillo";
+    if (anios <= 20) return "naranja";
+    return "rojo";
+  }
+
+  /* ---------- Texto ----------------------------------------------------- */
+  const normalizar = (t) =>
+    String(t == null ? "" : t).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+
+  const CAMPOS_BUSQUEDA = ["nombre", "expediente", "causa", "entidad", "circuito", "juzgado", "delito", "lugar"];
+
+  /*
+   * Búsqueda sin distinguir mayúsculas ni acentos:
+   *  1) Si la frase completa aparece en algún campo de algún registro
+   *     (p. ej. "Décimo Segundo Circuito"), se muestran solo esas coincidencias exactas.
+   *  2) Si no, cada palabra debe aparecer en algún campo (p. ej. "lopez jalisco").
+   */
+  const camposNormalizados = (r) => CAMPOS_BUSQUEDA.map((c) => normalizar(r[c]));
+
+  function coincideFrase(registro, frase) {
+    return camposNormalizados(registro).some((v) => v.includes(frase));
+  }
+
+  function coincideBusqueda(registro, texto) {
+    const palabras = normalizar(texto).split(" ").filter(Boolean);
+    if (!palabras.length) return true;
+    const pajar = camposNormalizados(registro).join(" | ");
+    return palabras.every((p) => pajar.includes(p));
+  }
+
+  function buscar(registros, texto) {
+    const frase = normalizar(texto);
+    if (!frase) return registros;
+    const exactos = registros.filter((r) => coincideFrase(r, frase));
+    return exactos.length ? exactos : registros.filter((r) => coincideBusqueda(r, frase));
+  }
+
+  /* ---------- Filtros --------------------------------------------------- */
+  const FILTROS_VACIOS = Object.freeze({
+    texto: "", entidad: "", circuito: "", juzgado: "", causa: "", nombre: "", rango: "",
+  });
+
+  function filtrar(registros, f) {
+    const causa = normalizar(f.causa);
+    const nombre = normalizar(f.nombre);
+    const porFiltros = registros.filter((r) =>
+      (!f.entidad || r.entidad === f.entidad) &&
+      (!f.circuito || r.circuito === f.circuito) &&
+      (!f.juzgado || r.juzgado === f.juzgado) &&
+      (!causa || normalizar(r.causa).includes(causa)) &&
+      (!nombre || normalizar(r.nombre).includes(nombre)) &&
+      (!f.rango || clasificarPena(r.pena) === f.rango)
+    );
+    return buscar(porFiltros, f.texto);
+  }
+
+  const unicos = (lista) => [...new Set(lista.filter(Boolean))];
+
+  /*
+   * Opciones de cada filtro según los filtros superiores
+   * (Entidad → Circuito → Juzgado → Causa / Nombre).
+   */
+  function opcionesDependientes(registros, f) {
+    const porEntidad = registros.filter((r) => !f.entidad || r.entidad === f.entidad);
+    const porCircuito = porEntidad.filter((r) => !f.circuito || r.circuito === f.circuito);
+    const porJuzgado = porCircuito.filter((r) => !f.juzgado || r.juzgado === f.juzgado);
+    return {
+      entidades: unicos(registros.map((r) => r.entidad)).sort(compararTexto),
+      circuitos: unicos(porEntidad.map((r) => r.circuito)).sort(compararCircuito),
+      juzgados: unicos(porCircuito.map((r) => r.juzgado)).sort(compararTexto),
+      causas: unicos(porJuzgado.map((r) => r.causa)).sort(compararTexto),
+      nombres: unicos(porJuzgado.map((r) => r.nombre)).sort(compararTexto),
+    };
+  }
+
+  function contarPorRango(registros) {
+    const c = { amarillo: 0, naranja: 0, rojo: 0 };
+    for (const r of registros) c[clasificarPena(r.pena)]++;
+    return c;
+  }
+
+  /* ---------- Orden ----------------------------------------------------- */
+  const colador = new Intl.Collator("es", { sensitivity: "base", numeric: true });
+  const compararTexto = (a, b) => colador.compare(String(a), String(b));
+
+  // "Décimo Segundo Circuito" → 12, para ordenar circuitos por número.
+  const ORDINALES = {
+    primer: 1, primero: 1, segundo: 2, tercer: 3, tercero: 3, cuarto: 4, quinto: 5,
+    sexto: 6, septimo: 7, octavo: 8, noveno: 9, decimo: 10, vigesimo: 20, trigesimo: 30,
+  };
+  function numeroCircuito(texto) {
+    const digitos = String(texto).match(/\d+/);
+    if (digitos) return parseInt(digitos[0], 10);
+    let n = 0;
+    for (const palabra of normalizar(texto).split(" ")) n += ORDINALES[palabra] || 0;
+    return n || Infinity;
+  }
+  const compararCircuito = (a, b) => numeroCircuito(a) - numeroCircuito(b) || compararTexto(a, b);
+
+  function ordenar(registros, clave, direccion) {
+    const signo = direccion === "desc" ? -1 : 1;
+    const cmp =
+      clave === "pena" ? (a, b) => a.pena - b.pena :
+      clave === "circuito" ? (a, b) => compararCircuito(a.circuito, b.circuito) :
+      (a, b) => compararTexto(a[clave], b[clave]);
+    // Orden estable: en empate se respeta el ID.
+    return [...registros].sort((a, b) => signo * cmp(a, b) || compararTexto(a.id, b.id));
+  }
+
+  /* ---------- Formato --------------------------------------------------- */
+  function formatearPena(anios) {
+    const totalMeses = Math.round(anios * 12);
+    const a = Math.floor(totalMeses / 12), m = totalMeses % 12;
+    const partes = [];
+    if (a) partes.push(a + (a === 1 ? " año" : " años"));
+    if (m) partes.push(m + (m === 1 ? " mes" : " meses"));
+    return partes.join(" ") || "0 años";
+  }
+
+  const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
+    "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+  function formatearFecha(iso) {
+    const m = String(iso || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return "Sin dato";
+    return `${parseInt(m[3], 10)} de ${MESES[parseInt(m[2], 10) - 1]} de ${m[1]}`;
+  }
+
+  return {
+    RANGOS, FILTROS_VACIOS, CAMPOS_BUSQUEDA,
+    clasificarPena, normalizar, coincideBusqueda, buscar, filtrar, opcionesDependientes,
+    contarPorRango, ordenar, numeroCircuito, formatearPena, formatearFecha,
+  };
+});
+</script>
+  <script>
+/*
+ * INTERFAZ — CAUSAS PENALES PPL
+ *   datos (DatosPPL) → procesamiento (LogicaPPL) → filtros/búsqueda → tabla → detalle
+ * Este archivo solo pinta y responde a la persona usuaria; no contiene registros.
+ */
+(function () {
+  "use strict";
+
+  const CONFIG = window.CONFIG_PPL;
+  const L = window.LogicaPPL;
+  const $ = (id) => document.getElementById(id);
+
+  const estado = {
+    todos: [],
+    claves: new WeakMap(),       // registro → clave interna (para abrir el detalle correcto)
+    porClave: new Map(),
+    filtros: { ...L.FILTROS_VACIOS },
+    orden: { clave: "entidad", direccion: "asc" },
+  };
+
+  const el = {
+    buscador: $("buscador"), entidad: $("f-entidad"), circuito: $("f-circuito"),
+    juzgado: $("f-juzgado"), causa: $("f-causa"), nombre: $("f-nombre"), rango: $("f-rango"),
+    lCausas: $("l-causas"), lNombres: $("l-nombres"),
+    total: $("total"), conteo: $("conteo-rangos"), cuerpo: $("cuerpo-tabla"),
+    vacio: $("vacio"), tabla: $("tabla"), dialogo: $("detalle"), detalle: $("detalle-cuerpo"),
+    fuente: $("fuente-texto"), avisos: $("avisos-datos"),
+  };
+
+  /* ---------- Carga de datos ---------- */
+  function recibirDatos(resultado) {
+    estado.todos = resultado.registros;
+    estado.claves = new WeakMap();
+    estado.porClave = new Map();
+    resultado.registros.forEach((r, i) => {
+      estado.claves.set(r, String(i));
+      estado.porClave.set(String(i), r);
+    });
+    el.fuente.textContent = `Fuente: ${resultado.origen} · ${resultado.registros.length} registros`;
+    el.avisos.hidden = !resultado.avisos.length;
+    el.avisos.textContent = resultado.avisos.join(" ");
+    actualizar();
+  }
+
+  function mostrarError(e) {
+    el.fuente.textContent = "No fue posible cargar los datos.";
+    el.avisos.hidden = false;
+    el.avisos.textContent = e.message;
+  }
+
+  function cargar() {
+    el.fuente.textContent = "Cargando datos…";
+    window.DatosPPL.cargarDatos(CONFIG, window).then(recibirDatos).catch(mostrarError);
+  }
+
+  /* ---------- Filtros dependientes ---------- */
+  function llenarSelect(select, opciones, textoTodos, valor) {
+    select.replaceChildren(new Option(textoTodos, ""), ...opciones.map((o) => new Option(o, o)));
+    select.value = opciones.includes(valor) ? valor : "";
+    return select.value;
+  }
+
+  function llenarLista(datalist, opciones) {
+    datalist.replaceChildren(...opciones.map((o) => new Option(o)));
+  }
+
+  function refrescarOpciones() {
+    const f = estado.filtros;
+    // Cada nivel se recalcula con el valor ya validado del nivel superior.
+    let op = L.opcionesDependientes(estado.todos, f);
+    f.entidad = llenarSelect(el.entidad, op.entidades, "Todas", f.entidad);
+    op = L.opcionesDependientes(estado.todos, f);
+    f.circuito = llenarSelect(el.circuito, op.circuitos, "Todos", f.circuito);
+    op = L.opcionesDependientes(estado.todos, f);
+    f.juzgado = llenarSelect(el.juzgado, op.juzgados, "Todos", f.juzgado);
+    op = L.opcionesDependientes(estado.todos, f);
+    llenarLista(el.lCausas, op.causas);
+    llenarLista(el.lNombres, op.nombres);
+  }
+
+  function leerFormulario() {
+    Object.assign(estado.filtros, {
+      texto: el.buscador.value, entidad: el.entidad.value, circuito: el.circuito.value,
+      juzgado: el.juzgado.value, causa: el.causa.value, nombre: el.nombre.value, rango: el.rango.value,
+    });
+  }
+
+  /* ---------- Resultados ---------- */
+  function celda(texto, clase) {
+    const td = document.createElement("td");
+    td.className = clase;
+    td.textContent = texto;
+    return td;
+  }
+
+  function chipPena(pena, grande) {
+    const rango = L.RANGOS[L.clasificarPena(pena)];
+    const chip = document.createElement("span");
+    chip.className = `chip chip--${rango.clave}` + (grande ? " chip--grande" : "");
+    chip.textContent = L.formatearPena(pena);
+    chip.title = `${rango.etiqueta}: ${rango.descripcion}`;
+    chip.dataset.rango = rango.clave;
+    const lector = document.createElement("span");
+    lector.className = "oculto-visual";
+    lector.textContent = ` (clasificación ${rango.etiqueta.toLowerCase()})`;
+    chip.append(lector);
+    return chip;
+  }
+
+  function fila(r) {
+    const tr = document.createElement("tr");
+    tr.append(
+      celda(r.entidad, "col-entidad"), celda(r.circuito, "col-circuito"),
+      celda(r.juzgado, "col-juzgado"), celda(r.causa, "col-causa"),
+      celda(r.nombre, "col-nombre"), celda(r.lugar, "col-lugar"),
+    );
+    const tdPena = celda("", "col-pena");
+    tdPena.append(chipPena(r.pena));
+    const tdVer = celda("", "col-ver");
+    const ojo = document.createElement("button");
+    ojo.type = "button";
+    ojo.className = "boton-ojo";
+    ojo.dataset.clave = estado.claves.get(r);
+    ojo.setAttribute("aria-label", `Ver detalle de ${r.nombre}, causa ${r.causa}`);
+    ojo.title = "Ver detalle";
+    ojo.innerHTML = '<svg aria-hidden="true"><use href="#i-ojo"/></svg>';
+    tdVer.append(ojo);
+    tr.append(tdPena, tdVer);
+    return tr;
+  }
+
+  function pintarConteo(c) {
+    const partes = ["amarillo", "naranja", "rojo"].map((k) => {
+      const s = document.createElement("span");
+      s.dataset.rango = k;
+      s.title = L.RANGOS[k].descripcion;
+      s.setAttribute("aria-label", `${L.RANGOS[k].descripcion}: ${c[k]}`);
+      s.textContent = `${L.RANGOS[k].emoji} ${c[k]}`;
+      return s;
+    });
+    const sep = () => Object.assign(document.createElement("span"), { className: "separador", textContent: "|" });
+    el.conteo.replaceChildren(partes[0], sep(), partes[1], sep(), partes[2]);
+  }
+
+  function pintarOrden() {
+    el.tabla.querySelectorAll("th[data-clave]").forEach((th) => {
+      if (th.dataset.clave === estado.orden.clave) {
+        th.setAttribute("aria-sort", estado.orden.direccion === "asc" ? "ascending" : "descending");
+      } else th.removeAttribute("aria-sort");
+    });
+  }
+
+  function actualizar() {
+    leerFormulario();
+    refrescarOpciones();
+    const filtrados = L.filtrar(estado.todos, estado.filtros);
+    const ordenados = L.ordenar(filtrados, estado.orden.clave, estado.orden.direccion);
+    el.cuerpo.replaceChildren(...ordenados.map(fila));
+    el.total.textContent = ordenados.length;
+    el.vacio.hidden = ordenados.length > 0;
+    el.tabla.hidden = ordenados.length === 0;
+    pintarConteo(L.contarPorRango(ordenados));
+    pintarOrden();
+  }
+
+  function limpiar() {
+    $("formulario").reset();
+    estado.filtros = { ...L.FILTROS_VACIOS };
+    actualizar();
+    el.buscador.focus();
+  }
+
+  /* ---------- Detalle ---------- */
+  function dato(etiqueta, valor, completo, destacado) {
+    const div = document.createElement("div");
+    div.className = [completo && "completo", destacado && "destacado"].filter(Boolean).join(" ");
+    const dt = document.createElement("dt");
+    dt.textContent = etiqueta;
+    const dd = document.createElement("dd");
+    if (valor instanceof Node) dd.append(valor);
+    else dd.textContent = valor === "" || valor == null ? "Sin dato" : valor;
+    div.append(dt, dd);
+    return div;
+  }
+
+  function abrirDetalle(clave) {
+    const r = estado.porClave.get(clave);
+    if (!r) return;
+    const rango = L.RANGOS[L.clasificarPena(r.pena)];
+    const clasif = document.createElement("span");
+    clasif.className = `chip chip--grande chip--${rango.clave}`;
+    clasif.dataset.rango = rango.clave;
+    clasif.textContent = `${rango.etiqueta.toUpperCase()} · ${rango.descripcion}`;
+
+    const dl = document.createElement("dl");
+    dl.className = "datos";
+    const campos = [
+      ["Nombre completo", r.nombre, true, "nombre"],
+      ["Expediente", r.expediente, false, "expediente"],
+      ["Causa penal", r.causa, false, "causa"],
+      ["Delito", r.delito, true, "delito"],
+      ["Entidad Federativa", r.entidad, false, "entidad"],
+      ["Circuito", r.circuito, false, "circuito"],
+      ["Juzgado de Distrito", r.juzgado, true, "juzgado"],
+      ["Lugar donde se encuentra", r.lugar, true, "lugar"],
+      ["Pena", chipPena(r.pena, true), false, "pena"],
+      ["Clasificación", clasif, false, "pena"],
+      ["Fecha de sentencia", L.formatearFecha(r.fechaSentencia), false, "fechaSentencia"],
+      ["Fecha de inicio", L.formatearFecha(r.fechaInicio), false, "fechaInicio"],
+      ["Fecha estimada de cumplimiento", L.formatearFecha(r.fechaCumplimiento), true, "fechaCumplimiento"],
+      ["Observaciones", r.observaciones, true, "observaciones"],
+    ];
+    // Los campos ocultos por configuración de privacidad no se muestran.
+    for (const [etq, val, completo, campo] of campos) {
+      if (campo in r) dl.append(dato(etq, val, completo, campo === "nombre"));
+    }
+    el.detalle.replaceChildren(dl);
+    el.dialogo.dataset.clave = clave;
+    el.dialogo.showModal();
+    el.detalle.scrollTop = 0;
+    $("btn-x").focus();
+  }
+
+  function cerrarDetalle() {
+    if (el.dialogo.open) el.dialogo.close();
+  }
+
+  /* ---------- Eventos ---------- */
+  let espera;
+  el.buscador.addEventListener("input", () => {
+    clearTimeout(espera);
+    espera = setTimeout(actualizar, 180);
+  });
+  [el.entidad, el.circuito, el.juzgado, el.rango].forEach((s) => s.addEventListener("change", actualizar));
+  [el.causa, el.nombre].forEach((i) => i.addEventListener("input", () => {
+    clearTimeout(espera);
+    espera = setTimeout(actualizar, 180);
+  }));
+
+  $("formulario").addEventListener("submit", (e) => {
+    e.preventDefault();
+    clearTimeout(espera);
+    actualizar();
+    $("resultados").scrollIntoView({ block: "start" });
+    $("resultados").focus({ preventScroll: true });
+  });
+  $("btn-limpiar").addEventListener("click", limpiar);
+  $("btn-limpiar-vacio").addEventListener("click", limpiar);
+
+  el.tabla.querySelector("thead").addEventListener("click", (e) => {
+    const th = e.target.closest("th[data-clave]");
+    if (!th) return;
+    const clave = th.dataset.clave;
+    estado.orden = {
+      clave,
+      direccion: estado.orden.clave === clave && estado.orden.direccion === "asc" ? "desc" : "asc",
+    };
+    actualizar();
+  });
+
+  el.cuerpo.addEventListener("click", (e) => {
+    const ojo = e.target.closest(".boton-ojo");
+    if (ojo) abrirDetalle(ojo.dataset.clave);
+  });
+
+  $("btn-x").addEventListener("click", cerrarDetalle);
+  $("btn-cerrar").addEventListener("click", cerrarDetalle);
+  // Clic fuera de la tarjeta (sobre el fondo oscuro) la cierra.
+  el.dialogo.addEventListener("click", (e) => { if (e.target === el.dialogo) cerrarDetalle(); });
+  // Al cerrar, el foco vuelve al ojo que abrió la tarjeta.
+  el.dialogo.addEventListener("close", () => {
+    const ojo = el.cuerpo.querySelector(`.boton-ojo[data-clave="${el.dialogo.dataset.clave}"]`);
+    if (ojo) ojo.focus();
+  });
+
+  // Con doble clic (file://) la copia embebida solo se vuelve a leer recargando la página.
+  $("btn-recargar").addEventListener("click", () => {
+    if (location.protocol === "file:") location.reload();
+    else cargar();
+  });
+  $("archivo-csv").addEventListener("change", (e) => {
+    const archivo = e.target.files[0];
+    if (!archivo) return;
+    // El archivo se lee en la propia computadora; no se sube a ningún servidor.
+    const lector = new FileReader();
+    lector.onload = () => {
+      try { recibirDatos(window.DatosPPL.cargarDesdeTextoCSV(lector.result, archivo.name, CONFIG)); }
+      catch (err) { mostrarError(err); }
+      e.target.value = "";
+    };
+    lector.readAsText(archivo, "utf-8");
+  });
+
+  $("aviso-ficticio").hidden = !CONFIG.fuente.esFicticia;
+  cargar();
+})();
+</script>
+</body>
+</html>
