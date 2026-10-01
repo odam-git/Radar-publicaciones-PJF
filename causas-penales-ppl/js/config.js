@@ -30,5 +30,10 @@ window.CONFIG_PPL = {
      * (minimización). Usar las claves internas: ver MAPA_COLUMNAS en datos.js.
      */
     camposOcultos: [],
+    /*
+     * Pena impuesta en primera instancia (no firme): solo se muestra como dato
+     * informativo dentro de la ficha. Para eliminarla por completo: false.
+     */
+    mostrarPenaNoFirme: true,
   },
 };

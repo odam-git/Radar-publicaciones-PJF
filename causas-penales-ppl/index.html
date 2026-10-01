@@ -14,23 +14,36 @@
 <body>
   <!-- Íconos (SVG locales, sin dependencias externas) -->
   <svg class="oculto" aria-hidden="true" focusable="false">
+    <symbol id="i-balanza" viewBox="0 0 24 24"><path d="M12 3v17M6 20h12M4 7h16M12 3.5 9.5 7M12 3.5 14.5 7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 7 2.5 13.5a3 3 0 0 0 6 0zM18.5 7l-3 6.5a3 3 0 0 0 6 0z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></symbol>
     <symbol id="i-buscar" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></symbol>
     <symbol id="i-limpiar" viewBox="0 0 24 24"><path d="M4 5h16l-6.5 7.5V19l-3 1.5v-8z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="m15.5 15.5 5 5m0-5-5 5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
     <symbol id="i-ojo" viewBox="0 0 24 24"><path d="M1.5 12S5.5 4.5 12 4.5 22.5 12 22.5 12 18.5 19.5 12 19.5 1.5 12 1.5 12z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.6" fill="currentColor"/></symbol>
     <symbol id="i-cerrar" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
     <symbol id="i-recargar" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M20 3.5v5h-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-archivo" viewBox="0 0 24 24"><path d="M6 2.5h8l5 5v14H6z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M14 2.5v5h5M9.5 13h6M9.5 17h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-exportar" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4.5-4.5M12 15l4.5-4.5M4 17v3h16v-3" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-alerta" viewBox="0 0 24 24"><path d="M12 3 2 20.5h20z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="17.5" r="1.4" fill="currentColor"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-personas" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5" fill="currentColor"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6z" fill="currentColor"/><circle cx="17" cy="9" r="2.6" fill="currentColor" opacity=".7"/><path d="M16 14.2c3.2-.4 5.5 1.8 5.5 5.3h-4.4c0-2-.4-3.8-1.1-5.3z" fill="currentColor" opacity=".7"/></symbol>
   </svg>
 
   <a class="saltar" href="#resultados">Saltar a los resultados</a>
 
   <header class="encabezado">
     <div class="contenedor encabezado__fila">
-      <div>
-        <h1>CAUSAS PENALES PPL</h1>
-        <p class="subtitulo">Sistema de consulta y seguimiento</p>
+      <div class="marca">
+        <span class="marca__logo" aria-hidden="true"><svg><use href="#i-balanza"/></svg></span>
+        <div>
+          <h1>CAUSAS PENALES PPL</h1>
+          <p class="subtitulo">Sistema de consulta y seguimiento · Prisión preventiva</p>
+        </div>
       </div>
-      <p class="aviso-ficticio" id="aviso-ficticio" hidden>DATOS FICTICIOS DE PRUEBA</p>
+      <div class="encabezado__acciones">
+        <p class="insignia" id="aviso-ficticio" hidden><span class="insignia__punto" aria-hidden="true"></span>Datos ficticios · Sin conexión externa</p>
+        <button type="button" class="boton boton--oscuro" id="btn-exportar">
+          <svg class="icono" aria-hidden="true"><use href="#i-exportar"/></svg> Exportar vista
+        </button>
+      </div>
     </div>
   </header>
 
@@ -42,23 +55,33 @@
         <button type="button" class="boton boton--terciario" id="btn-recargar">
           <svg class="icono" aria-hidden="true"><use href="#i-recargar"/></svg> Recargar datos
         </button>
+        <input type="file" id="archivo-csv" accept=".csv,text/csv" class="oculto-visual">
         <label class="boton boton--terciario" for="archivo-csv">
           <svg class="icono" aria-hidden="true"><use href="#i-archivo"/></svg> Cargar archivo CSV
         </label>
-        <input type="file" id="archivo-csv" accept=".csv,text/csv" class="oculto-visual">
       </div>
     </section>
-    <p id="avisos-datos" class="avisos" role="status" hidden></p>
+    <p id="avisos-datos" class="aviso aviso--naranja" role="status" hidden></p>
+
+    <!-- Avisos de depuración: sentencias ejecutoriadas y datos por revisar -->
+    <div id="avisos-depuracion" class="avisos-depuracion"></div>
+
+    <!-- Tarjetas ejecutivas: total + 5 niveles de antigüedad (funcionan como botones de filtro) -->
+    <section class="tarjetas" aria-labelledby="titulo-tarjetas">
+      <h2 id="titulo-tarjetas" class="oculto-visual">Semáforo de antigüedad desde el auto de formal prisión. Pulse un nivel para filtrar.</h2>
+      <div class="tarjetas__rejilla" id="tarjetas"></div>
+      <p class="tarjetas__nota">Antigüedad contada desde la <strong>fecha de auto de formal prisión</strong>. Pulse uno o varios niveles para filtrar.</p>
+    </section>
 
     <!-- Buscador y filtros -->
     <section class="panel" aria-labelledby="titulo-busqueda">
       <h2 id="titulo-busqueda" class="oculto-visual">Búsqueda y filtros</h2>
       <form id="formulario" autocomplete="off" novalidate>
-        <label for="buscador" class="etiqueta etiqueta--grande">Buscador</label>
+        <label for="buscador" class="etiqueta">Buscador</label>
         <div class="buscador">
           <svg class="buscador__icono" aria-hidden="true"><use href="#i-buscar"/></svg>
           <input type="search" id="buscador" name="texto"
-                 placeholder="Buscar por nombre, expediente, causa penal, entidad, circuito, juzgado, delito o lugar…">
+                 placeholder="Buscar por nombre, expediente, causa penal, entidad, circuito, juzgado, delito, lugar o etapa…">
         </div>
 
         <div class="filtros">
@@ -85,47 +108,45 @@
             <datalist id="l-nombres"></datalist>
           </div>
           <div class="campo">
-            <label for="f-rango" class="etiqueta">Rango de Pena</label>
-            <select id="f-rango" name="rango">
-              <option value="">Todos</option>
-              <option value="amarillo">🟡 Menos de 10 años</option>
-              <option value="naranja">🟠 De 10 a 20 años</option>
-              <option value="rojo">🔴 Más de 20 años</option>
-            </select>
+            <label for="f-etapa" class="etiqueta">Etapa Procesal</label>
+            <select id="f-etapa" name="etapa"></select>
           </div>
-        </div>
-
-        <div class="acciones">
-          <button type="submit" class="boton boton--primario" id="btn-buscar">
-            <svg class="icono icono--grande" aria-hidden="true"><use href="#i-buscar"/></svg> BUSCAR
-          </button>
-          <button type="button" class="boton boton--secundario" id="btn-limpiar">
-            <svg class="icono icono--grande" aria-hidden="true"><use href="#i-limpiar"/></svg> LIMPIAR FILTROS
-          </button>
+          <div class="campo">
+            <label for="f-nivel" class="etiqueta">Nivel de Antigüedad</label>
+            <select id="f-nivel" name="nivel"></select>
+          </div>
+          <div class="acciones">
+            <button type="submit" class="boton boton--primario" id="btn-buscar">
+              <svg class="icono icono--grande" aria-hidden="true"><use href="#i-buscar"/></svg> BUSCAR
+            </button>
+            <button type="button" class="boton boton--secundario" id="btn-limpiar">
+              <svg class="icono icono--grande" aria-hidden="true"><use href="#i-limpiar"/></svg> LIMPIAR FILTROS
+            </button>
+          </div>
         </div>
       </form>
     </section>
 
     <!-- Resultados -->
-    <section id="resultados" class="resultados" aria-labelledby="contador" tabindex="-1">
-      <div class="resultados__barra">
-        <h2 id="contador" class="contador" aria-live="polite">Resultados encontrados: <strong id="total">0</strong> PPL</h2>
-        <p class="conteo-rangos" id="conteo-rangos"></p>
+    <section id="resultados" class="panel panel--tabla" aria-labelledby="titulo-listado" tabindex="-1">
+      <div class="panel__cabecera">
+        <h2 id="titulo-listado">LISTADO DE CAUSAS PENALES EN PRISIÓN PREVENTIVA</h2>
+        <p id="contador" class="contador" aria-live="polite">Resultados encontrados: <strong id="total">0</strong> PPL</p>
       </div>
 
       <div class="tabla-contenedor" id="tabla-contenedor">
         <table class="tabla" id="tabla">
-          <caption class="oculto-visual">Personas privadas de la libertad. Use los encabezados para ordenar.</caption>
+          <caption class="oculto-visual">Personas en prisión preventiva. Use los encabezados para ordenar.</caption>
           <thead>
             <tr>
-              <th scope="col" data-clave="entidad"><button type="button" class="ordenar">Entidad Federativa<span class="flecha" aria-hidden="true"></span></button></th>
-              <th scope="col" data-clave="circuito"><button type="button" class="ordenar">Circuito<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="antiguedad" data-nombre="alerta"><button type="button" class="ordenar">Alerta<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="circuito"><button type="button" class="ordenar">Circuito / Entidad<span class="flecha" aria-hidden="true"></span></button></th>
               <th scope="col" data-clave="juzgado"><button type="button" class="ordenar">Juzgado de Distrito<span class="flecha" aria-hidden="true"></span></button></th>
-              <th scope="col" data-clave="causa"><button type="button" class="ordenar">Causa Penal<span class="flecha" aria-hidden="true"></span></button></th>
-              <th scope="col" data-clave="nombre"><button type="button" class="ordenar">Nombre de la Persona<span class="flecha" aria-hidden="true"></span></button></th>
-              <th scope="col" data-clave="lugar"><button type="button" class="ordenar">Lugar donde se encuentra<span class="flecha" aria-hidden="true"></span></button></th>
-              <th scope="col" data-clave="pena"><button type="button" class="ordenar">Pena<span class="flecha" aria-hidden="true"></span></button></th>
-              <th scope="col" class="col-ver">Ver</th>
+              <th scope="col" data-clave="causa"><button type="button" class="ordenar">Causa Penal / Expediente<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="nombre"><button type="button" class="ordenar">Persona Privada de la Libertad<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="etapa"><button type="button" class="ordenar">Etapa Procesal<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="antiguedad"><button type="button" class="ordenar">Antigüedad<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" class="col-ver">Acciones</th>
             </tr>
           </thead>
           <tbody id="cuerpo-tabla"></tbody>
@@ -140,11 +161,14 @@
     </section>
   </main>
 
-  <!-- Tarjeta de detalle -->
+  <!-- Ficha emergente: Expediente de Causa Penal -->
   <dialog id="detalle" class="detalle" aria-labelledby="detalle-titulo">
     <div class="detalle__caja">
       <div class="detalle__cabecera">
-        <h2 id="detalle-titulo">DATOS DE LA PERSONA</h2>
+        <div class="detalle__titulo">
+          <span id="detalle-nivel" class="nivel nivel--grande"></span>
+          <h2 id="detalle-titulo">Expediente de Causa Penal</h2>
+        </div>
         <button type="button" class="boton-x" id="btn-x" aria-label="Cerrar">
           <svg aria-hidden="true"><use href="#i-cerrar"/></svg>
         </button>

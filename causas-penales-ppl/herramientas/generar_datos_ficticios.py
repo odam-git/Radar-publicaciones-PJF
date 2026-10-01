@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
 """
-Generador de la base de datos FICTICIA de CAUSAS PENALES PPL.
+Generador de la base de datos FICTICIA de CAUSAS PENALES PPL
+(personas en prisión preventiva oficiosa sin sentencia firme).
 
 Todos los registros se construyen combinando al azar (con semilla fija,
 para que el resultado sea reproducible) listas de nombres, apellidos,
 delitos genéricos y lugares inventados. Ningún dato proviene de una
-fuente real ni de Internet. Los expedientes y causas llevan el prefijo
+fuente real ni de Internet. Expedientes, causas y tocas llevan el prefijo
 "FIC" para que nunca puedan confundirse con números reales.
+
+Contenido:
+  - 150 registros en seguimiento, repartidos en los 5 niveles de antigüedad
+    (contada desde la fecha de auto de formal prisión al 1 de octubre de 2026),
+    con casos exactamente en los límites 2, 5, 10, 20 y 30 años y uno sin fecha.
+  - 2 registros con sentencia ejecutoriada (IDs 151 y 152) para probar el
+    aviso de baja del seguimiento.
 
 Genera:
   datos/datos_ppl_ficticios.csv   (fuente principal, UTF-8 con BOM para Excel)
@@ -25,12 +33,15 @@ RAIZ = Path(__file__).resolve().parent.parent
 DIR_DATOS = RAIZ / "datos"
 SEMILLA = 20261001
 TOTAL = 150
+FECHA_REFERENCIA = date(2026, 10, 1)
 
 COLUMNAS = [
-    "ID", "Nombre completo", "Expediente", "Causa penal", "Delito",
+    "ID", "Nombre completo", "Expediente", "Causa penal", "Delito(s)",
     "Entidad Federativa", "Circuito", "Juzgado de Distrito",
-    "Lugar donde se encuentra", "Pena en años", "Fecha de sentencia",
-    "Fecha de inicio", "Fecha de cumplimiento", "Observaciones",
+    "Lugar de reclusión", "Situación de reclusión",
+    "Fecha de auto de formal prisión", "Etapa procesal", "Instancia actual",
+    "Último acto procesal", "Fecha de sentencia de primera instancia",
+    "Pena impuesta (no firme)", "Fecha de ejecutoria", "Observaciones",
 ]
 
 NOMBRES = [
@@ -75,8 +86,7 @@ DELITOS = [
     "Delitos contra el ambiente",
 ]
 
-# Entidad → (circuito, [juzgados], [lugares]). Los nombres de los centros
-# son genéricos e inventados para esta prueba.
+# Entidad → (circuito, [juzgados], [lugares]). Nombres de centros inventados.
 GEOGRAFIA = {
     "Ciudad de México": ("Primer Circuito", [
         "Juzgado Primero de Distrito de Procesos Penales Federales en la Ciudad de México",
@@ -124,105 +134,203 @@ GEOGRAFIA = {
     ], ["Centro Estatal de Reinserción Barrancas (ficticio)", "Centro Federal de Reinserción Frontera (ficticio)"]),
 }
 
-OBSERVACIONES = [
-    "Sin observaciones adicionales.",
-    "Sentencia firme. Registro de prueba.",
-    "Interpuso recurso de apelación; pendiente de resolución (dato ficticio).",
-    "Solicitó beneficio de libertad anticipada (dato ficticio).",
-    "Se encuentra en trámite un incidente de traslado (dato ficticio).",
-    "Cuenta con otra causa penal en trámite (dato ficticio).",
-    "Promovió juicio de amparo directo (dato ficticio).",
-    "Pena compurgada parcialmente en prisión preventiva (dato ficticio).",
-    "Pendiente de actualizar cómputo de la pena (dato ficticio).",
-    "Requiere verificación de domicilio procesal (dato ficticio).",
+ETAPAS = [
+    "Instrucción",
+    "Cierre de instrucción / conclusiones",
+    "Sentencia de primera instancia",
+    "Apelación (Tribunal de Alzada)",
+    "Amparo directo",
+    "Reposición del procedimiento",
+]
+ETAPAS_CON_SENTENCIA = ETAPAS[2:5]
+
+# Probabilidad de cada etapa según el nivel de antigüedad (1 = reciente … 5 = más antigua).
+PESOS_ETAPA = {
+    1: [70, 20, 10, 0, 0, 0],
+    2: [35, 25, 15, 15, 0, 10],
+    3: [15, 15, 10, 30, 15, 15],
+    4: [10, 10, 5, 30, 25, 20],
+    5: [10, 10, 5, 25, 25, 25],
+}
+
+ACTOS = {
+    "Instrucción": [
+        "Se desahogó la prueba testimonial ofrecida por la defensa",
+        "Se ordenó girar exhorto para el desahogo de una diligencia",
+        "Se difirió la audiencia de careos por falta de traslado",
+        "Se admitieron las pruebas periciales ofrecidas por las partes",
+    ],
+    "Cierre de instrucción / conclusiones": [
+        "Se declaró cerrada la instrucción y se dio vista para conclusiones",
+        "El Ministerio Público formuló conclusiones acusatorias",
+        "Se celebró la audiencia de vista",
+    ],
+    "Sentencia de primera instancia": [
+        "Se dictó sentencia de primera instancia; corre el plazo para apelar",
+        "Se notificó la sentencia de primera instancia a las partes",
+    ],
+    "Apelación (Tribunal de Alzada)": [
+        "Se interpuso apelación contra la sentencia de primera instancia; pendiente de resolución",
+        "El Tribunal de Alzada admitió el recurso y señaló fecha para la vista",
+    ],
+    "Amparo directo": [
+        "Se promovió amparo directo contra la resolución de segunda instancia; pendiente de resolución",
+        "El Tribunal Colegiado admitió la demanda de amparo directo",
+    ],
+    "Reposición del procedimiento": [
+        "El Tribunal de Alzada ordenó la reposición del procedimiento",
+        "Se repuso el procedimiento a partir del auto de formal prisión",
+    ],
+}
+
+SITUACIONES = [
+    "Privado de la libertad únicamente por esta causa",
+    "Privado de la libertad también por causa penal distinta",
+    "Compurga pena por causa penal distinta",
 ]
 
-# Penas que deben aparecer obligatoriamente para probar los límites de color.
-PENAS_LIMITE = [9, 10, 15, 20, 21, 9.5, 20.5]
+OBSERVACIONES = [
+    "Sin observaciones adicionales.",
+    "Registro de prueba.",
+    "Se solicitó la revisión de la medida cautelar (dato ficticio).",
+    "Cuenta con otra causa penal en trámite (dato ficticio).",
+    "Promovió amparo indirecto contra la prisión preventiva (dato ficticio).",
+    "Pendiente de traslado a otro centro (dato ficticio).",
+    "Defensa pública federal (dato ficticio).",
+    "Defensa particular (dato ficticio).",
+]
+
+# Límites de cada nivel en años (inclusivo en el límite superior).
+LIMITES = {1: (0, 2), 2: (2, 5), 3: (5, 10), 4: (10, 20), 5: (20, 30)}
+# Casos exactamente en el límite superior de cada nivel (deben quedar en ese nivel).
+CASOS_LIMITE = {0: 2, 1: 5, 2: 10, 3: 20, 4: 30}
+INDICE_SIN_FECHA = 72
+
+
+def restar_anios(fecha, anios):
+    try:
+        return fecha.replace(year=fecha.year - anios)
+    except ValueError:  # 29 de febrero
+        return fecha.replace(year=fecha.year - anios, day=28)
 
 
 def nombre_aleatorio(rnd):
     return f"{rnd.choice(NOMBRES)} {rnd.choice(APELLIDOS)} {rnd.choice(APELLIDOS)}"
 
 
-def pena_aleatoria(rnd, i):
-    if i < len(PENAS_LIMITE):
-        return PENAS_LIMITE[i]
-    # Reparto aproximado: 1/3 en cada rango.
-    rango = i % 3
-    if rango == 0:
-        return rnd.randint(2, 9)
-    if rango == 1:
-        return rnd.randint(10, 20)
-    return rnd.randint(21, 50)
+def fecha_afp(rnd, i, nivel):
+    if i in CASOS_LIMITE:
+        return restar_anios(FECHA_REFERENCIA, CASOS_LIMITE[i])
+    menor, mayor = LIMITES[nivel]
+    mas_reciente = restar_anios(FECHA_REFERENCIA, menor) - timedelta(days=1 if menor else 30)
+    mas_antigua = restar_anios(FECHA_REFERENCIA, mayor) + timedelta(days=1)
+    return mas_antigua + timedelta(days=rnd.randint(0, (mas_reciente - mas_antigua).days))
 
 
-def sumar_anios(fecha, anios):
-    meses = round(anios * 12)
-    anio = fecha.year + (fecha.month - 1 + meses) // 12
-    mes = (fecha.month - 1 + meses) % 12 + 1
-    dia = min(fecha.day, 28)
-    return date(anio, mes, dia)
+def fmt(fecha):
+    return fecha.strftime("%d/%m/%Y")
 
 
 def generar():
     rnd = random.Random(SEMILLA)
     entidades = list(GEOGRAFIA.keys())
-    registros = []
-    nombres_usados = set()
+    registros, nombres_usados = [], set()
 
     for i in range(TOTAL):
         entidad = entidades[i % len(entidades)]
         circuito, juzgados, lugares = GEOGRAFIA[entidad]
         juzgado = juzgados[(i // len(entidades)) % len(juzgados)]
-        lugar = rnd.choice(lugares)
+        # El nivel rota distinto que la entidad, para que cada entidad tenga los 5 niveles.
+        nivel = (i % 10 + i // 10) % 5 + 1
 
         nombre = nombre_aleatorio(rnd)
         while nombre in nombres_usados:
             nombre = nombre_aleatorio(rnd)
         nombres_usados.add(nombre)
 
-        anio_causa = rnd.randint(2012, 2023)
-        pena = pena_aleatoria(rnd, i)
-        inicio = date(anio_causa, 1, 1) + timedelta(days=rnd.randint(0, 330))
-        sentencia = inicio + timedelta(days=rnd.randint(200, 900))
-        cumplimiento = sumar_anios(inicio, pena)
+        afp = fecha_afp(rnd, i, nivel)
+        etapa = rnd.choices(ETAPAS, weights=PESOS_ETAPA[nivel])[0]
+        dias_en_proceso = (FECHA_REFERENCIA - afp).days
+        if etapa in ETAPAS_CON_SENTENCIA and dias_en_proceso < 240:
+            etapa = "Instrucción"
 
+        sentencia, pena = "", ""
+        if etapa in ETAPAS_CON_SENTENCIA:
+            f = afp + timedelta(days=rnd.randint(150, dias_en_proceso - 60))
+            sentencia, pena = f.isoformat(), rnd.randint(5, 60)
+            inicio_acto = f
+        else:
+            inicio_acto = afp
+        fecha_acto = inicio_acto + timedelta(days=rnd.randint(1, max(2, (FECHA_REFERENCIA - inicio_acto).days - 1)))
+        acto = f"{rnd.choice(ACTOS[etapa])} el {fmt(fecha_acto)}."
+
+        anio = afp.year
+        if etapa == "Apelación (Tribunal de Alzada)":
+            instancia = f"Tribunal Colegiado de Apelación del {circuito} (Toca FIC-{rnd.randint(1, 300)}/{fecha_acto.year})"
+        elif etapa == "Amparo directo":
+            instancia = f"Tribunal Colegiado en Materia Penal del {circuito} (A.D. FIC-{rnd.randint(1, 500)}/{fecha_acto.year})"
+        else:
+            instancia = juzgado
+
+        delitos = rnd.sample(DELITOS, rnd.choice([1, 1, 2]))
         registros.append({
             "ID": i + 1,
             "Nombre completo": nombre,
-            "Expediente": f"EXP-FIC-{1000 + i * 7}/{anio_causa}",
-            "Causa penal": f"CP-FIC-{100 + i:03d}/{anio_causa}",
-            "Delito": rnd.choice(DELITOS),
+            "Expediente": f"EXP-FIC-{1000 + i * 7}/{anio}",
+            "Causa penal": f"CP-FIC-{100 + i:03d}/{anio}",
+            "Delito(s)": "; ".join(delitos),
             "Entidad Federativa": entidad,
             "Circuito": circuito,
             "Juzgado de Distrito": juzgado,
-            "Lugar donde se encuentra": lugar,
-            "Pena en años": pena,
-            "Fecha de sentencia": sentencia.isoformat(),
-            "Fecha de inicio": inicio.isoformat(),
-            "Fecha de cumplimiento": cumplimiento.isoformat(),
+            "Lugar de reclusión": rnd.choice(lugares),
+            "Situación de reclusión": rnd.choices(SITUACIONES, weights=[70, 20, 10])[0],
+            "Fecha de auto de formal prisión": afp.isoformat(),
+            "Etapa procesal": etapa,
+            "Instancia actual": instancia,
+            "Último acto procesal": acto,
+            "Fecha de sentencia de primera instancia": sentencia,
+            "Pena impuesta (no firme)": pena,
+            "Fecha de ejecutoria": "",
             "Observaciones": rnd.choice(OBSERVACIONES),
         })
 
     # --- Casos de prueba deliberados (todos ficticios) ---------------------
-    # Homonimias exactas: mismo nombre, distinta causa, expediente y entidad.
     homonimos = ["José Luis Hernández Ruiz", "María Fernanda López Castro", "Juan Pablo Ramírez Soto"]
     for k, nombre in enumerate(homonimos):
         for j in (0, 1):
             r = registros[20 + k * 11 + j * 47]
             r["Nombre completo"] = nombre
             r["Observaciones"] = "Homonimia ficticia de prueba: existe otro registro con el mismo nombre y distinta causa."
-    # Nombres muy parecidos (búsquedas ambiguas).
     similares = ["José Luis Hernández Ríos", "José Luis Fernández Ruiz", "María Fernanda López Castillo"]
     for k, nombre in enumerate(similares):
         r = registros[95 + k * 9]
         r["Nombre completo"] = nombre
         r["Observaciones"] = "Nombre ficticio similar a otro registro, para probar búsquedas ambiguas."
-    # Misma persona ficticia con dos causas distintas.
     r1, r2 = registros[12], registros[139]
     r2["Nombre completo"] = r1["Nombre completo"]
     r1["Observaciones"] = r2["Observaciones"] = "Persona ficticia con dos causas penales distintas."
+
+    # Registro sin fecha de auto de formal prisión (debe generar aviso de revisión).
+    registros[INDICE_SIN_FECHA]["Fecha de auto de formal prisión"] = ""
+    registros[INDICE_SIN_FECHA]["Observaciones"] = "Registro de prueba sin fecha de auto de formal prisión."
+
+    # Dos registros con sentencia ejecutoriada (deben salir del seguimiento y listarse en el aviso).
+    for k, (etapa, ejecutoria) in enumerate([
+        ("Sentencia ejecutoriada", "2026-08-14"),
+        ("Apelación (Tribunal de Alzada)", "2026-09-03"),  # etapa sin actualizar, pero con fecha de ejecutoria
+    ]):
+        base = dict(registros[30 + k])
+        n = TOTAL + k + 1
+        base.update({
+            "ID": n,
+            "Nombre completo": nombre_aleatorio(rnd),
+            "Expediente": f"EXP-FIC-{9000 + k}/2019",
+            "Causa penal": f"CP-FIC-{900 + k}/2019",
+            "Etapa procesal": etapa,
+            "Fecha de ejecutoria": ejecutoria,
+            "Observaciones": "Registro de prueba con sentencia ejecutoriada: debe darse de baja del seguimiento.",
+        })
+        registros.append(base)
 
     return registros
 
@@ -240,6 +348,7 @@ def escribir(registros):
     try:
         from openpyxl import Workbook
         from openpyxl.styles import Font, PatternFill, Alignment
+        from openpyxl.utils import get_column_letter
     except ImportError:
         print("openpyxl no está instalado: se omitió el .xlsx (el .csv se abre igual en Excel).")
         return
@@ -251,11 +360,11 @@ def escribir(registros):
         ws.append([r[c] for c in COLUMNAS])
     for celda in ws[1]:
         celda.font = Font(bold=True, color="FFFFFF", size=12)
-        celda.fill = PatternFill("solid", fgColor="1F3A5F")
+        celda.fill = PatternFill("solid", fgColor="0F1E33")
         celda.alignment = Alignment(wrap_text=True, vertical="center")
-    anchos = [6, 34, 20, 18, 42, 20, 22, 70, 50, 12, 16, 16, 18, 60]
-    for i, ancho in enumerate(anchos):
-        ws.column_dimensions[chr(65 + i)].width = ancho
+    anchos = [6, 34, 20, 18, 50, 20, 22, 70, 50, 45, 18, 34, 70, 90, 18, 14, 16, 60]
+    for i, ancho in enumerate(anchos, start=1):
+        ws.column_dimensions[get_column_letter(i)].width = ancho
     ws.freeze_panes = "A2"
     ws.auto_filter.ref = ws.dimensions
     wb.save(DIR_DATOS / "datos_ppl_ficticios.xlsx")
@@ -277,4 +386,4 @@ def escribir_js(registros, ruta):
 if __name__ == "__main__":
     regs = generar()
     escribir(regs)
-    print(f"Generados {len(regs)} registros ficticios en {DIR_DATOS}")
+    print(f"Generados {len(regs)} registros ficticios ({TOTAL} en seguimiento) en {DIR_DATOS}")
