@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Seguridad: la página solo puede cargar archivos propios; no puede conectarse a servidores externos. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>CAUSAS PENALES PPL</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <!-- Íconos (SVG locales, sin dependencias externas) -->
+  <svg class="oculto" aria-hidden="true" focusable="false">
+    <symbol id="i-buscar" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-limpiar" viewBox="0 0 24 24"><path d="M4 5h16l-6.5 7.5V19l-3 1.5v-8z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="m15.5 15.5 5 5m0-5-5 5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-ojo" viewBox="0 0 24 24"><path d="M1.5 12S5.5 4.5 12 4.5 22.5 12 22.5 12 18.5 19.5 12 19.5 1.5 12 1.5 12z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.6" fill="currentColor"/></symbol>
+    <symbol id="i-cerrar" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
+    <symbol id="i-recargar" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M20 3.5v5h-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-archivo" viewBox="0 0 24 24"><path d="M6 2.5h8l5 5v14H6z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M14 2.5v5h5M9.5 13h6M9.5 17h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  </svg>
+
+  <a class="saltar" href="#resultados">Saltar a los resultados</a>
+
+  <header class="encabezado">
+    <div class="contenedor encabezado__fila">
+      <div>
+        <h1>CAUSAS PENALES PPL</h1>
+        <p class="subtitulo">Sistema de consulta y seguimiento</p>
+      </div>
+      <p class="aviso-ficticio" id="aviso-ficticio" hidden>DATOS FICTICIOS DE PRUEBA</p>
+    </div>
+  </header>
+
+  <main class="contenedor">
+    <!-- Fuente de datos -->
+    <section class="fuente" aria-label="Fuente de datos">
+      <p id="fuente-texto" class="fuente__texto">Cargando datos…</p>
+      <div class="fuente__acciones">
+        <button type="button" class="boton boton--terciario" id="btn-recargar">
+          <svg class="icono" aria-hidden="true"><use href="#i-recargar"/></svg> Recargar datos
+        </button>
+        <label class="boton boton--terciario" for="archivo-csv">
+          <svg class="icono" aria-hidden="true"><use href="#i-archivo"/></svg> Cargar archivo CSV
+        </label>
+        <input type="file" id="archivo-csv" accept=".csv,text/csv" class="oculto-visual">
+      </div>
+    </section>
+    <p id="avisos-datos" class="avisos" role="status" hidden></p>
+
+    <!-- Buscador y filtros -->
+    <section class="panel" aria-labelledby="titulo-busqueda">
+      <h2 id="titulo-busqueda" class="oculto-visual">Búsqueda y filtros</h2>
+      <form id="formulario" autocomplete="off" novalidate>
+        <label for="buscador" class="etiqueta etiqueta--grande">Buscador</label>
+        <div class="buscador">
+          <svg class="buscador__icono" aria-hidden="true"><use href="#i-buscar"/></svg>
+          <input type="search" id="buscador" name="texto"
+                 placeholder="Buscar por nombre, expediente, causa penal, entidad, circuito, juzgado, delito o lugar…">
+        </div>
+
+        <div class="filtros">
+          <div class="campo">
+            <label for="f-entidad" class="etiqueta">Entidad Federativa</label>
+            <select id="f-entidad" name="entidad"></select>
+          </div>
+          <div class="campo">
+            <label for="f-circuito" class="etiqueta">Circuito</label>
+            <select id="f-circuito" name="circuito"></select>
+          </div>
+          <div class="campo">
+            <label for="f-juzgado" class="etiqueta">Juzgado de Distrito</label>
+            <select id="f-juzgado" name="juzgado"></select>
+          </div>
+          <div class="campo">
+            <label for="f-causa" class="etiqueta">Causa Penal</label>
+            <input type="text" id="f-causa" name="causa" list="l-causas" placeholder="Todas">
+            <datalist id="l-causas"></datalist>
+          </div>
+          <div class="campo">
+            <label for="f-nombre" class="etiqueta">Nombre de la Persona</label>
+            <input type="text" id="f-nombre" name="nombre" list="l-nombres" placeholder="Todas">
+            <datalist id="l-nombres"></datalist>
+          </div>
+          <div class="campo">
+            <label for="f-rango" class="etiqueta">Rango de Pena</label>
+            <select id="f-rango" name="rango">
+              <option value="">Todos</option>
+              <option value="amarillo">🟡 Menos de 10 años</option>
+              <option value="naranja">🟠 De 10 a 20 años</option>
+              <option value="rojo">🔴 Más de 20 años</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="acciones">
+          <button type="submit" class="boton boton--primario" id="btn-buscar">
+            <svg class="icono icono--grande" aria-hidden="true"><use href="#i-buscar"/></svg> BUSCAR
+          </button>
+          <button type="button" class="boton boton--secundario" id="btn-limpiar">
+            <svg class="icono icono--grande" aria-hidden="true"><use href="#i-limpiar"/></svg> LIMPIAR FILTROS
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Resultados -->
+    <section id="resultados" class="resultados" aria-labelledby="contador" tabindex="-1">
+      <div class="resultados__barra">
+        <h2 id="contador" class="contador" aria-live="polite">Resultados encontrados: <strong id="total">0</strong> PPL</h2>
+        <p class="conteo-rangos" id="conteo-rangos"></p>
+      </div>
+
+      <div class="tabla-contenedor" id="tabla-contenedor">
+        <table class="tabla" id="tabla">
+          <caption class="oculto-visual">Personas privadas de la libertad. Use los encabezados para ordenar.</caption>
+          <thead>
+            <tr>
+              <th scope="col" data-clave="entidad"><button type="button" class="ordenar">Entidad Federativa<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="circuito"><button type="button" class="ordenar">Circuito<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="juzgado"><button type="button" class="ordenar">Juzgado de Distrito<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="causa"><button type="button" class="ordenar">Causa Penal<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="nombre"><button type="button" class="ordenar">Nombre de la Persona<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="lugar"><button type="button" class="ordenar">Lugar donde se encuentra<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="pena"><button type="button" class="ordenar">Pena<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" class="col-ver">Ver</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla"></tbody>
+        </table>
+        <div class="vacio" id="vacio" hidden>
+          <p>No se encontraron resultados con los criterios seleccionados.</p>
+          <button type="button" class="boton boton--secundario" id="btn-limpiar-vacio">
+            <svg class="icono icono--grande" aria-hidden="true"><use href="#i-limpiar"/></svg> LIMPIAR FILTROS
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Tarjeta de detalle -->
+  <dialog id="detalle" class="detalle" aria-labelledby="detalle-titulo">
+    <div class="detalle__caja">
+      <div class="detalle__cabecera">
+        <h2 id="detalle-titulo">DATOS DE LA PERSONA</h2>
+        <button type="button" class="boton-x" id="btn-x" aria-label="Cerrar">
+          <svg aria-hidden="true"><use href="#i-cerrar"/></svg>
+        </button>
+      </div>
+      <div class="detalle__cuerpo" id="detalle-cuerpo"></div>
+      <div class="detalle__pie">
+        <button type="button" class="boton boton--primario" id="btn-cerrar">CERRAR</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Orden de carga: configuración → datos → procesamiento → interfaz -->
+  <script src="js/config.js"></script>
+  <script src="datos/datos_ppl_ficticios.js"></script>
+  <script src="js/datos.js"></script>
+  <script src="js/logica.js"></script>
+  <script src="js/interfaz.js"></script>
+</body>
+</html>
