@@ -25,6 +25,21 @@
   const SIN_DATO = { clave: "sd", numero: 0, color: "Gris", descripcion: "Sin fecha de auto de formal prisión" };
   const POR_CLAVE = Object.fromEntries([...NIVELES, SIN_DATO].map((n) => [n.clave, n]));
 
+  const MOTIVOS = [
+    "Solo por esta causa federal",
+    "Por esta causa y por otra causa federal",
+    "Por esta causa y por causa del fuero común",
+    "Solo por causa del fuero común",
+    "Compurga pena por otra causa",
+  ];
+  // Etiqueta visible cuando la persona no está privada de la libertad solo por esta causa.
+  const ETIQUETA_MOTIVO = {
+    "Por esta causa y por otra causa federal": "También por otra causa federal",
+    "Por esta causa y por causa del fuero común": "También por proceso local",
+    "Solo por causa del fuero común": "Reclusión por proceso local",
+    "Compurga pena por otra causa": "Compurga pena por otra causa",
+  };
+
   const ETAPAS = [
     "Instrucción",
     "Cierre de instrucción / conclusiones",
@@ -122,11 +137,12 @@
 
   /* ---------- Filtros --------------------------------------------------- */
   const FILTROS_VACIOS = Object.freeze({
-    texto: "", entidad: "", circuito: "", juzgado: "", causa: "", nombre: "", etapa: "", niveles: [],
+    texto: "", entidad: "", circuito: "", juzgado: "", causa: "", nombre: "", etapa: "", motivo: "",
+    niveles: [], proximos: 0,
   });
 
   // Todos los filtros excepto los niveles (sirve para los conteos de las tarjetas).
-  function filtrarSinNivel(registros, f) {
+  function filtrarSinNivel(registros, f, hoy) {
     const causa = normalizar(f.causa);
     const nombre = normalizar(f.nombre);
     const porFiltros = registros.filter((r) =>
@@ -135,13 +151,15 @@
       (!f.juzgado || r.juzgado === f.juzgado) &&
       (!causa || normalizar(r.causa).includes(causa)) &&
       (!nombre || normalizar(r.nombre).includes(nombre)) &&
-      (!f.etapa || r.etapa === f.etapa)
+      (!f.etapa || r.etapa === f.etapa) &&
+      (!f.motivo || r.motivoPrivacion === f.motivo) &&
+      (!f.proximos || !!proximoCambio(r.fechaAFP, hoy, f.proximos))
     );
     return buscar(porFiltros, f.texto);
   }
 
   function filtrar(registros, f, hoy) {
-    const base = filtrarSinNivel(registros, f);
+    const base = filtrarSinNivel(registros, f, hoy);
     const niveles = f.niveles || [];
     return niveles.length ? base.filter((r) => niveles.includes(nivelDe(r, hoy))) : base;
   }
@@ -213,6 +231,82 @@
     });
   }
 
+  /* ---------- Próximos a cambiar de nivel ------------------------------
+   * Como cada rango incluye su límite superior, el nivel cambia el día
+   * siguiente a cumplir 2, 5, 10, 20 o 30 años desde el auto de formal prisión.
+   */
+  const UMBRALES = [2, 5, 10, 20, 30];
+  function proximoCambio(fechaAFP, hoy, dias) {
+    const afp = aFecha(fechaAFP);
+    const h = hoyUTC(hoy);
+    if (!afp || afp > h) return null;
+    for (const anios of UMBRALES) {
+      const cambio = sumarAnios(afp, anios);
+      cambio.setUTCDate(cambio.getUTCDate() + 1);
+      if (cambio > h) {
+        const faltan = Math.round((cambio - h) / 864e5);
+        if (faltan > dias) return null;
+        const destino = anios === 30 ? "n5" : NIVELES[UMBRALES.indexOf(anios) + 1].clave;
+        return { anios, fecha: cambio.toISOString().slice(0, 10), faltan, destino, mas30: anios === 30 };
+      }
+    }
+    return null;
+  }
+
+  /* ---------- Personas y coimputados ----------------------------------- */
+  const llavePersona = (r) => r.idPersona || normalizar(r.nombre);
+  const personas = (registros) => new Set(registros.map(llavePersona)).size;
+  const mismaCausa = (a, b) => normalizar(a.causa) === normalizar(b.causa) && a.juzgado === b.juzgado;
+  const coimputados = (registros, r) => registros.filter((x) => x !== r && mismaCausa(x, r));
+
+  /* ---------- Resumen por entidad o por juzgado ------------------------ */
+  function resumen(registros, hoy, por) {
+    const grupos = new Map();
+    for (const r of registros) {
+      const clave = por === "juzgado" ? r.juzgado : r.entidad;
+      if (!grupos.has(clave)) {
+        grupos.set(clave, { clave, entidad: r.entidad, total: 0, n1: 0, n2: 0, n3: 0, n4: 0, n5: 0, sd: 0, mas10: 0 });
+      }
+      const g = grupos.get(clave);
+      const n = nivelDe(r, hoy);
+      g[n]++; g.total++;
+      if (n === "n4" || n === "n5") g.mas10++;
+    }
+    // Orden por casos de 10 años o más; la cifra visible ("12 de 15") coincide con el orden.
+    return [...grupos.values()].sort((a, b) => b.mas10 - a.mas10 || b.total - a.total || compararTexto(a.clave, b.clave));
+  }
+
+  function concentracion(filas, top) {
+    const total = filas.reduce((s, g) => s + g.mas10, 0);
+    const primeros = filas.slice(0, top).filter((g) => g.mas10 > 0);
+    const suma = primeros.reduce((s, g) => s + g.mas10, 0);
+    return { grupos: primeros.length, suma, total, porcentaje: total ? Math.round((suma / total) * 100) : 0 };
+  }
+
+  /* ---------- Comparativo contra el corte anterior ---------------------- */
+  const llaveCausa = (r) => [llavePersona(r), normalizar(r.causa), r.juzgado].join("|");
+
+  function comparar(actuales, anteriores, corteActual, corteAnterior, ejecutoriadasActuales) {
+    const fa = aFecha(corteActual), fp = aFecha(corteAnterior);
+    const mapaAnt = new Map(anteriores.map((r) => [llaveCausa(r), r]));
+    const mapaAct = new Map(actuales.map((r) => [llaveCausa(r), r]));
+    const ejecutoriadas = new Set((ejecutoriadasActuales || []).map(llaveCausa));
+    const altas = [], cambiosEtapa = [], subieron = [], bajas = [];
+    for (const r of actuales) {
+      const a = mapaAnt.get(llaveCausa(r));
+      if (!a) { altas.push(r); continue; }
+      if (a.etapa !== r.etapa) cambiosEtapa.push({ registro: r, antes: a.etapa, ahora: r.etapa });
+      const nA = antiguedad(a.fechaAFP, fp).nivel, nR = antiguedad(r.fechaAFP, fa).nivel;
+      if (nA !== nR && nA !== "sd" && nR !== "sd") subieron.push({ registro: r, antes: nA, ahora: nR });
+    }
+    for (const a of anteriores) {
+      if (!mapaAct.has(llaveCausa(a))) {
+        bajas.push({ registro: a, motivo: ejecutoriadas.has(llaveCausa(a)) ? "Sentencia ejecutoriada" : "Ya no aparece en el corte actual" });
+      }
+    }
+    return { altas, bajas, cambiosEtapa, subieron };
+  }
+
   /* ---------- Formato --------------------------------------------------- */
   function formatearAntiguedad(a) {
     if (a.anios === null) return "Sin dato";
@@ -244,7 +338,8 @@
   }
 
   return {
-    NIVELES, SIN_DATO, POR_CLAVE, ETAPAS, FILTROS_VACIOS, CAMPOS_BUSQUEDA,
+    NIVELES, SIN_DATO, POR_CLAVE, ETAPAS, MOTIVOS, ETIQUETA_MOTIVO, UMBRALES, FILTROS_VACIOS, CAMPOS_BUSQUEDA,
+    proximoCambio, personas, coimputados, resumen, concentracion, comparar,
     antiguedad, nivelDe, contarPorNivel, revisar,
     normalizar, coincideBusqueda, buscar, filtrar, filtrarSinNivel, opcionesDependientes,
     ordenar, numeroCircuito, formatearAntiguedad, formatearAnios, formatearFecha, formatearFechaCorta,

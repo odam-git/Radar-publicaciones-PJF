@@ -36,13 +36,15 @@ TOTAL = 150
 FECHA_REFERENCIA = date(2026, 10, 1)
 
 COLUMNAS = [
-    "ID", "Nombre completo", "Expediente", "Causa penal", "Delito(s)",
-    "Entidad Federativa", "Circuito", "Juzgado de Distrito",
-    "Lugar de reclusión", "Situación de reclusión",
+    "ID", "ID de persona", "Nombre completo", "Expediente", "Causa penal", "Delito(s)",
+    "Entidad Federativa", "Circuito", "Juzgado de Distrito", "Lugar de reclusión",
+    "Motivo de la privación de libertad", "Otra causa: autoridad", "Otra causa: situación",
     "Fecha de auto de formal prisión", "Etapa procesal", "Instancia actual",
-    "Último acto procesal", "Fecha de sentencia de primera instancia",
-    "Pena impuesta (no firme)", "Fecha de ejecutoria", "Observaciones",
+    "Último acto procesal", "Fecha del último acto procesal",
+    "Fecha de sentencia de primera instancia", "Pena impuesta (no firme)",
+    "Fecha de ejecutoria", "Fecha de corte", "Observaciones",
 ]
+FECHA_CORTE_ANTERIOR = date(2026, 9, 1)
 
 NOMBRES = [
     "Adrián", "Alejandra", "Alfonso", "Alma Delia", "Andrés", "Ángel", "Araceli",
@@ -183,11 +185,14 @@ ACTOS = {
     ],
 }
 
-SITUACIONES = [
-    "Privado de la libertad únicamente por esta causa",
-    "Privado de la libertad también por causa penal distinta",
-    "Compurga pena por causa penal distinta",
+MOTIVOS = [
+    "Solo por esta causa federal",
+    "Por esta causa y por otra causa federal",
+    "Por esta causa y por causa del fuero común",
+    "Solo por causa del fuero común",
+    "Compurga pena por otra causa",
 ]
+SITUACIONES_OTRA = ["En proceso", "Sentenciada (no firme)", "Compurgando pena"]
 
 OBSERVACIONES = [
     "Sin observaciones adicionales.",
@@ -233,6 +238,7 @@ def fmt(fecha):
 
 def generar():
     rnd = random.Random(SEMILLA)
+    rnd2 = random.Random(SEMILLA + 1)  # campos añadidos en la versión 3 (no altera los demás)
     entidades = list(GEOGRAFIA.keys())
     registros, nombres_usados = [], set()
 
@@ -262,7 +268,7 @@ def generar():
         else:
             inicio_acto = afp
         fecha_acto = inicio_acto + timedelta(days=rnd.randint(1, max(2, (FECHA_REFERENCIA - inicio_acto).days - 1)))
-        acto = f"{rnd.choice(ACTOS[etapa])} el {fmt(fecha_acto)}."
+        acto = f"{rnd.choice(ACTOS[etapa])}."
 
         anio = afp.year
         if etapa == "Apelación (Tribunal de Alzada)":
@@ -273,8 +279,21 @@ def generar():
             instancia = juzgado
 
         delitos = rnd.sample(DELITOS, rnd.choice([1, 1, 2]))
+        motivo = rnd2.choices(MOTIVOS, weights=[70, 8, 10, 6, 6])[0]
+        otra_autoridad, otra_situacion = "", ""
+        if motivo == "Por esta causa y por otra causa federal":
+            otra_autoridad = rnd2.choice([j for j in juzgados if j != juzgado] or juzgados) + " (otra causa federal)"
+            otra_situacion = rnd2.choice(SITUACIONES_OTRA[:2])
+        elif "fuero común" in motivo:
+            otra_autoridad = f"Juzgado Penal de Primera Instancia en {entidad} (fuero común, ficticio)"
+            otra_situacion = rnd2.choice(SITUACIONES_OTRA[:2])
+        elif motivo.startswith("Compurga"):
+            otra_autoridad = rnd2.choice([f"Juzgado de Ejecución en {entidad} (fuero común, ficticio)",
+                                          f"Juzgado de Distrito Especializado en Ejecución en {entidad} (ficticio)"])
+            otra_situacion = "Compurgando pena"
         registros.append({
             "ID": i + 1,
+            "ID de persona": f"PER-{i + 1:04d}",
             "Nombre completo": nombre,
             "Expediente": f"EXP-FIC-{1000 + i * 7}/{anio}",
             "Causa penal": f"CP-FIC-{100 + i:03d}/{anio}",
@@ -283,14 +302,18 @@ def generar():
             "Circuito": circuito,
             "Juzgado de Distrito": juzgado,
             "Lugar de reclusión": rnd.choice(lugares),
-            "Situación de reclusión": rnd.choices(SITUACIONES, weights=[70, 20, 10])[0],
+            "Motivo de la privación de libertad": motivo,
+            "Otra causa: autoridad": otra_autoridad,
+            "Otra causa: situación": otra_situacion,
             "Fecha de auto de formal prisión": afp.isoformat(),
             "Etapa procesal": etapa,
             "Instancia actual": instancia,
             "Último acto procesal": acto,
+            "Fecha del último acto procesal": fecha_acto.isoformat(),
             "Fecha de sentencia de primera instancia": sentencia,
             "Pena impuesta (no firme)": pena,
             "Fecha de ejecutoria": "",
+            "Fecha de corte": FECHA_REFERENCIA.isoformat(),
             "Observaciones": rnd.choice(OBSERVACIONES),
         })
 
@@ -308,7 +331,23 @@ def generar():
         r["Observaciones"] = "Nombre ficticio similar a otro registro, para probar búsquedas ambiguas."
     r1, r2 = registros[12], registros[139]
     r2["Nombre completo"] = r1["Nombre completo"]
+    r2["ID de persona"] = r1["ID de persona"]  # misma persona, dos causas
     r1["Observaciones"] = r2["Observaciones"] = "Persona ficticia con dos causas penales distintas."
+
+    # Coimputados: varias PPL en la misma causa y juzgado (mismo auto de formal prisión y etapa).
+    for base_i, otros in [(40, [54, 63]), (49, [58])]:
+        base = registros[base_i]
+        for j in otros:
+            for campo in ["Expediente", "Causa penal", "Delito(s)", "Entidad Federativa", "Circuito",
+                          "Juzgado de Distrito", "Lugar de reclusión", "Fecha de auto de formal prisión",
+                          "Etapa procesal", "Instancia actual", "Último acto procesal",
+                          "Fecha del último acto procesal", "Fecha de sentencia de primera instancia"]:
+                registros[j][campo] = base[campo]
+            if not base["Fecha de sentencia de primera instancia"]:
+                registros[j]["Pena impuesta (no firme)"] = ""
+            elif not registros[j]["Pena impuesta (no firme)"]:
+                registros[j]["Pena impuesta (no firme)"] = base["Pena impuesta (no firme)"]
+            registros[j]["Observaciones"] = "Coimputado ficticio: comparte causa con otras PPL."
 
     # Registro sin fecha de auto de formal prisión (debe generar aviso de revisión).
     registros[INDICE_SIN_FECHA]["Fecha de auto de formal prisión"] = ""
@@ -323,6 +362,7 @@ def generar():
         n = TOTAL + k + 1
         base.update({
             "ID": n,
+            "ID de persona": f"PER-{n:04d}",
             "Nombre completo": nombre_aleatorio(rnd),
             "Expediente": f"EXP-FIC-{9000 + k}/2019",
             "Causa penal": f"CP-FIC-{900 + k}/2019",
@@ -335,13 +375,57 @@ def generar():
     return registros
 
 
-def escribir(registros):
-    DIR_DATOS.mkdir(parents=True, exist_ok=True)
+ANTERIOR_DE_ETAPA = {
+    "Cierre de instrucción / conclusiones": "Instrucción",
+    "Sentencia de primera instancia": "Cierre de instrucción / conclusiones",
+    "Apelación (Tribunal de Alzada)": "Sentencia de primera instancia",
+}
 
-    with open(DIR_DATOS / "datos_ppl_ficticios.csv", "w", newline="", encoding="utf-8-sig") as f:
+
+def generar_corte_anterior(registros):
+    """Corte ficticio del 1 de septiembre de 2026 para probar el comparativo:
+    3 altas (no existían), 2 bajas (ya no aparecen), 5 cambios de etapa y las 2
+    ejecutoriadas de hoy todavía en seguimiento."""
+    rnd = random.Random(SEMILLA + 2)
+    activos = [r for r in registros if not r["Fecha de ejecutoria"]]
+    altas = {r["ID"] for r in activos if r["Fecha de auto de formal prisión"] >= "2026-01-01"}
+    altas = set(sorted(altas)[:3])
+    anteriores = []
+    cambios = 0
+    for r in registros:
+        if r["ID"] in altas:
+            continue
+        a = dict(r)
+        a["Fecha de corte"] = FECHA_CORTE_ANTERIOR.isoformat()
+        if a["Fecha de ejecutoria"]:  # hace un mes aún no causaba ejecutoria
+            a["Fecha de ejecutoria"] = ""
+            a["Etapa procesal"] = "Apelación (Tribunal de Alzada)"
+        elif cambios < 5 and a["Etapa procesal"] in ANTERIOR_DE_ETAPA and r["ID"] % 7 == 0:
+            a["Etapa procesal"] = ANTERIOR_DE_ETAPA[a["Etapa procesal"]]
+            cambios += 1
+        anteriores.append(a)
+    for k in range(2):  # bajas: estaban hace un mes y ya no están
+        b = dict(registros[80 + k])
+        b.update({"ID": 960 + k, "ID de persona": f"PER-{960 + k:04d}", "Nombre completo": nombre_aleatorio(rnd),
+                  "Expediente": f"EXP-FIC-{9600 + k}/2010", "Causa penal": f"CP-FIC-{960 + k}/2010",
+                  "Fecha de corte": FECHA_CORTE_ANTERIOR.isoformat(),
+                  "Observaciones": "Registro de prueba: obtuvo su libertad antes del corte actual (dato ficticio)."})
+        anteriores.append(b)
+    return anteriores
+
+
+def escribir_csv(registros, ruta):
+    with open(ruta, "w", newline="", encoding="utf-8-sig") as f:
         w = csv.DictWriter(f, fieldnames=COLUMNAS)
         w.writeheader()
         w.writerows(registros)
+
+
+def escribir(registros):
+    DIR_DATOS.mkdir(parents=True, exist_ok=True)
+
+    escribir_csv(registros, DIR_DATOS / "datos_ppl_ficticios.csv")
+    escribir_csv(generar_corte_anterior(registros), DIR_DATOS / "corte_anterior_ficticio.csv")
 
     escribir_js(registros, DIR_DATOS / "datos_ppl_ficticios.js")
 
@@ -362,9 +446,11 @@ def escribir(registros):
         celda.font = Font(bold=True, color="FFFFFF", size=12)
         celda.fill = PatternFill("solid", fgColor="0F1E33")
         celda.alignment = Alignment(wrap_text=True, vertical="center")
-    anchos = [6, 34, 20, 18, 50, 20, 22, 70, 50, 45, 18, 34, 70, 90, 18, 14, 16, 60]
-    for i, ancho in enumerate(anchos, start=1):
-        ws.column_dimensions[get_column_letter(i)].width = ancho
+    anchos = {"ID": 6, "ID de persona": 12, "Nombre completo": 34, "Juzgado de Distrito": 70,
+              "Lugar de reclusión": 50, "Otra causa: autoridad": 60, "Instancia actual": 70,
+              "Último acto procesal": 80, "Observaciones": 60, "Delito(s)": 50}
+    for i, col in enumerate(COLUMNAS, start=1):
+        ws.column_dimensions[get_column_letter(i)].width = anchos.get(col, 20)
     ws.freeze_panes = "A2"
     ws.auto_filter.ref = ws.dimensions
     wb.save(DIR_DATOS / "datos_ppl_ficticios.xlsx")

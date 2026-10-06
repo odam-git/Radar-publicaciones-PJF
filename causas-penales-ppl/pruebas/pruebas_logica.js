@@ -36,7 +36,7 @@ prueba("CSV y copia embebida contienen la misma información", () => {
   const llave = (r) => [r.id, r.nombre, r.causa, r.fechaAFP, r.etapa];
   assert.deepStrictEqual(R.map(llave), E.registros.map(llave));
 });
-prueba("Las 18 columnas de la nueva estructura están presentes y en orden", () => {
+prueba("Las columnas de la hoja coinciden, en orden, con las que lee la aplicación", () => {
   assert.deepStrictEqual(Object.keys(D.parsearCSV(csv)[0]), D.MAPA_COLUMNAS.map((c) => c.columna));
 });
 prueba("Sin alias ni columnas de pena firme, inicio o cumplimiento", () => {
@@ -47,11 +47,29 @@ prueba("2. Los nombres provienen de las listas ficticias del generador", () => {
   const gen = fs.readFileSync(path.join(RAIZ, "herramientas/generar_datos_ficticios.py"), "utf8");
   for (const r of [...R, ...EJ]) for (const p of r.nombre.split(" ")) assert.ok(gen.includes(p), "Palabra no generada: " + p);
 });
-prueba("3. Expedientes y causas ficticios (prefijo FIC) y únicos", () => {
+prueba("3. Expedientes y causas ficticios (prefijo FIC); persona + causa es único", () => {
   const todos = [...R, ...EJ];
   assert.ok(todos.every((r) => /^EXP-FIC-\d+\/\d{4}$/.test(r.expediente)));
   assert.ok(todos.every((r) => /^CP-FIC-\d+\/\d{4}$/.test(r.causa)));
-  assert.strictEqual(new Set(todos.map((r) => r.causa)).size, todos.length);
+  assert.strictEqual(new Set(todos.map((r) => r.idPersona + "|" + r.causa)).size, todos.length);
+});
+prueba("ID de persona: 149 personas en 150 causas (una persona con dos causas)", () => {
+  assert.strictEqual(L.personas(R), 149);
+  const r12 = R.find((r) => r.id === "13"), r139 = R.find((r) => r.id === "140");
+  assert.strictEqual(r12.idPersona, r139.idPersona);
+  assert.notStrictEqual(r12.causa, r139.causa);
+});
+prueba("Coimputados: dos causas con varias PPL en el mismo juzgado", () => {
+  const r = R.find((x) => x.id === "41");
+  assert.strictEqual(L.coimputados(R, r).length, 2);
+  assert.ok(L.coimputados(R, r).every((x) => x.causa === r.causa && x.juzgado === r.juzgado && x.fechaAFP === r.fechaAFP));
+  assert.strictEqual(L.coimputados(R, R.find((x) => x.id === "50")).length, 1);
+  assert.strictEqual(L.coimputados(R, R.find((x) => x.id === "2")).length, 0);
+});
+prueba("Motivo de la privación de libertad: catálogo completo y datos de la otra causa coherentes", () => {
+  assert.ok(R.every((r) => L.MOTIVOS.includes(r.motivoPrivacion)));
+  for (const m of L.MOTIVOS) assert.ok(R.some((r) => r.motivoPrivacion === m), "Sin casos: " + m);
+  for (const r of R) assert.strictEqual(!!r.otraAutoridad, r.motivoPrivacion !== "Solo por esta causa federal", r.id);
 });
 prueba("Homonimias y nombres similares para pruebas", () => {
   const cuenta = {};
@@ -138,6 +156,11 @@ prueba("Los datos ficticios cubren los 5 niveles (30-30-30-30-29) + 1 sin fecha"
   assert.deepStrictEqual(L.contarPorNivel(R, HOY), { n1: 30, n2: 30, n3: 30, n4: 30, n5: 29, sd: 1 });
   assert.ok(!R.some((r) => L.antiguedad(r.fechaAFP, HOY).mas30), "No debe haber casos de más de 30 años");
 });
+prueba("Fecha de corte y fecha del último acto se leen de la hoja", () => {
+  assert.ok(R.every((r) => r.fechaCorte === "2026-10-01"));
+  assert.ok(R.every((r) => /^\d{4}-\d{2}-\d{2}$/.test(r.fechaUltimoActo) && r.fechaUltimoActo >= (r.fechaAFP || "")));
+  assert.strictEqual(D.cargarDesdeTextoCSV(csv, "x.csv", { privacidad: {}, fuente: {} }).fechaCorte, "2026-10-01");
+});
 prueba("Revisión de calidad detecta registro sin fecha y etapas fuera de catálogo", () => {
   const p = L.revisar(R, HOY);
   assert.strictEqual(p.length, 1);
@@ -152,14 +175,15 @@ prueba("4. Encuentra por nombre (sin acentos ni mayúsculas)", () => {
   assert.strictEqual(buscar("jose luis hernandez ruiz").length, 2);
 });
 prueba("Encuentra por expediente y por causa penal", () => {
-  assert.deepStrictEqual(buscar(R[40].expediente).map((r) => r.id), [R[40].id]);
+  assert.deepStrictEqual(buscar(R[5].expediente).map((r) => r.id), [R[5].id]);
+  assert.strictEqual(buscar(R[40].expediente).length, 3); // causa con coimputados
   assert.deepStrictEqual(buscar(R[77].causa).map((r) => r.id), [R[77].id]);
 });
 prueba("Encuentra por juzgado, entidad, circuito, delito, lugar y etapa", () => {
   const juz = "Juzgado Segundo de Distrito en Sonora";
   assert.strictEqual(buscar(juz).length, R.filter((r) => r.juzgado === juz).length);
-  assert.strictEqual(buscar("michoacan").length, 15);
-  assert.strictEqual(buscar("Décimo Segundo Circuito").length, 15);
+  assert.strictEqual(buscar("michoacan").length, R.filter((r) => r.entidad === "Michoacán").length);
+  assert.strictEqual(buscar("Décimo Segundo Circuito").length, R.filter((r) => r.circuito === "Décimo Segundo Circuito").length);
   assert.ok(buscar("hidrocarburos").every((r) => r.delito.includes("hidrocarburos")));
   assert.ok(buscar("Tierra Caliente").every((r) => r.lugar.includes("Tierra Caliente")));
   assert.strictEqual(buscar("amparo directo").length, R.filter((r) => r.etapa === "Amparo directo").length);
@@ -197,6 +221,70 @@ prueba("Filtros dependientes: Entidad → Circuito → Juzgado", () => {
   assert.deepStrictEqual(op.circuitos, ["Séptimo Circuito"]);
   assert.strictEqual(op.juzgados.length, 3);
   assert.strictEqual(op.causas.length, 15);
+});
+
+prueba("Filtro por motivo de la privación de libertad", () => {
+  const res = F({ motivo: "Solo por causa del fuero común" });
+  assert.ok(res.length > 0 && res.every((r) => r.motivoPrivacion === "Solo por causa del fuero común"));
+});
+
+console.log("\nPRÓXIMOS A CAMBIAR DE NIVEL");
+prueba("Cambia el día siguiente a cumplir el umbral (límite inclusivo)", () => {
+  const p = L.proximoCambio("2024-10-01", HOY, 30);
+  assert.deepStrictEqual([p.anios, p.fecha, p.faltan, p.destino], [2, "2026-10-02", 1, "n2"]);
+  const p2 = L.proximoCambio("2016-12-15", HOY, 90);
+  assert.deepStrictEqual([p2.anios, p2.fecha, p2.destino], [10, "2026-12-16", "n4"]);
+});
+prueba("Cumplir 30 años se informa, aunque sigue en Nivel 5", () => {
+  const p = L.proximoCambio("1996-10-01", HOY, 30);
+  assert.ok(p.mas30 && p.destino === "n5");
+});
+prueba("Fuera del horizonte, sin fecha o fecha futura → sin aviso", () => {
+  assert.strictEqual(L.proximoCambio("2016-12-15", HOY, 30), null);
+  assert.strictEqual(L.proximoCambio("", HOY, 90), null);
+  assert.strictEqual(L.proximoCambio("2027-01-01", HOY, 90), null);
+  assert.strictEqual(L.proximoCambio("2010-01-01", HOY, 90), null); // ya pasó 10 y faltan años para 20
+});
+prueba("Filtro de próximos: coincide con el cálculo individual", () => {
+  const n = R.filter((r) => L.proximoCambio(r.fechaAFP, HOY, 90)).length;
+  assert.ok(n > 0);
+  assert.strictEqual(F({ proximos: 90 }).length, n);
+  assert.ok(F({ proximos: 30 }).length <= n);
+});
+
+console.log("\nRESUMEN Y COMPARATIVO");
+prueba("Resumen por entidad y por juzgado suma el total y ordena por casos de 10 años o más", () => {
+  for (const por of ["entidad", "juzgado"]) {
+    const filas = L.resumen(R, HOY, por);
+    assert.strictEqual(filas.reduce((s, g) => s + g.total, 0), 150);
+    assert.ok(filas.every((g, i) => i === 0 || filas[i - 1].mas10 >= g.mas10));
+    assert.ok(filas.every((g) => g.n1 + g.n2 + g.n3 + g.n4 + g.n5 + g.sd === g.total && g.mas10 === g.n4 + g.n5));
+  }
+  assert.strictEqual(L.resumen(R, HOY, "entidad").length, 10);
+});
+prueba("Concentración: los 5 primeros grupos y su porcentaje", () => {
+  const c = L.concentracion(L.resumen(R, HOY, "juzgado"), 5);
+  assert.strictEqual(c.total, 59);
+  assert.ok(c.grupos === 5 && c.suma <= c.total && c.porcentaje === Math.round((c.suma / c.total) * 100));
+});
+const ANT = D.normalizarFilas(D.parsearCSV(fs.readFileSync(path.join(RAIZ, "datos/corte_anterior_ficticio.csv"), "utf8")));
+const CMP = L.comparar(R, ANT.registros, "2026-10-01", "2026-09-01", EJ);
+prueba("Comparativo: 3 altas y 4 bajas (2 por ejecutoria, 2 que ya no aparecen)", () => {
+  assert.strictEqual(CMP.altas.length, 3);
+  assert.strictEqual(CMP.bajas.length, 4);
+  assert.strictEqual(CMP.bajas.filter((b) => b.motivo === "Sentencia ejecutoriada").length, 2);
+});
+prueba("Comparativo: 5 cambios de etapa, cada uno a la etapa siguiente", () => {
+  assert.strictEqual(CMP.cambiosEtapa.length, 5);
+  assert.ok(CMP.cambiosEtapa.every((c) => L.ETAPAS.indexOf(c.ahora) === L.ETAPAS.indexOf(c.antes) + 1));
+});
+prueba("Comparativo: quienes subieron de nivel lo hicieron por el paso del tiempo", () => {
+  assert.ok(CMP.subieron.length > 0);
+  assert.ok(CMP.subieron.every((c) => L.POR_CLAVE[c.ahora].numero === L.POR_CLAVE[c.antes].numero + 1));
+});
+prueba("Comparar un corte consigo mismo no reporta cambios", () => {
+  const c = L.comparar(R, R, "2026-10-01", "2026-10-01", []);
+  assert.deepStrictEqual([c.altas.length, c.bajas.length, c.cambiosEtapa.length, c.subieron.length], [0, 0, 0, 0]);
 });
 
 console.log("\nORDEN Y CSV");

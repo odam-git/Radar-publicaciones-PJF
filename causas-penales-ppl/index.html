@@ -8,6 +8,7 @@
         content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
   <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="light dark">
   <title>CAUSAS PENALES PPL</title>
   <link rel="stylesheet" href="css/estilos.css">
 </head>
@@ -23,8 +24,12 @@
     <symbol id="i-archivo" viewBox="0 0 24 24"><path d="M6 2.5h8l5 5v14H6z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M14 2.5v5h5M9.5 13h6M9.5 17h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
     <symbol id="i-exportar" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4.5-4.5M12 15l4.5-4.5M4 17v3h16v-3" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-alerta" viewBox="0 0 24 24"><path d="M12 3 2 20.5h20z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="17.5" r="1.4" fill="currentColor"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 11v6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="7.5" r="1.4" fill="currentColor"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-personas" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5" fill="currentColor"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6z" fill="currentColor"/><circle cx="17" cy="9" r="2.6" fill="currentColor" opacity=".7"/><path d="M16 14.2c3.2-.4 5.5 1.8 5.5 5.3h-4.4c0-2-.4-3.8-1.1-5.3z" fill="currentColor" opacity=".7"/></symbol>
+    <symbol id="i-reloj" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 6.5V12l3.5 2.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-comparar" viewBox="0 0 24 24"><path d="M4 8h13m0 0-3.5-3.5M17 8l-3.5 3.5M20 16H7m0 0 3.5-3.5M7 16l3.5 3.5" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-bandera" viewBox="0 0 24 24"><path d="M5 21V4m0 0h11l-2 4 2 4H5" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   </svg>
 
   <a class="saltar" href="#resultados">Saltar a los resultados</a>
@@ -35,42 +40,44 @@
         <span class="marca__logo" aria-hidden="true"><svg><use href="#i-balanza"/></svg></span>
         <div>
           <h1>CAUSAS PENALES PPL</h1>
-          <p class="subtitulo">Sistema de consulta y seguimiento · Prisión preventiva</p>
+          <p class="subtitulo">Sistema de consulta y seguimiento · Prisión preventiva · Sistema penal tradicional</p>
+          <p class="corte" id="texto-corte"></p>
         </div>
       </div>
       <div class="encabezado__acciones">
+        <p class="insignia insignia--clasificacion" id="clasificacion" hidden></p>
         <p class="insignia" id="aviso-ficticio" hidden><span class="insignia__punto" aria-hidden="true"></span>Datos ficticios · Sin conexión externa</p>
         <button type="button" class="boton boton--oscuro" id="btn-exportar">
-          <svg class="icono" aria-hidden="true"><use href="#i-exportar"/></svg> Exportar vista
+          <svg class="icono" aria-hidden="true"><use href="#i-exportar"/></svg> EXPORTAR VISTA
         </button>
       </div>
     </div>
   </header>
 
   <main class="contenedor">
-    <!-- Fuente de datos -->
-    <section class="fuente" aria-label="Fuente de datos">
-      <p id="fuente-texto" class="fuente__texto">Cargando datos…</p>
-      <div class="fuente__acciones">
-        <button type="button" class="boton boton--terciario" id="btn-recargar">
-          <svg class="icono" aria-hidden="true"><use href="#i-recargar"/></svg> Recargar datos
-        </button>
-        <input type="file" id="archivo-csv" accept=".csv,text/csv" class="oculto-visual">
-        <label class="boton boton--terciario" for="archivo-csv">
-          <svg class="icono" aria-hidden="true"><use href="#i-archivo"/></svg> Cargar archivo CSV
-        </label>
-      </div>
-    </section>
     <p id="avisos-datos" class="aviso aviso--naranja" role="status" hidden></p>
 
-    <!-- Avisos de depuración: sentencias ejecutoriadas y datos por revisar -->
+    <!-- Avisos: sentencias ejecutoriadas, datos por revisar y reclusión por proceso local -->
     <div id="avisos-depuracion" class="avisos-depuracion"></div>
 
-    <!-- Tarjetas ejecutivas: total + 5 niveles de antigüedad (funcionan como botones de filtro) -->
+    <!-- Semáforo: regla de años + tarjetas que funcionan como botones de filtro -->
     <section class="tarjetas" aria-labelledby="titulo-tarjetas">
       <h2 id="titulo-tarjetas" class="oculto-visual">Semáforo de antigüedad desde el auto de formal prisión. Pulse un nivel para filtrar.</h2>
+      <div class="regla" id="regla" aria-hidden="true"></div>
       <div class="tarjetas__rejilla" id="tarjetas"></div>
-      <p class="tarjetas__nota">Antigüedad contada desde la <strong>fecha de auto de formal prisión</strong>. Pulse uno o varios niveles para filtrar.</p>
+      <p class="tarjetas__nota">Años transcurridos desde la <strong>fecha de auto de formal prisión</strong>. Pulse uno o varios niveles para filtrar.</p>
+    </section>
+
+    <!-- Próximos a cambiar de nivel -->
+    <section class="proximos" aria-labelledby="titulo-proximos">
+      <svg class="proximos__icono" aria-hidden="true"><use href="#i-reloj"/></svg>
+      <div class="proximos__texto">
+        <h2 id="titulo-proximos">Próximos a cambiar de nivel</h2>
+        <p><strong id="proximos-total">0</strong> PPL cambian de nivel en los próximos
+          <label class="oculto-visual" for="f-horizonte">Horizonte en días</label>
+          <select id="f-horizonte"></select> días.</p>
+      </div>
+      <button type="button" class="boton boton--secundario" id="btn-proximos" aria-pressed="false">VER ESTOS CASOS</button>
     </section>
 
     <!-- Buscador y filtros -->
@@ -86,7 +93,7 @@
 
         <div class="filtros">
           <div class="campo">
-            <label for="f-entidad" class="etiqueta">Entidad Federativa</label>
+            <label for="f-entidad" class="etiqueta">Entidad federativa</label>
             <select id="f-entidad" name="entidad"></select>
           </div>
           <div class="campo">
@@ -97,40 +104,60 @@
             <label for="f-juzgado" class="etiqueta">Juzgado de Distrito</label>
             <select id="f-juzgado" name="juzgado"></select>
           </div>
+        </div>
+
+        <div class="filtros filtros--mas" id="mas-filtros" hidden>
           <div class="campo">
-            <label for="f-causa" class="etiqueta">Causa Penal</label>
+            <label for="f-causa" class="etiqueta">Causa penal</label>
             <input type="text" id="f-causa" name="causa" list="l-causas" placeholder="Todas">
             <datalist id="l-causas"></datalist>
           </div>
           <div class="campo">
-            <label for="f-nombre" class="etiqueta">Nombre de la Persona</label>
+            <label for="f-nombre" class="etiqueta">Nombre de la persona</label>
             <input type="text" id="f-nombre" name="nombre" list="l-nombres" placeholder="Todas">
             <datalist id="l-nombres"></datalist>
           </div>
           <div class="campo">
-            <label for="f-etapa" class="etiqueta">Etapa Procesal</label>
+            <label for="f-etapa" class="etiqueta">Etapa procesal</label>
             <select id="f-etapa" name="etapa"></select>
           </div>
           <div class="campo">
-            <label for="f-nivel" class="etiqueta">Nivel de Antigüedad</label>
+            <label for="f-nivel" class="etiqueta">Nivel de antigüedad</label>
             <select id="f-nivel" name="nivel"></select>
           </div>
-          <div class="acciones">
-            <button type="submit" class="boton boton--primario" id="btn-buscar">
-              <svg class="icono icono--grande" aria-hidden="true"><use href="#i-buscar"/></svg> BUSCAR
-            </button>
-            <button type="button" class="boton boton--secundario" id="btn-limpiar">
-              <svg class="icono icono--grande" aria-hidden="true"><use href="#i-limpiar"/></svg> LIMPIAR FILTROS
-            </button>
+          <div class="campo">
+            <label for="f-motivo" class="etiqueta">Motivo de la privación de libertad</label>
+            <select id="f-motivo" name="motivo"></select>
           </div>
+        </div>
+
+        <div class="acciones">
+          <button type="submit" class="boton boton--primario" id="btn-buscar">
+            <svg class="icono icono--grande" aria-hidden="true"><use href="#i-buscar"/></svg> BUSCAR
+          </button>
+          <button type="button" class="boton boton--secundario" id="btn-limpiar">
+            <svg class="icono icono--grande" aria-hidden="true"><use href="#i-limpiar"/></svg> LIMPIAR FILTROS
+          </button>
+          <button type="button" class="boton boton--terciario" id="btn-mas-filtros" aria-expanded="false" aria-controls="mas-filtros">
+            MÁS FILTROS
+          </button>
         </div>
       </form>
     </section>
 
-    <!-- Resultados -->
+    <!-- Comparativo contra el corte anterior (aparece al cargar un corte) -->
+    <section class="panel comparativo" id="comparativo" aria-labelledby="titulo-comparativo" hidden></section>
+
+    <!-- Selector de vista -->
+    <div class="vistas" role="group" aria-label="Vista de resultados">
+      <button type="button" class="vistas__boton" id="vista-listado" aria-pressed="true">LISTADO</button>
+      <button type="button" class="vistas__boton" id="vista-resumen" aria-pressed="false">RESUMEN POR ENTIDAD Y JUZGADO</button>
+    </div>
+
+    <!-- Listado -->
     <section id="resultados" class="panel panel--tabla" aria-labelledby="titulo-listado" tabindex="-1">
       <div class="panel__cabecera">
-        <h2 id="titulo-listado">LISTADO DE CAUSAS PENALES EN PRISIÓN PREVENTIVA</h2>
+        <h2 id="titulo-listado">Listado de causas penales en prisión preventiva</h2>
         <p id="contador" class="contador" aria-live="polite">Resultados encontrados: <strong id="total">0</strong> PPL</p>
       </div>
 
@@ -142,9 +169,9 @@
               <th scope="col" data-clave="antiguedad" data-nombre="alerta"><button type="button" class="ordenar">Alerta<span class="flecha" aria-hidden="true"></span></button></th>
               <th scope="col" data-clave="circuito"><button type="button" class="ordenar">Circuito / Entidad<span class="flecha" aria-hidden="true"></span></button></th>
               <th scope="col" data-clave="juzgado"><button type="button" class="ordenar">Juzgado de Distrito<span class="flecha" aria-hidden="true"></span></button></th>
-              <th scope="col" data-clave="causa"><button type="button" class="ordenar">Causa Penal / Expediente<span class="flecha" aria-hidden="true"></span></button></th>
-              <th scope="col" data-clave="nombre"><button type="button" class="ordenar">Persona Privada de la Libertad<span class="flecha" aria-hidden="true"></span></button></th>
-              <th scope="col" data-clave="etapa"><button type="button" class="ordenar">Etapa Procesal<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="causa"><button type="button" class="ordenar">Causa penal / Expediente<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="nombre"><button type="button" class="ordenar">Persona privada de la libertad<span class="flecha" aria-hidden="true"></span></button></th>
+              <th scope="col" data-clave="etapa"><button type="button" class="ordenar">Etapa procesal<span class="flecha" aria-hidden="true"></span></button></th>
               <th scope="col" data-clave="antiguedad"><button type="button" class="ordenar">Antigüedad<span class="flecha" aria-hidden="true"></span></button></th>
               <th scope="col" class="col-ver">Acciones</th>
             </tr>
@@ -158,6 +185,56 @@
           </button>
         </div>
       </div>
+    </section>
+
+    <!-- Resumen por entidad o juzgado -->
+    <section id="resumen" class="panel panel--tabla" aria-labelledby="titulo-resumen" hidden>
+      <div class="panel__cabecera">
+        <h2 id="titulo-resumen">Resumen por entidad y juzgado</h2>
+        <div class="vistas vistas--chica" role="group" aria-label="Agrupar por">
+          <button type="button" class="vistas__boton" id="resumen-entidad" aria-pressed="true">POR ENTIDAD</button>
+          <button type="button" class="vistas__boton" id="resumen-juzgado" aria-pressed="false">POR JUZGADO</button>
+        </div>
+      </div>
+      <p class="resumen__titular" id="resumen-titular"></p>
+      <div class="tabla-contenedor">
+        <table class="tabla tabla--resumen" id="tabla-resumen">
+          <caption class="oculto-visual">Casos por nivel de antigüedad. Respeta los filtros aplicados.</caption>
+          <thead id="cabeza-resumen"></thead>
+          <tbody id="cuerpo-resumen"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Datos y metodología -->
+    <section class="panel datos" aria-labelledby="titulo-datos">
+      <h2 id="titulo-datos">Datos y metodología</h2>
+      <p id="fuente-texto" class="datos__fuente">Cargando datos…</p>
+      <div class="datos__acciones">
+        <button type="button" class="boton boton--terciario" id="btn-recargar">
+          <svg class="icono" aria-hidden="true"><use href="#i-recargar"/></svg> RECARGAR DATOS
+        </button>
+        <input type="file" id="archivo-csv" accept=".csv,text/csv" class="oculto-visual">
+        <label class="boton boton--terciario" for="archivo-csv">
+          <svg class="icono" aria-hidden="true"><use href="#i-archivo"/></svg> CARGAR ARCHIVO CSV
+        </label>
+        <input type="file" id="archivo-anterior" accept=".csv,text/csv" class="oculto-visual">
+        <label class="boton boton--terciario" for="archivo-anterior">
+          <svg class="icono" aria-hidden="true"><use href="#i-comparar"/></svg> COMPARAR CON CORTE ANTERIOR
+        </label>
+      </div>
+      <details class="metodologia">
+        <summary>Nota metodológica</summary>
+        <ul>
+          <li><strong>Universo:</strong> personas privadas de la libertad en prisión preventiva en causas penales federales del sistema penal tradicional (Código Federal de Procedimientos Penales) que no tienen sentencia firme. Incluye a quienes tienen sentencia de primera instancia recurrida o pendiente de causar ejecutoria. El tratamiento de las causas en amparo directo está pendiente de revisión normativa.</li>
+          <li><strong>Antigüedad:</strong> tiempo transcurrido desde la fecha del auto de formal prisión hasta el día de la consulta. Cada rango incluye su límite superior (exactamente 2 años es Nivel 1). Más de 30 años se mantiene en Nivel 5.</li>
+          <li><strong>Unidad de conteo:</strong> cada renglón es una causa por persona. Una persona puede tener varias causas y una causa puede tener varias personas (coimputados).</li>
+          <li><strong>Motivo de la privación de libertad:</strong> indica si la persona está recluida solo por esta causa federal, también por otra causa (federal o local), solo por un proceso local (en la causa federal no hay prisión preventiva vigente) o compurgando pena por otra causa.</li>
+          <li><strong>Sentencias ejecutoriadas:</strong> los registros con etapa "Sentencia ejecutoriada" o con fecha de ejecutoria no se muestran ni se cuentan; se listan en el aviso para darlos de baja.</li>
+          <li><strong>Fecha de corte:</strong> fecha en que se capturó la información. Las etapas y actuaciones corresponden a esa fecha; la antigüedad se recalcula cada día.</li>
+          <li><strong>Privacidad:</strong> la aplicación funciona sin conexión a Internet y no envía información a ningún servidor.</li>
+        </ul>
+      </details>
     </section>
   </main>
 

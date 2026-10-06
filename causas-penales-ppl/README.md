@@ -48,15 +48,19 @@ causas-penales-ppl/
 │   └── interfaz.js             Pinta tarjetas, filtros, tabla, avisos y ficha (no contiene registros)
 ├── datos/
 │   ├── datos_ppl_ficticios.csv   Fuente principal (150 en seguimiento + 2 ejecutoriadas de prueba)
+│   ├── corte_anterior_ficticio.csv  Corte del mes anterior, para probar el comparativo
 │   ├── datos_ppl_ficticios.xlsx  Misma información en Excel
 │   └── datos_ppl_ficticios.js    Copia para el modo doble clic (generada)
 ├── herramientas/
 │   ├── generar_datos_ficticios.py  Genera los registros ficticios
 │   ├── csv_a_js.py                 Convierte un CSV/Excel en la copia embebida
-│   └── empaquetar_un_archivo.py    Genera CAUSAS_PENALES_PPL.html (versión de un solo archivo)
+│   ├── empaquetar_un_archivo.py    Genera CAUSAS_PENALES_PPL.html (versión de un solo archivo)
+│   └── generar_plantilla.py        Genera la plantilla de captura en Excel
+├── plantillas/
+│   └── plantilla_captura_ppl.xlsx  Hoja para los juzgados, con listas desplegables e instrucciones
 ├── pruebas/
-│   ├── pruebas_logica.js        36 pruebas de datos y lógica (Node)
-│   └── pruebas_interfaz.js      30 pruebas en navegador real (Playwright)
+│   ├── pruebas_logica.js        51 pruebas de datos y lógica (Node)
+│   └── pruebas_interfaz.js      38 pruebas en navegador real (Playwright)
 └── iniciar_servidor_local.bat
 ```
 
@@ -95,15 +99,31 @@ Flujo: **fuente de datos → `datos.js` (lectura y normalización) → `logica.j
 
 **Filtros dependientes:** Entidad → Circuito → Juzgado → (sugerencias de Causa y Nombre).
 
+**Motivo de la privación de libertad:** catálogo de 5 opciones (solo por esta causa federal; también por otra causa federal; también por proceso local; solo por proceso local; compurga pena por otra causa). Cuando no es "solo por esta causa", la fila muestra una etiqueta (p. ej. "Reclusión por proceso local") y un aviso azul cuenta los casos de reclusión solo por proceso local.
+
+**Próximos a cambiar de nivel:** cuenta y filtra a quienes cumplirán 2, 5, 10, 20 o 30 años en los próximos 30, 90 o 180 días. Como cada rango incluye su límite, el cambio ocurre el día siguiente al aniversario.
+
+**Comparativo contra el corte anterior:** botón *COMPARAR CON CORTE ANTERIOR* → elegir el CSV del mes pasado. Muestra altas, bajas (indicando si fue por ejecutoria), cambios de etapa y quienes subieron de nivel. La llave de comparación es *ID de persona + causa + juzgado*.
+
+**Resumen por entidad y juzgado:** tabla con los casos por nivel, "X de Y" con 10 años o más (la cifra que define el orden), total y una barra de distribución; la frase superior indica cuánto concentran los 5 primeros. *VER CAUSAS* lleva al listado filtrado. Respeta los filtros aplicados.
+
+**Personas y causas:** cada renglón es una causa por persona; la tarjeta Total muestra causas y personas (por *ID de persona*). La ficha avisa si la causa tiene coimputados y permite verlos.
+
+**Fecha de corte y clasificación:** la fecha de corte se toma de la columna *Fecha de corte* (o de `config.js`). La leyenda de clasificación (`clasificacion` en `config.js`) aparece en el encabezado, la impresión y los archivos exportados.
+
+**Accesibilidad (revisión con la habilidad *apple-design*, guardada en `.claude/skills/apple-design`):** texto base en porcentaje (crece con la letra del navegador), anillo de foco doble visible en fondo claro y oscuro, modo oscuro automático según el sistema (contraste de texto ≥ 7:1), ficha a pantalla completa en pantallas angostas o con zoom alto, filtros secundarios en *MÁS FILTROS*, filas alternadas y botones en mayúsculas.
+
 ---
 
 ## 4. Sustituir los datos ficticios por un Excel/CSV
 
+**Plantilla para los juzgados:** `plantillas/plantilla_captura_ppl.xlsx` trae los encabezados exactos, listas desplegables (entidad, etapa, motivo, situación de la otra causa), validación de fechas y pena, una hoja de instrucciones y un renglón de ejemplo. Al terminar, se guarda como *CSV UTF-8* y se carga en la aplicación.
+
 La hoja debe conservar los encabezados (se toleran diferencias de acentos y mayúsculas):
 
-`ID · Nombre completo · Expediente · Causa penal · Delito(s) · Entidad Federativa · Circuito · Juzgado de Distrito · Lugar de reclusión · Situación de reclusión · Fecha de auto de formal prisión · Etapa procesal · Instancia actual · Último acto procesal · Fecha de sentencia de primera instancia · Pena impuesta (no firme) · Fecha de ejecutoria · Observaciones`
+`ID · ID de persona · Nombre completo · Expediente · Causa penal · Delito(s) · Entidad Federativa · Circuito · Juzgado de Distrito · Lugar de reclusión · Motivo de la privación de libertad · Otra causa: autoridad · Otra causa: situación · Fecha de auto de formal prisión · Etapa procesal · Instancia actual · Último acto procesal · Fecha del último acto procesal · Fecha de sentencia de primera instancia · Pena impuesta (no firme) · Fecha de ejecutoria · Fecha de corte · Observaciones`
 
-- Las tres columnas de sentencia, pena y ejecutoria son opcionales y normalmente van vacías.
+- Son opcionales: *ID de persona* (recomendado), los datos de la otra causa, la fecha del último acto, sentencia, pena, ejecutoria y fecha de corte.
 - *Fechas:* `AAAA-MM-DD` o `DD/MM/AAAA`.
 
 Tres formas, de la más rápida a la más permanente:
@@ -162,7 +182,7 @@ node pruebas/pruebas_logica.js                         (sin dependencias)
 npm install playwright && node pruebas/pruebas_interfaz.js   (navegador real; solo desarrollo)
 ```
 
-Cubren: 150 registros en seguimiento; nombres, expedientes y causas ficticios; exclusión y aviso de ejecutoriadas; aviso de datos por revisar; semáforo con límites exactos de 2/5/10/20/30 años, más de 30, sin fecha y 29 de febrero; tarjetas-botón (uno o varios niveles); buscador por cada campo; filtros individuales, dependientes y combinados; pena solo informativa; exportar vista; ojo → registro correcto (incluidas homonimias); cierre con X, CERRAR, clic fuera y Esc; contador; LIMPIAR FILTROS; orden; encabezado fijo; carga de CSV; ejecución por `file://` y por servidor local; y ausencia de solicitudes externas.
+Cubren: 150 registros en seguimiento; nombres, expedientes y causas ficticios; exclusión y aviso de ejecutoriadas; aviso de datos por revisar; semáforo con límites exactos de 2/5/10/20/30 años, más de 30, sin fecha y 29 de febrero; tarjetas-botón (uno o varios niveles); buscador por cada campo; filtros individuales, dependientes y combinados; pena solo informativa; motivo de la privación de libertad y aviso de proceso local; próximos a cambiar de nivel; comparativo contra el corte anterior; resumen por entidad y juzgado; coimputados; personas y causas; fecha de corte y clasificación; exportar vista; botones en mayúsculas; foco visible; modo oscuro; zoom al 200 % con ficha a pantalla completa; ojo → registro correcto (incluidas homonimias); cierre con X, CERRAR, clic fuera y Esc; contador; LIMPIAR FILTROS; orden; encabezado fijo; carga de CSV; ejecución por `file://` y por servidor local; y ausencia de solicitudes externas.
 
 ---
 
@@ -175,5 +195,6 @@ Cubren: 150 registros en seguimiento; nombres, expedientes y causas ficticios; e
 - **Seudonimización por defecto** para perfiles que no necesiten el nombre.
 - **Cifrado** de los archivos de datos y del equipo; **respaldos** cifrados y periódicos.
 - **Exportación** a Excel/PDF de los resultados filtrados, con marca de agua.
-- **Alerta por inactividad:** fecha del último acto procesal para detectar asuntos sin movimiento.
-- **Histórico:** comparar cortes mensuales para ver qué asuntos subieron de nivel.
+- **Alerta por inactividad:** ya se captura la fecha del último acto procesal; falta el aviso de asuntos sin movimiento.
+- **Verificación del sistema aplicable** con las fechas de las declaratorias del Código Nacional (pendiente de cotejar con el DOF).
+- **Tarjetas en lugar de tabla en celulares**, enlace que conserve los filtros e impresión con mejor formato.

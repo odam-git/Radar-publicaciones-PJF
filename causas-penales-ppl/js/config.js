@@ -16,6 +16,20 @@ window.CONFIG_PPL = {
     rutaCSV: "datos/datos_ppl_ficticios.csv",
     urlGoogleSheets: "", // Vacío a propósito: esta versión no se conecta a Google Sheets.
     esFicticia: true,    // Muestra la etiqueta "Datos ficticios" en el encabezado.
+    // Fecha de corte si la hoja no trae la columna "Fecha de corte" (AAAA-MM-DD).
+    fechaCorte: "",
+  },
+
+  /*
+   * Leyenda de clasificación de la información. Aparece en el encabezado,
+   * en la impresión y en los archivos exportados. Vacío = no se muestra.
+   */
+  clasificacion: "Información confidencial · Uso interno",
+
+  seguimiento: {
+    // Días para el aviso "Próximos a cambiar de nivel" (opciones del selector).
+    horizontesDias: [30, 90, 180],
+    horizontePorDefecto: 90,
   },
 
   privacidad: {

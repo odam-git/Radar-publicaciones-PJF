@@ -22,6 +22,7 @@
    */
   const MAPA_COLUMNAS = [
     { clave: "id",            columna: "ID",                         alias: ["id", "folio"] },
+    { clave: "idPersona",     columna: "ID de persona",              alias: ["id persona", "persona"], opcional: true },
     { clave: "nombre",        columna: "Nombre completo",            alias: ["nombre", "nombre de la persona", "nombre de la ppl"], identificativo: true },
     { clave: "expediente",    columna: "Expediente",                 alias: [] },
     { clave: "causa",         columna: "Causa penal",                alias: ["causa", "causa penal vigente"] },
@@ -30,14 +31,18 @@
     { clave: "circuito",      columna: "Circuito",                   alias: ["circuito judicial"] },
     { clave: "juzgado",       columna: "Juzgado de Distrito",        alias: ["juzgado", "organo jurisdiccional"] },
     { clave: "lugar",         columna: "Lugar de reclusión",         alias: ["lugar", "lugar donde se encuentra", "centro penitenciario"] },
-    { clave: "situacion",     columna: "Situación de reclusión",     alias: ["reclusion", "situacion"] },
+    { clave: "motivoPrivacion", columna: "Motivo de la privación de libertad", alias: ["motivo de privacion", "situacion de reclusion", "situacion"] },
+    { clave: "otraAutoridad", columna: "Otra causa: autoridad",      alias: ["otra causa autoridad"], opcional: true },
+    { clave: "otraSituacion", columna: "Otra causa: situación",      alias: ["otra causa situacion"], opcional: true },
     { clave: "fechaAFP",      columna: "Fecha de auto de formal prisión", alias: ["fecha de afp", "fecha auto de formal prision", "auto de formal prision"] },
     { clave: "etapa",         columna: "Etapa procesal",             alias: ["etapa"] },
     { clave: "instancia",     columna: "Instancia actual",           alias: ["instancia"] },
     { clave: "ultimoActo",    columna: "Último acto procesal",       alias: ["ultimo acto", "resena jurisdiccional"] },
+    { clave: "fechaUltimoActo", columna: "Fecha del último acto procesal", alias: ["fecha ultimo acto"], opcional: true },
     { clave: "fechaSentencia", columna: "Fecha de sentencia de primera instancia", alias: ["fecha de sentencia"], opcional: true },
     { clave: "penaNoFirme",   columna: "Pena impuesta (no firme)",   alias: ["pena", "pena impuesta"], opcional: true },
     { clave: "fechaEjecutoria", columna: "Fecha de ejecutoria",      alias: ["ejecutoria"], opcional: true },
+    { clave: "fechaCorte",    columna: "Fecha de corte",             alias: ["corte"], opcional: true },
     { clave: "observaciones", columna: "Observaciones",              alias: [] },
   ];
 
@@ -128,6 +133,8 @@
       r.id = String(r.id || i + 1);
       r.fechaAFP = aFechaISO(r.fechaAFP);
       r.fechaSentencia = aFechaISO(r.fechaSentencia);
+      r.fechaUltimoActo = aFechaISO(r.fechaUltimoActo);
+      r.fechaCorte = aFechaISO(r.fechaCorte);
       r.fechaEjecutoria = aFechaISO(r.fechaEjecutoria) || r.fechaEjecutoria;
       const pena = aNumeroPena(r.penaNoFirme);
       r.penaNoFirme = Number.isNaN(pena) ? null : pena;
@@ -202,7 +209,11 @@
 
   function prepararRegistros(filas, origen, config) {
     const { registros, ejecutoriadas, avisos } = normalizarFilas(filas);
+    // Fecha de corte: la más reciente que traiga la hoja; si no trae, la de la configuración.
+    const fechaCorte = [...registros, ...ejecutoriadas].map((r) => r.fechaCorte).filter(Boolean).sort().pop()
+      || (config.fuente && config.fuente.fechaCorte) || "";
     return {
+      fechaCorte,
       registros: aplicarPrivacidad(registros, config.privacidad),
       ejecutoriadas: aplicarPrivacidad(ejecutoriadas, config.privacidad),
       origen, avisos,
