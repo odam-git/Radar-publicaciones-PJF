@@ -5,58 +5,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Seguridad: la página solo puede cargar archivos propios; no puede conectarse a servidores externos. -->
   <meta http-equiv="Content-Security-Policy"
-        content="default-src 'none'; script-src 'sha256-d2i4RmfDXBIaWX3PYZi3hrvXDe/81X7+rLRbyFiJLW4=' 'sha256-WtaMLkOQezNTuK0m7kYoI+6Ag5TVt04ub+QJPtbkzW8=' 'sha256-rqxKYo6t9S0oSR7b1jEdtnxkqkeJ6LG3Ibwfo0iA5H0=' 'sha256-gqHprf7MxBtXifK3tkRN9cNLxP1YAAJ4Of7ZhdJrNpU=' 'sha256-kVamA8b27v/rXlZiB+iT9RJ72mTxXvKIobfrNyVIdSM='; style-src 'sha256-mJVlj8gNcpKeIPQ9hk54ztRbdzbQy+XLbaCojOR4Dok='; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+        content="default-src 'none'; script-src 'sha256-d2i4RmfDXBIaWX3PYZi3hrvXDe/81X7+rLRbyFiJLW4=' 'sha256-WtaMLkOQezNTuK0m7kYoI+6Ag5TVt04ub+QJPtbkzW8=' 'sha256-rqxKYo6t9S0oSR7b1jEdtnxkqkeJ6LG3Ibwfo0iA5H0=' 'sha256-P6ICKYVWPh4+jUmwq1OCXzjHYSyd2rfP8RhUpVQU5sg=' 'sha256-ls9XZLzbpMXQ1sE0mrKJ5AWmp4dc6C+KPqi4qA235c8='; style-src 'sha256-oUWVDCZkRGuOt3ngUYRogWczB8uZJ2mh78khx8MI9Yk='; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
   <meta name="robots" content="noindex, nofollow">
   <meta name="color-scheme" content="light dark">
   <title>CAUSAS PENALES PPL</title>
   <style>
-/* CAUSAS PENALES PPL — estilos (versión 4)
-   Prioridad: legibilidad. Texto base de 18 px que crece con el tamaño de letra del navegador,
-   alto contraste, áreas de clic grandes, modo claro y oscuro según el sistema.
-   Sistema: espaciado en múltiplos de 4 y 8 px; cuatro estilos de texto (cifra, título,
-   encabezado y cuerpo); un solo color de acento. Tipografía del sistema (sin descargas). */
+/* CAUSAS PENALES PPL — estilos (versión 5)
+   Inspiración: interfaces de Apple (superficies neutras, tipografía del sistema, mucho aire,
+   controles tipo píldora) sin perder lo acordado: texto base de 18 px que crece con la letra del
+   navegador, alto contraste, áreas de clic grandes, botones en mayúsculas y el semáforo de colores.
+   Sistema: espaciado en múltiplos de 4 y 8 px; cuatro estilos de texto (cifra, título, encabezado
+   y cuerpo) más el titular de portada; un solo color de acento (azul). Sin descargas externas. */
 
 :root {
   color-scheme: light dark;
 
   /* Espaciado (múltiplos de 4 / 8 px) */
-  --e1: 4px; --e2: 8px; --e3: 12px; --e4: 16px; --e6: 24px; --e8: 32px; --e12: 48px;
+  --e1: 4px; --e2: 8px; --e3: 12px; --e4: 16px; --e6: 24px; --e8: 32px; --e12: 48px; --e16: 64px;
 
   /* Escala tipográfica: nunca por debajo del cuerpo (18 px) */
-  --t-cifra: 2.25rem;       /* números de las tarjetas y del comparativo */
-  --t-titulo: 1.5rem;       /* título de la app, nombre en la ficha, contador */
-  --t-encabezado: 1.125rem; /* encabezados de sección y datos de la ficha */
+  --t-portada: clamp(2.25rem, 4.6vw, 4rem); /* titular de la portada */
+  --t-cifra: 2.25rem;       /* números de las tarjetas, cifras clave y comparativo */
+  --t-titulo: 1.5rem;       /* títulos de sección, nombre en la ficha, contador */
+  --t-encabezado: 1.125rem; /* encabezados menores y datos de la ficha */
   --t-cuerpo: 1rem;         /* todo lo demás */
 
-  --encabezado: #0f1e33;
-  --encabezado-2: #1b2d48;
-  --institucional: #1f3a5f;
-  --institucional-hover: #0f1e33;
-  --institucional-claro: #e8eef6;
-  --acento: #1d5fbf;
-  --texto: #1c1c1e;
-  --texto-2: #2e3742;
-  --borde: #5b6573;
-  --borde-suave: #d3d8df;
-  --fondo: #eef1f5;
+  --texto: #1d1d1f;
+  --texto-2: #515154;       /* gris secundario con contraste ≥ 7:1 sobre blanco */
+  --borde: #86868b;         /* bordes de controles: ≥ 3:1 sobre blanco */
+  --borde-suave: #d2d2d7;
+  --linea: #e8e8ed;
+  --fondo: #f5f5f7;
   --superficie: #ffffff;
-  --superficie-2: #f6f8fa;
-  --fila-par: #f4f6f9;
-  --fila-hover: #e9f0f9;
+  --superficie-2: #fafafc;
+  --superficie-3: #ececf0;  /* controles neutros (botón terciario, control segmentado) */
+  --vidrio: rgba(251, 251, 253, 0.82);
+  --fila-par: #fafafc;
+  --fila-hover: #eef5fd;
+
+  --institucional: #0066cc;        /* texto y bordes de acciones secundarias */
+  --institucional-hover: #004f9e;
+  --institucional-claro: #e8f1fb;
+  --primario: #0071e3;             /* botón principal (texto blanco 4.6:1, negrita de 18 px) */
+  --primario-hover: #0062c4;
+  --acento: #0066cc;
+  --ceja: #b64400;                 /* texto pequeño sobre el titular */
+
   --foco: #ffbf00;
   --foco-interno: #0f1e33;
 
-  --aviso-baja-fondo: #fff1f1;   --aviso-baja-borde: #b3131b;
-  --aviso-rev-fondo: #fff6ea;    --aviso-rev-borde: #8a4a00;
-  --aviso-info-fondo: #eaf2fd;   --aviso-info-borde: #1d5fbf;
-  --aviso-amparo-fondo: #f1eefb; --aviso-amparo-borde: #5b3fa8;
-  --acto-fondo: #fffbe8;         --acto-borde: #b89a1e;
-  --instancia-fondo: #ffeeb0;    --instancia-texto: #3d2f00;
-  --cambio-texto: #7a3d00;
+  --aviso-baja: #d70015;   --aviso-baja-tinte: #fdecee;
+  --aviso-rev: #a05a00;    --aviso-rev-tinte: #fdf3e6;
+  --aviso-info: #0066cc;   --aviso-info-tinte: #e8f1fb;
+  --aviso-amparo: #7a3fd1; --aviso-amparo-tinte: #f3edfc;
+  --acto-fondo: #fffbe8;   --acto-borde: #b89a1e;
+  --instancia-fondo: #ffeeb0; --instancia-texto: #3d2f00;
+  --cambio-texto: #8a3f00;
 
   /* Semáforo de antigüedad (5 niveles). El relleno es el color acordado;
-     el borde y la franja usan un tono oscuro del mismo color para distinguirse del fondo. */
+     el tono oscuro del mismo color se usa en franjas y bordes para distinguirse del fondo. */
   --n1: #fff2a8;  --n1-borde: #8f7a00;  --n1-texto: #2a2300;
   --n2: #ffd21f;  --n2-borde: #7a6200;  --n2-texto: #1f1800;
   --n3: #ffb36b;  --n3-borde: #8a4a00;  --n3-texto: #241200;
@@ -64,47 +72,69 @@
   --n5: #c0121e;  --n5-borde: #6e0b10;  --n5-texto: #ffffff;
   --sd: #dde1e7;  --sd-borde: #5b6573;  --sd-texto: #1f252c;
 
+  /* Mapa: una sola tonalidad de claro a oscuro (validada para daltonismo y contraste). */
+  --m0: #e8e8ed; --m0-texto: #515154;
+  --m1: #7fb4ee; --m1-texto: #0b1a2e;
+  --m2: #5b98e3; --m2-texto: #0b1a2e;
+  --m3: #3a7ed3; --m3-texto: #ffffff;
+  --m4: #1d64b8; --m4-texto: #ffffff;
+  --m5: #0b4a8f; --m5-texto: #ffffff;
+
   --radio: 12px;
-  --sombra: 0 1px 2px rgba(15, 30, 51, 0.06), 0 2px 8px rgba(15, 30, 51, 0.06);
+  --radio-grande: 24px;
+  --sombra: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
+  --sombra-alta: 0 12px 32px rgba(0, 0, 0, 0.12);
   --transicion: 150ms cubic-bezier(0.16, 1, 0.3, 1);
-  --fuente: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --fuente: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", system-ui, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --fuente-titular: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI Variable Display", "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif;
 }
 
 /* Modo oscuro: se activa solo, según la configuración del sistema (sin botón propio). */
 @media (prefers-color-scheme: dark) {
   :root {
-    --encabezado: #0a1220;
-    --encabezado-2: #1a2a42;
-    --institucional: #9cc2f5;
-    --institucional-hover: #c4dcfb;
-    --institucional-claro: #22344d;
-    --acento: #8fbcff;
-    --texto: #f2f5f9;
-    --texto-2: #c9d3df;
-    --borde: #8d9aab;
-    --borde-suave: #3a4a60;
-    --fondo: #0e1420;
-    --superficie: #172131;
-    --superficie-2: #1d2a3d;
-    --fila-par: #1b2638;
-    --fila-hover: #24364f;
+    --texto: #f5f5f7;
+    --texto-2: #c7c7cc;
+    --borde: #8e8e93;
+    --borde-suave: #3a3a3c;
+    --linea: #2c2c2e;
+    --fondo: #000000;
+    --superficie: #1c1c1e;
+    --superficie-2: #232325;
+    --superficie-3: #2c2c2e;
+    --vidrio: rgba(22, 22, 23, 0.82);
+    --fila-par: #202022;
+    --fila-hover: #1b2a3d;
+    --institucional: #2997ff;
+    --institucional-hover: #5aafff;
+    --institucional-claro: #0b2a4a;
+    --primario: #0071e3;
+    --primario-hover: #1a82ee;
+    --acento: #2997ff;
+    --ceja: #ff9f45;
     --foco: #ffcf3f;
     --foco-interno: #ffffff;
-    --aviso-baja-fondo: #3a1518;   --aviso-baja-borde: #ff7b7b;
-    --aviso-rev-fondo: #33260f;    --aviso-rev-borde: #f0a849;
-    --aviso-info-fondo: #10283f;   --aviso-info-borde: #6aaef0;
-    --aviso-amparo-fondo: #251c3d; --aviso-amparo-borde: #b9a4f5;
-    --acto-fondo: #2b2510;         --acto-borde: #c9a93a;
-    --instancia-fondo: #4a3d10;    --instancia-texto: #ffeaa6;
+    --aviso-baja: #ff6961;   --aviso-baja-tinte: #3a1518;
+    --aviso-rev: #ffb340;    --aviso-rev-tinte: #33260f;
+    --aviso-info: #64aeff;   --aviso-info-tinte: #10283f;
+    --aviso-amparo: #c3a6ff; --aviso-amparo-tinte: #251c3d;
+    --acto-fondo: #2b2510;   --acto-borde: #c9a93a;
+    --instancia-fondo: #4a3d10; --instancia-texto: #ffeaa6;
     --cambio-texto: #ffc27a;
-    --sombra: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --m0: #2c2c2e; --m0-texto: #c7c7cc;
+    --m1: #28589a; --m1-texto: #ffffff;
+    --m2: #3570b8; --m2-texto: #ffffff;
+    --m3: #4f8edb; --m3-texto: #000000;
+    --m4: #80b2ee; --m4-texto: #000000;
+    --m5: #b9d7f8; --m5-texto: #000000;
+    --sombra: none;
+    --sombra-alta: 0 12px 32px rgba(0, 0, 0, 0.6);
   }
 }
 
-/* "Aumentar contraste" del sistema: bordes más visibles. */
+/* "Aumentar contraste" del sistema: bordes visibles en tarjetas y controles. */
 @media (prefers-contrast: more) {
-  :root { --borde-suave: var(--borde); --texto-2: var(--texto); }
-  .tarjeta, .panel, .campo select, .campo input, .buscador input { border-width: 3px; }
+  :root { --borde-suave: var(--borde); --linea: var(--borde); --texto-2: var(--texto); }
+  .tarjeta, .panel, .grafica, .proximos, .avisos-depuracion { box-shadow: 0 0 0 2px var(--borde); }
 }
 
 * { box-sizing: border-box; }
@@ -115,8 +145,10 @@ body {
   font-family: var(--fuente);
   font-size: var(--t-cuerpo);
   line-height: 1.5;
+  letter-spacing: -0.01em;
   color: var(--texto);
   background: var(--fondo);
+  -webkit-font-smoothing: antialiased;
 }
 h1, h2, h3, p { margin: 0; }
 
@@ -135,107 +167,137 @@ h1, h2, h3, p { margin: 0; }
 }
 
 .saltar {
-  position: absolute; left: var(--e4); top: -80px; z-index: 10;
+  position: absolute; left: var(--e4); top: -80px; z-index: 30;
   background: var(--foco); color: #000; padding: var(--e3) var(--e4); font-weight: 700; border-radius: var(--radio);
 }
 .saltar:focus { top: var(--e3); }
 
+/* Las secciones a las que se salta quedan debajo de la barra superior fija. */
+main section, #resultados, #resumen, #estadistica, #comparativo { scroll-margin-top: 88px; }
+
 .contenedor { width: 100%; max-width: 1560px; margin: 0 auto; padding: 0 var(--e6); }
 
-/* ---------- Encabezado ---------- */
-.encabezado { background: var(--encabezado); color: #fff; margin-bottom: var(--e6); }
-.encabezado__fila {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: var(--e4); flex-wrap: wrap; padding-top: var(--e4); padding-bottom: var(--e4);
+/* ---------- Barra superior translúcida ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--vidrio); border-bottom: 1px solid var(--linea);
+  -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
 }
-.marca { display: flex; align-items: center; gap: var(--e4); }
+.nav__fila { display: flex; align-items: center; justify-content: space-between; gap: var(--e2) var(--e4); flex-wrap: wrap; min-height: 64px; padding-top: var(--e2); padding-bottom: var(--e2); }
+.marca { display: flex; align-items: center; gap: var(--e3); }
 .marca__logo {
   display: inline-flex; align-items: center; justify-content: center; flex: none;
-  width: 64px; height: 64px; border-radius: 16px; background: #1d5fbf; color: #fff;
+  width: 40px; height: 40px; border-radius: 10px; background: var(--primario); color: #fff;
 }
-.marca__logo svg { width: 40px; height: 40px; }
-.encabezado h1 { font-size: var(--t-titulo); letter-spacing: 0.03em; line-height: 1.2; }
-.subtitulo { margin-top: var(--e1); color: #d3dcea; }
-.corte { margin-top: var(--e1); color: #ffffff; font-weight: 600; }
-.encabezado__acciones { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e3); }
+.marca__logo svg { width: 26px; height: 26px; }
+.marca__nombre { font-weight: 700; letter-spacing: 0.02em; }
+.encabezado__acciones { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e2); }
 .insignia {
   display: inline-flex; align-items: center; gap: var(--e2);
-  padding: var(--e2) var(--e4); border-radius: 999px; font-weight: 700;
-  background: #10331f; color: #b8f5cf; border: 2px solid #2f8f55;
+  padding: var(--e1) var(--e3); border-radius: 999px; font-weight: 600;
+  background: #e7f6ec; color: #135c2e;
 }
-.insignia--clasificacion { background: #3a1d00; color: #ffd9a8; border-color: #c87a1e; }
-.insignia__punto { width: 12px; height: 12px; border-radius: 50%; background: #3ddc84; }
+.insignia--clasificacion { background: #fdf0e3; color: #7a3a00; }
+.insignia__punto { width: 10px; height: 10px; border-radius: 50%; background: #1f9d4c; }
+@media (prefers-color-scheme: dark) {
+  .insignia { background: #10331f; color: #9ef0bd; }
+  .insignia--clasificacion { background: #3a2208; color: #ffd2a1; }
+  .insignia__punto { background: #30d158; }
+}
 
-/* ---------- Avisos ---------- */
+/* ---------- Portada ---------- */
+.portada { padding: var(--e16) 0 var(--e12); text-align: center; }
+.corte { color: var(--ceja); font-weight: 600; }
+.portada h1 {
+  margin: var(--e3) auto 0; max-width: 1100px;
+  font-family: var(--fuente-titular); font-size: var(--t-portada); line-height: 1.06; letter-spacing: -0.035em; font-weight: 700;
+}
+.titular__gris { display: block; color: var(--texto-2); }
+.subtitulo { max-width: 780px; margin: var(--e4) auto 0; font-size: var(--t-encabezado); color: var(--texto-2); line-height: 1.45; }
+.cifras-clave {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  max-width: 1200px; margin: var(--e12) auto 0; border-top: 1px solid var(--borde-suave); text-align: left;
+}
+.cifra-clave { padding: var(--e6) var(--e6) 0; }
+.cifra-clave + .cifra-clave { border-left: 1px solid var(--borde-suave); }
+.cifra-clave__valor { font-family: var(--fuente-titular); font-size: 3rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+.cifra-clave__valor small { font-size: var(--t-titulo); font-weight: 600; letter-spacing: -0.01em; }
+.cifra-clave__texto { margin-top: var(--e2); color: var(--texto-2); line-height: 1.35; }
+
+/* ---------- Avisos: una sola tarjeta agrupada, un renglón por aviso ---------- */
 .aviso {
   margin-bottom: var(--e4); padding: var(--e3) var(--e4); border-radius: var(--radio);
-  border: 2px solid var(--aviso-rev-borde); background: var(--aviso-rev-fondo);
+  background: var(--aviso-rev-tinte); color: var(--texto); box-shadow: inset 4px 0 0 var(--aviso-rev);
 }
-.avisos-depuracion { display: grid; gap: var(--e2); margin-bottom: var(--e6); }
+.avisos-depuracion {
+  margin-bottom: var(--e8); background: var(--superficie); border-radius: var(--radio-grande);
+  box-shadow: var(--sombra); overflow: hidden;
+}
 .avisos-depuracion:empty { display: none; }
-.depuracion { border-radius: var(--radio); border: 2px solid; background: var(--superficie); color: var(--texto); }
-.depuracion--baja { border-color: var(--aviso-baja-borde); background: var(--aviso-baja-fondo); }
-.depuracion--revision { border-color: var(--aviso-rev-borde); background: var(--aviso-rev-fondo); }
-.depuracion--info { border-color: var(--aviso-info-borde); background: var(--aviso-info-fondo); }
-.depuracion--amparo { border-color: var(--aviso-amparo-borde); background: var(--aviso-amparo-fondo); }
+.depuracion { color: var(--texto); --tono: var(--aviso-rev); --tinte: var(--aviso-rev-tinte); }
+.depuracion + .depuracion { border-top: 1px solid var(--linea); }
+.depuracion--baja { --tono: var(--aviso-baja); --tinte: var(--aviso-baja-tinte); }
+.depuracion--info { --tono: var(--aviso-info); --tinte: var(--aviso-info-tinte); }
+.depuracion--amparo { --tono: var(--aviso-amparo); --tinte: var(--aviso-amparo-tinte); }
 .depuracion summary, .depuracion__fila {
-  display: flex; align-items: center; gap: var(--e3); flex-wrap: wrap;
-  padding: var(--e3) var(--e4); font-weight: 700;
+  display: flex; align-items: center; gap: var(--e4); flex-wrap: wrap;
+  padding: var(--e3) var(--e6); font-weight: 600;
 }
 .depuracion summary { cursor: pointer; list-style: none; }
 .depuracion summary::-webkit-details-marker { display: none; }
-.depuracion .icono { width: 32px; height: 32px; }
-.depuracion--baja .icono { color: var(--aviso-baja-borde); }
-.depuracion--revision .icono { color: var(--aviso-rev-borde); }
-.depuracion--info .icono { color: var(--aviso-info-borde); }
-.depuracion--amparo .icono { color: var(--aviso-amparo-borde); }
+.depuracion summary:hover, .depuracion__fila:hover { background: var(--superficie-2); }
+.depuracion .icono {
+  width: 40px; height: 40px; padding: var(--e2); border-radius: 50%;
+  color: var(--tono); background: var(--tinte);
+}
 .depuracion__texto { flex: 1 1 320px; }
 .depuracion__ver {
-  min-height: 44px; padding: var(--e2) var(--e4); border-radius: 8px; border: 2px solid var(--institucional);
-  font: inherit; font-weight: 700; color: var(--institucional); background: var(--superficie);
-  cursor: pointer; letter-spacing: 0.03em;
+  min-height: 44px; padding: var(--e2) var(--e4); border-radius: 999px; border: 0;
+  font: inherit; font-weight: 700; color: var(--institucional); background: var(--superficie-3);
+  cursor: pointer; letter-spacing: 0.03em; display: inline-flex; align-items: center;
 }
-.depuracion[open] .depuracion__ver::after { content: " ▲"; }
-details.depuracion:not([open]) .depuracion__ver::after { content: " ▼"; }
+.depuracion__ver:hover { background: var(--institucional-claro); }
+.depuracion[open] .depuracion__ver::after { content: " ▲"; white-space: pre; }
+details.depuracion:not([open]) .depuracion__ver::after { content: " ▼"; white-space: pre; }
 /* La lista se alinea con el texto del aviso: margen + ícono + separación. */
-.depuracion ul { margin: 0; padding: 0 var(--e4) var(--e4) calc(var(--e4) + 32px + var(--e3)); }
-.depuracion li { padding: var(--e2) 0; border-top: 1px solid var(--borde-suave); }
+.depuracion ul { margin: 0; padding: 0 var(--e6) var(--e4) calc(var(--e6) + 40px + var(--e4)); }
+.depuracion li { padding: var(--e2) 0; border-top: 1px solid var(--linea); }
 
 /* ---------- Semáforo: regla de años + tarjetas ---------- */
-.tarjetas { margin-bottom: var(--e6); }
+.tarjetas { margin-bottom: var(--e8); }
 .tarjetas__rejilla, .regla { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--e4); }
-.regla { margin-bottom: var(--e2); }
-.regla__titulo { grid-column: 1; align-self: end; font-weight: 700; color: var(--texto-2); line-height: 1.25; }
+.regla { margin-bottom: var(--e3); }
+.regla__titulo { grid-column: 1; align-self: end; font-weight: 600; color: var(--texto-2); line-height: 1.25; }
 .regla__tramo { padding-top: var(--e1); }
 .regla__barra {
-  display: block; height: 12px; border-radius: 6px;
-  background: var(--color-nivel); border: 2px solid var(--color-borde);
+  display: block; height: 8px; border-radius: 4px;
+  background: var(--color-nivel); box-shadow: inset 0 0 0 1px var(--color-borde);
 }
-.regla__marcas { display: flex; justify-content: space-between; font-weight: 700; margin-top: var(--e1); }
+.regla__marcas { display: flex; justify-content: space-between; font-weight: 600; margin-top: var(--e1); color: var(--texto-2); }
 .tarjeta {
   position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: var(--e1);
-  min-height: 144px; padding: var(--e4) var(--e4) var(--e3) var(--e6); text-align: left;
+  min-height: 152px; padding: var(--e4) var(--e4) var(--e4) var(--e6); text-align: left;
   font-family: inherit; font-size: var(--t-cuerpo); color: var(--texto); background: var(--superficie);
-  border: 2px solid var(--borde-suave); border-radius: var(--radio);
-  box-shadow: var(--sombra); cursor: pointer; overflow: hidden;
+  border: 0; border-radius: 20px; box-shadow: var(--sombra), 0 0 0 1px var(--linea);
+  cursor: pointer; overflow: hidden;
 }
 .tarjeta::before {
-  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 12px;
-  background: var(--color-nivel, var(--institucional)); border-right: 3px solid var(--color-borde, var(--institucional));
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px;
+  background: var(--color-nivel, var(--primario)); border-right: 2px solid var(--color-borde, var(--primario));
 }
-.tarjeta:hover { border-color: var(--borde); }
-.tarjeta[aria-pressed="true"] { border: 4px solid var(--texto); padding: 14px 14px 10px 22px; }
-.tarjeta__etiqueta { padding-right: var(--e12); font-weight: 800; color: var(--texto-2); }
-.tarjeta__numero { font-size: var(--t-cifra); font-weight: 800; line-height: 1.15; }
-.tarjeta__rango { font-weight: 700; }
+.tarjeta:hover { transform: translateY(-2px); box-shadow: var(--sombra-alta), 0 0 0 1px var(--borde-suave); }
+.tarjeta[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--texto); }
+.tarjeta__etiqueta { padding-right: var(--e12); font-weight: 700; color: var(--texto-2); }
+.tarjeta__numero { font-family: var(--fuente-titular); font-size: var(--t-cifra); font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; }
+.tarjeta__rango { font-weight: 600; }
 .tarjeta__color { color: var(--texto-2); }
 .tarjeta__muestra {
   position: absolute; right: var(--e3); top: var(--e3); width: 40px; height: 40px; border-radius: 50%;
   display: inline-flex; align-items: center; justify-content: center;
-  background: var(--color-nivel); border: 2px solid var(--color-borde); color: var(--color-texto);
+  background: var(--color-nivel); box-shadow: inset 0 0 0 2px var(--color-borde); color: var(--color-texto);
 }
 .tarjeta__muestra svg { width: 24px; height: 24px; }
-.tarjeta--total .tarjeta__muestra { background: var(--institucional-claro); border-color: var(--institucional); color: var(--institucional); }
+.tarjeta--total .tarjeta__muestra { background: var(--institucional-claro); box-shadow: none; color: var(--institucional); }
 .tarjeta__check { display: none; }
 .tarjeta[aria-pressed="true"] .tarjeta__check { display: block; }
 .tarjeta[aria-pressed="true"] .tarjeta__num-nivel { display: none; }
@@ -252,43 +314,41 @@ details.depuracion:not([open]) .depuracion__ver::after { content: " ▼"; }
 /* ---------- Próximos a cambiar de nivel ---------- */
 .proximos {
   display: flex; flex-wrap: wrap; align-items: center; gap: var(--e3) var(--e6);
-  margin-bottom: var(--e6); padding: var(--e4) var(--e6);
-  background: var(--superficie); border: 2px solid var(--borde-suave); border-left: 8px solid var(--n4-borde);
-  border-radius: var(--radio); box-shadow: var(--sombra);
+  margin-bottom: var(--e8); padding: var(--e4) var(--e6);
+  background: var(--superficie); border-radius: var(--radio-grande); box-shadow: var(--sombra);
 }
-.proximos__icono { width: 40px; height: 40px; color: var(--cambio-texto); flex: none; }
+.proximos__icono { width: 48px; height: 48px; padding: var(--e2); border-radius: 50%; color: var(--cambio-texto); background: var(--aviso-rev-tinte); flex: none; }
 .proximos__texto { flex: 1 1 360px; }
 .proximos h2 { font-size: var(--t-encabezado); }
 .proximos p { margin-top: var(--e1); font-size: var(--t-encabezado); }
 .proximos strong { font-size: var(--t-titulo); }
 .proximos select {
   min-height: 48px; padding: var(--e1) var(--e2); font: inherit; font-weight: 700; color: var(--texto);
-  background: var(--superficie); border: 2px solid var(--borde); border-radius: 8px;
+  background: var(--superficie); border: 2px solid var(--borde); border-radius: var(--radio);
 }
-.proximos .boton[aria-pressed="true"] { background: var(--institucional); color: var(--superficie); }
+.proximos .boton[aria-pressed="true"] { background: var(--primario); border-color: var(--primario); color: #fff; }
 
 /* ---------- Paneles ---------- */
 .panel {
-  background: var(--superficie); border: 1px solid var(--borde-suave);
-  border-radius: var(--radio); box-shadow: var(--sombra);
-  padding: var(--e6); margin: 0 0 var(--e6);
+  background: var(--superficie); border-radius: var(--radio-grande); box-shadow: var(--sombra);
+  padding: var(--e8); margin: 0 0 var(--e8);
 }
-.etiqueta { display: block; font-weight: 700; color: var(--texto); margin-bottom: var(--e2); }
+.etiqueta { display: block; font-weight: 600; color: var(--texto); margin-bottom: var(--e2); }
 
 .buscador { position: relative; }
 .buscador__icono {
   position: absolute; left: var(--e4); top: 50%; transform: translateY(-50%);
-  width: 32px; height: 32px; color: var(--institucional); pointer-events: none;
+  width: 28px; height: 28px; color: var(--texto-2); pointer-events: none;
 }
 .buscador input {
-  width: 100%; min-height: 64px; padding: var(--e3) var(--e4) var(--e3) 64px;
+  width: 100%; min-height: 64px; padding: var(--e3) var(--e4) var(--e3) 60px;
   font-size: var(--t-encabezado); font-family: inherit; color: var(--texto);
-  border: 2px solid var(--borde); border-radius: var(--radio); background: var(--superficie);
+  border: 2px solid var(--borde); border-radius: 16px; background: var(--superficie);
 }
 .buscador input::placeholder, .campo input::placeholder { color: var(--texto-2); opacity: 1; }
 
-.filtros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--e4) var(--e6); margin-top: var(--e4); }
-.filtros--mas { padding-top: var(--e4); border-top: 1px solid var(--borde-suave); }
+.filtros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--e4) var(--e6); margin-top: var(--e6); }
+.filtros--mas { padding-top: var(--e6); border-top: 1px solid var(--linea); }
 .campo select, .campo input {
   width: 100%; min-height: 56px; padding: var(--e2) var(--e3);
   font-size: var(--t-cuerpo); font-family: inherit; color: var(--texto);
@@ -298,37 +358,46 @@ details.depuracion:not([open]) .depuracion__ver::after { content: " ▼"; }
 .acciones .boton--primario { min-width: 224px; }
 .acciones .boton--secundario { min-width: 256px; }
 
-/* ---------- Botones (texto en mayúsculas, como se acordó) ---------- */
+/* ---------- Botones tipo píldora (texto en mayúsculas, como se acordó) ---------- */
 .boton {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--e2);
   min-height: 56px; padding: var(--e2) var(--e6);
   font-family: inherit; font-size: var(--t-cuerpo); font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;
-  border-radius: var(--radio); border: 2px solid var(--institucional);
+  border-radius: 999px; border: 2px solid var(--institucional);
   cursor: pointer; text-decoration: none; white-space: nowrap;
 }
-.boton--primario { background: var(--institucional); color: var(--superficie); }
-.boton--primario:hover { background: var(--institucional-hover); border-color: var(--institucional-hover); }
-.boton--secundario, .boton--terciario { background: var(--superficie); color: var(--institucional); }
-.boton--secundario:hover, .boton--terciario:hover { background: var(--institucional-claro); }
-.boton--terciario { min-height: 48px; padding: var(--e2) var(--e4); }
-.boton--oscuro { min-height: 48px; background: var(--encabezado-2); color: #fff; border-color: #6b7d97; }
-.boton--oscuro:hover { background: #26405f; }
-.boton:active, .boton-ojo:active, .tarjeta:active, .vistas__boton:active { transform: translateY(1px); }
+.boton--primario { background: var(--primario); border-color: var(--primario); color: #fff; }
+.boton--primario:hover { background: var(--primario-hover); border-color: var(--primario-hover); }
+.boton--secundario { background: transparent; color: var(--institucional); }
+.boton--secundario:hover { background: var(--institucional-claro); }
+.boton--terciario { min-height: 48px; padding: var(--e2) var(--e4); background: var(--superficie-3); color: var(--institucional); border-color: transparent; }
+.boton--terciario:hover { background: var(--institucional-claro); }
+.boton--oscuro { min-height: 48px; padding: var(--e2) var(--e4); background: var(--texto); color: var(--superficie); border-color: var(--texto); }
+.boton--oscuro:hover { opacity: 0.88; }
+.boton:active, .boton-ojo:active, .tarjeta:active, .vistas__boton:active, .segmentado__boton:active,
+.mosaico:active, .barra-fila:active { transform: scale(0.97); }
 input[type="file"]:focus-visible + label {
   outline: 3px solid var(--foco-interno); outline-offset: 2px; box-shadow: 0 0 0 8px var(--foco);
 }
 .icono { width: 24px; height: 24px; flex: none; }
 .icono--grande { width: 28px; height: 28px; }
 
-/* Selector de vista (control segmentado) */
-.vistas { display: flex; flex-wrap: wrap; margin: 0 0 var(--e4); }
-.vistas__boton {
-  min-height: 48px; padding: var(--e2) var(--e6); font: inherit; font-weight: 700; letter-spacing: 0.03em;
-  color: var(--institucional); background: var(--superficie); border: 2px solid var(--institucional); cursor: pointer;
+/* Selector de vista: control segmentado */
+.vistas {
+  display: inline-flex; flex-wrap: wrap; gap: var(--e1); padding: var(--e1); margin: 0 0 var(--e6);
+  background: var(--superficie-3); border-radius: 28px;
 }
-.vistas__boton:first-child { border-radius: var(--radio) 0 0 var(--radio); }
-.vistas__boton:last-child { border-radius: 0 var(--radio) var(--radio) 0; border-left-width: 0; }
-.vistas__boton[aria-pressed="true"] { background: var(--institucional); color: var(--superficie); }
+.vistas__boton, .segmentado__boton {
+  min-height: 48px; padding: var(--e2) var(--e6); font: inherit; font-weight: 700; letter-spacing: 0.03em;
+  color: var(--texto); background: transparent; border: 0; border-radius: 999px; cursor: pointer;
+}
+.vistas__boton:hover, .segmentado__boton:hover { background: rgba(127, 127, 127, 0.12); }
+.vistas__boton[aria-pressed="true"], .segmentado__boton[aria-pressed="true"] {
+  background: var(--superficie); color: var(--texto); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.14);
+}
+@media (prefers-color-scheme: dark) {
+  .vistas__boton[aria-pressed="true"], .segmentado__boton[aria-pressed="true"] { background: #48484a; }
+}
 .vistas--chica { margin: 0; }
 .vistas--chica .vistas__boton { padding: var(--e2) var(--e4); }
 
@@ -337,27 +406,26 @@ input[type="file"]:focus-visible + label {
 .panel--tabla:focus { outline: none; }
 .panel__cabecera {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-  gap: var(--e2) var(--e6); padding: var(--e4) var(--e6); background: var(--superficie-2);
-  border-bottom: 1px solid var(--borde-suave);
+  gap: var(--e2) var(--e6); padding: var(--e6) var(--e8); border-bottom: 1px solid var(--linea);
 }
-.panel__cabecera h2 { font-size: var(--t-encabezado); }
-.contador { font-size: var(--t-encabezado); font-weight: 600; }
-.contador strong { font-size: var(--t-titulo); color: var(--institucional); }
+.panel__cabecera h2 { font-size: var(--t-titulo); letter-spacing: -0.02em; }
+.contador { font-size: var(--t-encabezado); font-weight: 600; color: var(--texto-2); }
+.contador strong { font-size: var(--t-titulo); color: var(--texto); }
 
 .tabla-contenedor { overflow: auto; max-height: 75vh; }
 .tabla { width: 100%; border-collapse: separate; border-spacing: 0; font-size: var(--t-cuerpo); min-width: 1200px; }
 .tabla thead th {
   position: sticky; top: 0; z-index: 2;
-  background: var(--superficie-2); color: var(--texto);
-  text-align: left; font-weight: 800;
-  padding: 0; border-bottom: 2px solid var(--borde);
+  background: var(--superficie-2); color: var(--texto-2);
+  text-align: left; font-weight: 700;
+  padding: 0; border-bottom: 1px solid var(--borde-suave);
 }
-.tabla thead th.col-ver, .tabla--resumen thead th { padding: var(--e3) var(--e2); }
+.tabla thead th.col-ver, .tabla--resumen thead th, .tabla--estadistica thead th { padding: var(--e3) var(--e2); }
 .ordenar {
   all: unset; box-sizing: border-box; display: flex; align-items: center; gap: var(--e2);
   width: 100%; padding: var(--e3); cursor: pointer; line-height: 1.3;
 }
-.ordenar:hover { background: var(--fila-hover); }
+.ordenar:hover { background: var(--fila-hover); color: var(--texto); }
 .ordenar:focus-visible { outline: 3px solid var(--foco-interno); outline-offset: -5px; box-shadow: inset 0 0 0 8px var(--foco); }
 .flecha { font-size: 0.9rem; min-width: 1em; color: var(--institucional); }
 th[aria-sort="ascending"] .flecha::after { content: "▲"; }
@@ -366,11 +434,11 @@ th:not([aria-sort]) .flecha::after { content: "⇅"; opacity: 0.6; }
 
 .tabla td {
   padding: var(--e3); vertical-align: middle; background: var(--superficie);
-  border-bottom: 1px solid var(--borde-suave);
+  border-bottom: 1px solid var(--linea);
 }
 .tabla tbody tr:nth-child(even) td { background: var(--fila-par); }
 .tabla tbody tr:hover td { background: var(--fila-hover); }
-.principal { display: block; font-weight: 700; }
+.principal { display: block; font-weight: 600; }
 .secundario { display: block; margin-top: var(--e1); color: var(--texto-2); }
 .cambio { display: block; margin-top: var(--e1); font-weight: 700; color: var(--cambio-texto); }
 .tabla td.col-alerta { width: 96px; }
@@ -388,19 +456,18 @@ th:not([aria-sort]) .flecha::after { content: "⇅"; opacity: 0.6; }
 
 /* Etiqueta de motivo de reclusión distinto a "solo por esta causa". */
 .marca-motivo {
-  display: inline-flex; align-items: center; gap: var(--e1); margin-top: var(--e2); padding: var(--e1) var(--e2);
-  border-radius: 8px; font-weight: 700;
-  background: var(--aviso-info-fondo); color: var(--texto); border: 2px solid var(--aviso-info-borde);
+  display: inline-flex; align-items: center; gap: var(--e1); margin-top: var(--e2); padding: var(--e1) var(--e3);
+  border-radius: var(--radio); font-weight: 600; background: var(--aviso-info-tinte); color: var(--texto);
 }
-.marca-motivo svg { width: 20px; height: 20px; color: var(--aviso-info-borde); flex: none; }
+.marca-motivo svg { width: 20px; height: 20px; color: var(--aviso-info); flex: none; }
 
 /* Marca de alertas de plazo o de sistema, bajo el nivel. */
 .marca-alerta {
-  display: inline-flex; align-items: center; gap: var(--e1); margin-top: var(--e2); padding: 0 var(--e2);
-  min-height: 32px; border-radius: 8px; font-weight: 800;
-  background: var(--aviso-rev-fondo); color: var(--texto); border: 2px solid var(--aviso-rev-borde);
+  display: inline-flex; align-items: center; gap: var(--e1); margin-top: var(--e2); padding: 0 var(--e3);
+  min-height: 32px; border-radius: 999px; font-weight: 700;
+  background: var(--aviso-rev-tinte); color: var(--texto); box-shadow: inset 0 0 0 1.5px var(--aviso-rev);
 }
-.marca-alerta svg { width: 20px; height: 20px; color: var(--aviso-rev-borde); }
+.marca-alerta svg { width: 20px; height: 20px; color: var(--aviso-rev); }
 
 /* Indicador de nivel: color + número + texto (no se depende solo del color). */
 .nivel {
@@ -415,8 +482,8 @@ th:not([aria-sort]) .flecha::after { content: "⇅"; opacity: 0.6; }
 
 .boton-ojo {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 64px; height: 56px; border-radius: var(--radio);
-  border: 2px solid var(--institucional); background: var(--superficie); color: var(--institucional);
+  width: 64px; height: 56px; border-radius: 16px;
+  border: 2px solid var(--institucional); background: transparent; color: var(--institucional);
   cursor: pointer;
 }
 .boton-ojo svg { width: 36px; height: 36px; }
@@ -426,101 +493,182 @@ th:not([aria-sort]) .flecha::after { content: "⇅"; opacity: 0.6; }
 .vacio p { margin-bottom: var(--e4); }
 
 /* ---------- Resumen ---------- */
-.resumen__titular { padding: var(--e4) var(--e6); font-size: var(--t-encabezado); font-weight: 600; border-bottom: 1px solid var(--borde-suave); }
+.resumen__titular { padding: var(--e4) var(--e8); font-size: var(--t-encabezado); font-weight: 600; border-bottom: 1px solid var(--linea); }
 .tabla--resumen { min-width: 1000px; }
-.tabla--resumen td.num, .tabla--resumen th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tabla--resumen td.num, .tabla--resumen th.num, .tabla--estadistica td.num, .tabla--estadistica th.num {
+  text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap;
+}
 .tabla--resumen td.cero { color: var(--texto-2); }
 .tabla--resumen td.col-nombre-resumen { min-width: 216px; }
-.distribucion { display: flex; gap: 2px; height: 24px; min-width: 152px; border-radius: 4px; overflow: hidden; background: var(--superficie-2); }
+.distribucion { display: flex; gap: 2px; height: 20px; min-width: 152px; border-radius: 4px; overflow: hidden; background: var(--superficie-2); }
 .distribucion span { display: block; height: 100%; background: var(--color-nivel); }
 
+/* ---------- Estadística por entidad federativa ---------- */
+.estadistica { margin-bottom: var(--e8); }
+.estadistica__intro { padding: var(--e6) 0 var(--e8); }
+.estadistica__intro h2 { font-family: var(--fuente-titular); font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.1; letter-spacing: -0.03em; }
+.estadistica__intro h2 span { color: var(--texto-2); }
+.estadistica__intro p { margin-top: var(--e3); font-size: var(--t-encabezado); color: var(--texto-2); max-width: 900px; }
+.graficas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--e6); }
+.grafica { background: var(--superficie); border-radius: var(--radio-grande); box-shadow: var(--sombra); padding: var(--e8); min-width: 0; }
+.grafica h3 { font-size: var(--t-titulo); letter-spacing: -0.02em; }
+.grafica__sub { margin: var(--e1) 0 var(--e6); color: var(--texto-2); }
+.grafica--tabla { margin-top: var(--e6); padding: var(--e4) var(--e8); }
+.grafica--tabla summary { cursor: pointer; font-weight: 700; color: var(--institucional); min-height: 44px; display: flex; align-items: center; }
+.grafica--tabla .tabla { min-width: 760px; margin-top: var(--e3); }
+
+.segmentado {
+  display: inline-flex; flex-wrap: wrap; gap: var(--e1); padding: var(--e1); margin-bottom: var(--e6);
+  background: var(--superficie-3); border-radius: 999px;
+}
+.segmentado__boton { min-height: 44px; padding: var(--e1) var(--e4); }
+
+/* Mapa de mosaicos: un cuadro por entidad, misma área para todas. */
+.mapa { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; }
+.mosaico {
+  aspect-ratio: 1; min-width: 0; padding: 0; border: 0; border-radius: var(--radio);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  font: inherit; font-size: var(--t-cuerpo); font-weight: 700; line-height: 1.05; letter-spacing: 0;
+  background: var(--m-fondo); color: var(--m-texto);
+}
+button.mosaico { cursor: pointer; }
+button.mosaico:hover { transform: scale(1.06); box-shadow: var(--sombra-alta); }
+.mosaico__abrev { font-size: 0.8125em; font-weight: 600; opacity: 0.92; }
+.mosaico__valor { font-size: 1.125em; }
+.m0 { --m-fondo: var(--m0); --m-texto: var(--m0-texto); }
+.m1 { --m-fondo: var(--m1); --m-texto: var(--m1-texto); }
+.m2 { --m-fondo: var(--m2); --m-texto: var(--m2-texto); }
+.m3 { --m-fondo: var(--m3); --m-texto: var(--m3-texto); }
+.m4 { --m-fondo: var(--m4); --m-texto: var(--m4-texto); }
+.m5 { --m-fondo: var(--m5); --m-texto: var(--m5-texto); }
+.escala { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e2); margin-top: var(--e4); color: var(--texto-2); font-variant-numeric: tabular-nums; }
+.escala i { display: inline-block; width: 24px; height: 12px; border-radius: 3px; background: var(--m-fondo); }
+.escala .escala__sin { margin-left: var(--e4); }
+.escala__nota { flex-basis: 100%; }
+
+/* Barras horizontales (entidades apiladas por nivel; etapas en un solo color). */
+.leyenda { display: flex; flex-wrap: wrap; gap: var(--e2) var(--e4); margin-bottom: var(--e3); color: var(--texto-2); }
+.leyenda i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; margin-right: var(--e2); vertical-align: -2px; background: var(--color-nivel); box-shadow: inset 0 0 0 1px var(--color-borde); }
+.barras { display: grid; gap: 2px; }
+.barra-fila {
+  display: grid; grid-template-columns: minmax(120px, 176px) minmax(0, 1fr) 48px; align-items: center; gap: var(--e3);
+  width: 100%; min-height: 44px; padding: var(--e1) var(--e2); border: 0; border-radius: var(--radio);
+  font: inherit; color: var(--texto); text-align: left; background: transparent; cursor: pointer;
+}
+.barra-fila:hover { background: var(--superficie-2); }
+.barra-fila--etapa { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 48px; }
+.barra-fila__nombre { min-width: 0; overflow-wrap: anywhere; line-height: 1.3; }
+.barra-fila__pista { display: block; min-width: 0; }
+.barra-fila__barra { display: flex; gap: 2px; height: 20px; min-width: 2px; }
+.barra-fila__barra > span { height: 100%; background: var(--color-nivel); }
+.barra-fila__barra > span:last-child { border-radius: 0 4px 4px 0; }
+.barra-fila__barra > span.t-n1 { box-shadow: inset 0 0 0 1px var(--n1-borde); }
+.barra-fila__barra--simple { background: var(--primario); border-radius: 0 4px 4px 0; }
+.barra-fila__valor { font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* Histograma de antigüedad por año cumplido (columnas con el color de su nivel). */
+.histograma { display: flex; align-items: flex-end; gap: 2px; height: 224px; border-bottom: 1px solid var(--borde-suave); }
+.histograma__columna { flex: 1; min-width: 0; border-radius: 4px 4px 0 0; background: var(--color-nivel); }
+.histograma__columna.t-n1 { box-shadow: inset 0 0 0 1px var(--n1-borde); }
+.histograma__eje { display: flex; justify-content: space-between; margin-top: var(--e2); color: var(--texto-2); font-variant-numeric: tabular-nums; }
+
+/* Globo informativo de las gráficas (apoyo visual; la misma información está en la etiqueta accesible). */
+.globo {
+  position: fixed; left: 0; top: 0; z-index: 40; max-width: 320px; pointer-events: none;
+  display: grid; gap: 2px; padding: var(--e3) var(--e4); border-radius: var(--radio);
+  background: var(--superficie); color: var(--texto); box-shadow: var(--sombra-alta), 0 0 0 1px var(--linea);
+  opacity: 0; transition: opacity 120ms ease-out;
+}
+.globo--visible { opacity: 1; }
+
 /* ---------- Comparativo (cifras como franja, sin tarjetas anidadas) ---------- */
-.comparativo h2 { font-size: var(--t-encabezado); margin-bottom: var(--e2); }
+.comparativo h2 { font-size: var(--t-titulo); letter-spacing: -0.02em; margin-bottom: var(--e2); }
 .comparativo__cifras { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--e6); margin: var(--e4) 0; }
-.cifra { padding-top: var(--e2); border-top: 4px solid var(--institucional); }
-.cifra strong { display: block; font-size: var(--t-cifra); line-height: 1.1; }
-.comparativo details { margin-top: var(--e2); border-top: 1px solid var(--borde-suave); }
+.cifra { padding-top: var(--e2); border-top: 1px solid var(--borde-suave); }
+.cifra strong { display: block; font-family: var(--fuente-titular); font-size: var(--t-cifra); letter-spacing: -0.03em; line-height: 1.1; }
+.comparativo details { margin-top: var(--e2); border-top: 1px solid var(--linea); }
 .comparativo summary { padding: var(--e3) 0; font-weight: 700; cursor: pointer; }
 .comparativo ul { margin: 0; padding: 0 0 var(--e3) var(--e6); }
-.comparativo li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e2) var(--e3); padding: var(--e2) 0; border-top: 1px solid var(--borde-suave); }
+.comparativo li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e2) var(--e3); padding: var(--e2) 0; border-top: 1px solid var(--linea); }
 .comparativo li .boton-ojo { width: 56px; height: 48px; }
 .comparativo li .boton-ojo svg { width: 32px; height: 32px; }
 .comparativo__pie { margin-top: var(--e4); }
 
 /* ---------- Datos y metodología ---------- */
-.datos h2 { font-size: var(--t-encabezado); margin-bottom: var(--e2); }
-.datos__fuente { margin-bottom: var(--e3); color: var(--texto-2); }
+.datos h2 { font-size: var(--t-titulo); letter-spacing: -0.02em; margin-bottom: var(--e2); }
+.datos__fuente { margin-bottom: var(--e4); color: var(--texto-2); }
 .datos__acciones { display: flex; flex-wrap: wrap; gap: var(--e2); }
-.metodologia { margin-top: var(--e4); border-top: 1px solid var(--borde-suave); padding-top: var(--e3); }
+.metodologia { margin-top: var(--e6); border-top: 1px solid var(--linea); padding-top: var(--e3); }
 .metodologia summary { font-weight: 700; cursor: pointer; padding: var(--e2) 0; min-height: 44px; }
 .metodologia li { margin: var(--e2) 0; }
 
-/* ---------- Ficha emergente ---------- */
+/* ---------- Ficha emergente (hoja con esquinas amplias) ---------- */
 .detalle {
   width: min(1000px, calc(100vw - 24px)); max-height: calc(100vh - 32px);
-  padding: 0; border: 0; border-radius: 16px;
+  padding: 0; border: 0; border-radius: 28px;
   background: var(--superficie); color: var(--texto);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3);
 }
-.detalle::backdrop { background: rgba(10, 20, 35, 0.72); }
+.detalle::backdrop { background: rgba(0, 0, 0, 0.45); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 .detalle__caja { display: flex; flex-direction: column; max-height: calc(100vh - 32px); }
 .detalle__cabecera {
   display: flex; align-items: center; justify-content: space-between; gap: var(--e4);
-  padding: var(--e3) var(--e4) var(--e3) var(--e6); background: var(--encabezado); color: #fff;
+  padding: var(--e4) var(--e4) var(--e4) var(--e8); background: var(--superficie); color: var(--texto);
+  border-bottom: 1px solid var(--linea);
 }
 .detalle__titulo { display: flex; align-items: center; flex-wrap: wrap; gap: var(--e2) var(--e4); }
-.detalle__cabecera h2 { font-size: var(--t-encabezado); }
+.detalle__cabecera h2 { font-size: var(--t-titulo); letter-spacing: -0.02em; }
 .boton-x {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 56px; height: 56px; border-radius: var(--radio);
-  border: 2px solid #fff; background: transparent; color: #fff; cursor: pointer; flex: none;
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 0; background: var(--superficie-3); color: var(--texto); cursor: pointer; flex: none;
 }
-.boton-x svg { width: 28px; height: 28px; }
-.boton-x:hover { background: #fff; color: var(--encabezado); }
+.boton-x svg { width: 22px; height: 22px; }
+.boton-x:hover { background: var(--borde-suave); }
 
-.detalle__cuerpo { padding: var(--e6); overflow-y: auto; display: grid; gap: var(--e6); }
+.detalle__cuerpo { padding: var(--e6) var(--e8); overflow-y: auto; display: grid; gap: var(--e6); }
 /* Bloque principal: persona y causa (único fondo neutro de la ficha). */
 .ficha-bloque {
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--e4) var(--e8);
-  padding: var(--e4) var(--e6); background: var(--superficie-2); border-radius: var(--radio);
+  padding: var(--e6); background: var(--superficie-2); border-radius: 20px; box-shadow: inset 0 0 0 1px var(--linea);
 }
 .ficha-fila { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--e4) var(--e8); }
-.ficha-seccion { padding-top: var(--e4); border-top: 1px solid var(--borde-suave); }
+.ficha-seccion { padding-top: var(--e4); border-top: 1px solid var(--linea); }
 .ficha-dato .rotulo, .ficha-seccion > .rotulo {
-  display: block; font-weight: 800; color: var(--texto-2); margin-bottom: var(--e1);
+  display: block; font-weight: 700; color: var(--texto-2); margin-bottom: var(--e1);
 }
 .ficha-seccion > .rotulo { margin-bottom: var(--e2); }
 .ficha-dato .valor { display: block; font-size: var(--t-encabezado); font-weight: 500; overflow-wrap: anywhere; }
-.ficha-dato .valor--destacado { font-size: var(--t-titulo); font-weight: 800; line-height: 1.25; text-transform: uppercase; }
-.ficha-dato .valor--causa { font-size: var(--t-titulo); font-weight: 800; color: var(--acento); }
+.ficha-dato .valor--destacado { font-size: var(--t-titulo); font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; text-transform: uppercase; }
+.ficha-dato .valor--causa { font-size: var(--t-titulo); font-weight: 700; color: var(--acento); }
 .ficha-dato .complemento { display: block; margin-top: var(--e1); color: var(--texto-2); }
 /* Las secciones de la ficha son texto plano; solo se resaltan alertas y último acto. */
 .recuadro { font-size: var(--t-encabezado); }
-.recuadro--acto { padding: var(--e4) var(--e6); border-radius: var(--radio); background: var(--acto-fondo); border: 2px solid var(--acto-borde); }
+.recuadro--acto { padding: var(--e4) var(--e6); border-radius: 16px; background: var(--acto-fondo); box-shadow: inset 4px 0 0 var(--acto-borde); }
 .recuadro--antiguedad, .recuadro--datos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--e4) var(--e8); font-size: var(--t-cuerpo); }
 .recuadro--datos { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .recuadro .fecha-acto { margin-top: var(--e2); color: var(--texto-2); font-size: var(--t-cuerpo); }
 .etiqueta-instancia {
-  display: inline-block; margin-top: var(--e3); padding: var(--e1) var(--e3); border-radius: 8px;
-  background: var(--instancia-fondo); color: var(--instancia-texto); font-weight: 800;
+  display: inline-block; margin-top: var(--e3); padding: var(--e1) var(--e3); border-radius: 999px;
+  background: var(--instancia-fondo); color: var(--instancia-texto); font-weight: 700;
 }
 .nota-informativa {
-  grid-column: 1 / -1; padding: var(--e3) var(--e4); border-radius: 8px;
+  grid-column: 1 / -1; padding: var(--e3) var(--e4); border-radius: var(--radio);
   border: 1px dashed var(--borde);
 }
 .nota-cambio { grid-column: 1 / -1; font-weight: 700; color: var(--cambio-texto); }
-.alertas-ficha { padding: var(--e3) var(--e4); border-radius: var(--radio); background: var(--aviso-rev-fondo); border: 2px solid var(--aviso-rev-borde); }
+.alertas-ficha { padding: var(--e4) var(--e6); border-radius: 16px; background: var(--aviso-rev-tinte); box-shadow: inset 4px 0 0 var(--aviso-rev); }
 .alertas-ficha ul { margin: 0; padding-left: var(--e6); }
 .alertas-ficha li { padding: var(--e1) 0; font-weight: 700; }
 .alertas-ficha .fundamento { display: block; font-weight: 500; color: var(--texto); }
 .coimputados {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--e2) var(--e4);
-  padding: var(--e3) var(--e4); border-radius: var(--radio); background: var(--aviso-info-fondo); border: 2px solid var(--aviso-info-borde);
+  padding: var(--e3) var(--e6); border-radius: 16px; background: var(--aviso-info-tinte);
 }
 .coimputados p { font-weight: 700; }
 .detalle__pie {
-  display: flex; justify-content: flex-end; padding: var(--e4) var(--e6);
-  border-top: 1px solid var(--borde-suave);
+  display: flex; justify-content: flex-end; padding: var(--e4) var(--e8);
+  border-top: 1px solid var(--linea);
 }
 .detalle__pie .boton { min-width: 176px; }
 
@@ -529,63 +677,79 @@ th:not([aria-sort]) .flecha::after { content: "⇅"; opacity: 0.6; }
   .tarjetas__rejilla { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .regla { display: none; }
   .recuadro--datos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .graficas { grid-template-columns: 1fr; }
 }
 /* Ficha a pantalla completa cuando hay poco espacio (zoom alto o pantallas chicas). */
 @media (max-width: 900px) {
+  /* La barra superior deja de ser fija para no ocupar media pantalla en vistas angostas. */
+  .nav { position: static; }
+  main section, #resultados, #resumen, #estadistica, #comparativo { scroll-margin-top: 0; }
   .detalle { width: 100vw; max-width: 100vw; height: 100vh; max-height: 100vh; margin: 0; border-radius: 0; }
   .detalle__caja { height: 100vh; max-height: 100vh; }
   .detalle__cabecera { padding: var(--e2) var(--e3) var(--e2) var(--e4); }
   .detalle__cuerpo { flex: 1; padding: var(--e4); }
   .detalle__pie { padding: var(--e2) var(--e4); }
   .filtros { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .comparativo__cifras { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .depuracion summary, .depuracion__fila { padding: var(--e2) var(--e3); gap: var(--e2); }
-  .depuracion .icono { width: 24px; height: 24px; }
-  .depuracion ul { padding: 0 var(--e3) var(--e3) calc(var(--e3) + 24px + var(--e2)); }
+  .comparativo__cifras, .cifras-clave { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cifra-clave:nth-child(3) { border-left: 0; }
+  .cifra-clave { padding: var(--e4) var(--e4) 0; }
+  .cifra-clave__valor { font-size: var(--t-cifra); }
+  .portada { padding: var(--e8) 0 var(--e6); }
+  .depuracion summary, .depuracion__fila { padding: var(--e2) var(--e4); gap: var(--e3); }
+  .depuracion .icono { width: 32px; height: 32px; padding: 6px; }
+  .depuracion ul { padding: 0 var(--e4) var(--e3) calc(var(--e4) + 32px + var(--e3)); }
   /* Con poco espacio, el semáforo y los avisos se compactan para llegar antes a los resultados. */
   .tarjetas__rejilla { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--e2); }
   .tarjeta { min-height: 0; padding: var(--e2) var(--e2) var(--e2) var(--e4); }
-  .tarjeta[aria-pressed="true"] { padding: 6px 6px 6px 14px; }
-  .tarjeta::before { width: 8px; }
+  .tarjeta::before { width: 6px; }
   .tarjeta__numero { font-size: var(--t-titulo); }
   .tarjeta__color, .tarjeta__muestra, .tarjetas__nota { display: none; }
   .tarjeta__etiqueta { padding-right: 0; }
   .proximos { padding: var(--e3) var(--e4); gap: var(--e2) var(--e3); }
   .proximos__icono { display: none; }
-  .encabezado__fila { padding-top: var(--e3); padding-bottom: var(--e3); }
-  .encabezado { margin-bottom: var(--e3); }
-  .panel { margin-bottom: var(--e4); }
+  .panel, .grafica { padding: var(--e6); margin-bottom: var(--e4); }
+  .grafica--tabla { padding: var(--e3) var(--e4); }
+  .panel--tabla { padding: 0; }
+  .panel__cabecera { padding: var(--e4); }
+  .mapa { gap: 4px; }
+  .mosaico { font-size: 0.75rem; border-radius: 8px; }
 }
 @media (max-width: 720px) {
   .contenedor { padding: 0 var(--e4); }
-  .panel { padding: var(--e4); }
   .tarjetas__rejilla { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .filtros, .ficha-bloque, .ficha-fila, .recuadro--antiguedad, .recuadro--datos { grid-template-columns: 1fr; }
   .acciones .boton { width: 100%; }
-  .marca__logo { width: 48px; height: 48px; }
   .depuracion ul { padding-left: var(--e4); }
+  .barra-fila, .barra-fila--etapa { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 40px; }
+  .mosaico__abrev { font-size: 0.75em; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .boton, .boton-ojo, .boton-x, .tarjeta, .vistas__boton, .depuracion__ver, .ordenar {
-    transition: background-color var(--transicion), color var(--transicion), border-color var(--transicion), transform var(--transicion);
+  .boton, .boton-ojo, .boton-x, .tarjeta, .vistas__boton, .segmentado__boton, .depuracion__ver, .ordenar,
+  .mosaico, .barra-fila, .histograma__columna, .barra-fila__barra {
+    /* Sin transición de sombra: el anillo de foco debe aparecer de inmediato. */
+    transition: background-color var(--transicion), color var(--transicion), border-color var(--transicion),
+      transform var(--transicion), width 300ms cubic-bezier(0.16, 1, 0.3, 1), height 300ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .boton:active, .boton-ojo:active, .tarjeta:active, .vistas__boton:active { transform: none; }
+  .boton:active, .boton-ojo:active, .tarjeta:active, .tarjeta:hover, .vistas__boton:active, .segmentado__boton:active,
+  .mosaico:active, button.mosaico:hover, .barra-fila:active { transform: none; }
 }
 
 /* ---------- Impresión / PDF ---------- */
 @media print {
-  :root { --fondo: #fff; --superficie: #fff; --superficie-2: #fff; --fila-par: #fff; }
+  :root { --fondo: #fff; --superficie: #fff; --superficie-2: #fff; --fila-par: #fff; --sombra: none; }
   .saltar, .encabezado__acciones .boton, #aviso-ficticio, .proximos .boton, .vistas, .panel:has(#formulario),
-  .datos__acciones, .col-ver, .acciones, .tarjetas__nota { display: none !important; }
-  .encabezado { background: #fff !important; color: #000; border-bottom: 2px solid #000; }
+  .datos__acciones, .col-ver, .acciones, .tarjetas__nota, .segmentado, .globo { display: none !important; }
+  .nav { position: static; background: #fff; border-bottom: 2px solid #000; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .portada { padding: var(--e4) 0; }
   .subtitulo, .corte { color: #000; }
   .tabla-contenedor { max-height: none; overflow: visible; }
   .tabla { min-width: 0; font-size: 11pt; }
   .tabla thead th { position: static; }
   .metodologia > *:not(summary) { display: block; }
+  .grafica, .panel { break-inside: avoid; box-shadow: 0 0 0 1px #999; }
   .detalle { display: none; }
 }
 </style>
@@ -612,15 +776,12 @@ th:not([aria-sort]) .flecha::after { content: "⇅"; opacity: 0.6; }
 
   <a class="saltar" href="#resultados">Saltar a los resultados</a>
 
-  <header class="encabezado">
-    <div class="contenedor encabezado__fila">
+  <!-- Barra superior translúcida -->
+  <header class="nav">
+    <div class="contenedor nav__fila">
       <div class="marca">
         <span class="marca__logo" aria-hidden="true"><svg><use href="#i-balanza"/></svg></span>
-        <div>
-          <h1>CAUSAS PENALES PPL</h1>
-          <p class="subtitulo">Sistema de consulta y seguimiento · Prisión preventiva · Sistema penal tradicional</p>
-          <p class="corte" id="texto-corte"></p>
-        </div>
+        <span class="marca__nombre">CAUSAS PENALES PPL</span>
       </div>
       <div class="encabezado__acciones">
         <p class="insignia insignia--clasificacion" id="clasificacion" hidden></p>
@@ -631,6 +792,16 @@ th:not([aria-sort]) .flecha::after { content: "⇅"; opacity: 0.6; }
       </div>
     </div>
   </header>
+
+  <!-- Portada: titular y cifras clave del corte -->
+  <section class="portada" aria-labelledby="titular">
+    <div class="contenedor">
+      <p class="corte" id="texto-corte"></p>
+      <h1 id="titular">CAUSAS PENALES PPL</h1>
+      <p class="subtitulo">Sistema de consulta y seguimiento · Prisión preventiva · Sistema penal tradicional federal, con antigüedad, etapa procesal y alertas de plazo.</p>
+      <div class="cifras-clave" id="cifras-clave"></div>
+    </div>
+  </section>
 
   <main class="contenedor">
     <p id="avisos-datos" class="aviso aviso--naranja" role="status" hidden></p>
@@ -734,6 +905,7 @@ th:not([aria-sort]) .flecha::after { content: "⇅"; opacity: 0.6; }
     <div class="vistas" role="group" aria-label="Vista de resultados">
       <button type="button" class="vistas__boton" id="vista-listado" aria-pressed="true">LISTADO</button>
       <button type="button" class="vistas__boton" id="vista-resumen" aria-pressed="false">RESUMEN POR ENTIDAD Y JUZGADO</button>
+      <button type="button" class="vistas__boton" id="vista-estadistica" aria-pressed="false">ESTADÍSTICA</button>
     </div>
 
     <!-- Listado -->
@@ -788,6 +960,50 @@ th:not([aria-sort]) .flecha::after { content: "⇅"; opacity: 0.6; }
       </div>
     </section>
 
+    <!-- Estadística por entidad federativa: gráficas que respetan los filtros aplicados -->
+    <section id="estadistica" class="estadistica" aria-labelledby="titulo-estadistica" hidden>
+      <div class="estadistica__intro">
+        <h2 id="titulo-estadistica">Estadística por entidad federativa. <span>Con los filtros aplicados.</span></h2>
+        <p id="estadistica-resumen"></p>
+      </div>
+      <div class="graficas">
+        <article class="grafica" aria-labelledby="titulo-mapa">
+          <h3 id="titulo-mapa">Mapa de la República</h3>
+          <p class="grafica__sub" id="mapa-sub"></p>
+          <div class="segmentado" id="mapa-indicador" role="group" aria-label="Indicador del mapa"></div>
+          <div class="mapa" id="mapa" role="group" aria-label="Mapa de mosaicos por entidad. Pulse una entidad para ver sus causas."></div>
+          <div class="escala" id="mapa-escala"></div>
+        </article>
+        <article class="grafica" aria-labelledby="titulo-entidades">
+          <h3 id="titulo-entidades">Causas por entidad y nivel</h3>
+          <p class="grafica__sub">Ordenadas por casos de 10 años o más. Pulse una entidad para ver sus causas.</p>
+          <div class="leyenda" id="leyenda-niveles"></div>
+          <div class="barras" id="barras-entidad"></div>
+        </article>
+        <article class="grafica" aria-labelledby="titulo-etapas">
+          <h3 id="titulo-etapas">Etapa procesal</h3>
+          <p class="grafica__sub">Catálogo literal del CFPP. Pulse una etapa para ver sus causas.</p>
+          <div class="barras" id="barras-etapa"></div>
+        </article>
+        <article class="grafica" aria-labelledby="titulo-histograma">
+          <h3 id="titulo-histograma">Antigüedad</h3>
+          <p class="grafica__sub">Causas por años cumplidos desde el auto de formal prisión, con el color de su nivel.</p>
+          <div class="histograma" id="histograma" role="img"></div>
+          <div class="histograma__eje" aria-hidden="true"><span>0</span><span>5</span><span>10</span><span>15</span><span>20</span><span>25</span><span>30+ años</span></div>
+        </article>
+      </div>
+      <details class="grafica grafica--tabla">
+        <summary>Ver los datos como tabla</summary>
+        <div class="tabla-contenedor">
+          <table class="tabla tabla--estadistica">
+            <caption class="oculto-visual">Causas por entidad federativa y nivel de antigüedad, con los filtros aplicados.</caption>
+            <thead id="cabeza-estadistica"></thead>
+            <tbody id="cuerpo-estadistica"></tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
     <!-- Datos y metodología -->
     <section class="panel datos" aria-labelledby="titulo-datos">
       <h2 id="titulo-datos">Datos y metodología</h2>
@@ -816,6 +1032,7 @@ th:not([aria-sort]) .flecha::after { content: "⇅"; opacity: 0.6; }
           <li><strong>Sistema aplicable:</strong> si la averiguación previa inició en o después de la fecha en que el Código Nacional entró en vigor en la entidad del juzgado (declaratorias del Congreso de la Unión, DOF 2014–2016), se pide verificar la causa; no se excluye.</li>
           <li><strong>Revisión de la prisión preventiva:</strong> el quinto transitorio del decreto DOF 17-06-2016 permite solicitar la revisión de la medida dictada en el sistema anterior.</li>
           <li><strong>Motivo de la privación de libertad:</strong> indica si la persona está recluida solo por esta causa federal, también por otra causa (federal o local), solo por un proceso local o compurgando pena por otra causa.</li>
+          <li><strong>Estadística:</strong> las gráficas usan los mismos filtros que el listado. El mapa es una cuadrícula aproximada de la República en la que cada entidad ocupa un cuadro del mismo tamaño, para comparar sin que influya la superficie del territorio; el tono más oscuro indica el valor más alto del indicador elegido. La antigüedad mediana es el valor central: la mitad de las causas tiene más tiempo y la otra mitad menos.</li>
           <li><strong>Unidad de conteo:</strong> cada renglón es una causa por persona. Una persona puede tener varias causas y una causa puede tener varias personas (coimputados).</li>
           <li><strong>Fecha de corte:</strong> fecha en que se capturó la información. Las etapas y actuaciones corresponden a esa fecha; la antigüedad y las alertas se recalculan cada día.</li>
           <li><strong>Privacidad:</strong> la aplicación funciona sin conexión a Internet y no envía información a ningún servidor.</li>
@@ -841,6 +1058,8 @@ th:not([aria-sort]) .flecha::after { content: "⇅"; opacity: 0.6; }
       </div>
     </div>
   </dialog>
+
+  <div class="globo" id="globo" aria-hidden="true"></div>
 
   <!-- Orden de carga: configuración → datos → procesamiento → interfaz -->
   <script>
@@ -6425,6 +6644,20 @@ window.FUENTE_PPL_EMBEBIDA = [
     ["2016-06-14", "2016-02-26", ["Baja California", "Guerrero", "Jalisco", "Tamaulipas"]],
   ];
 
+  /* ---------- Mapa de mosaicos de la República (columna, fila) ---------- */
+  // Cuadrícula aproximada: cada entidad ocupa un cuadro del mismo tamaño para comparar sin sesgo de superficie.
+  const MOSAICO = [
+    ["BC", "Baja California", 0, 0], ["SON", "Sonora", 1, 0], ["CHIH", "Chihuahua", 2, 0], ["COAH", "Coahuila", 3, 0, ["Coahuila de Zaragoza"]],
+    ["NL", "Nuevo León", 4, 0], ["BCS", "Baja California Sur", 0, 1], ["SIN", "Sinaloa", 1, 1], ["DGO", "Durango", 2, 1],
+    ["ZAC", "Zacatecas", 3, 1], ["TAMS", "Tamaulipas", 4, 1], ["NAY", "Nayarit", 1, 2], ["AGS", "Aguascalientes", 2, 2],
+    ["SLP", "San Luis Potosí", 3, 2], ["VER", "Veracruz", 4, 2, ["Veracruz de Ignacio de la Llave"]], ["JAL", "Jalisco", 1, 3],
+    ["GTO", "Guanajuato", 2, 3], ["QRO", "Querétaro", 3, 3], ["HGO", "Hidalgo", 4, 3], ["YUC", "Yucatán", 7, 3],
+    ["COL", "Colima", 1, 4], ["MICH", "Michoacán", 2, 4, ["Michoacán de Ocampo"]], ["MEX", "Estado de México", 3, 4, ["México"]],
+    ["TLAX", "Tlaxcala", 4, 4], ["TAB", "Tabasco", 5, 4], ["CAM", "Campeche", 6, 4], ["QROO", "Quintana Roo", 7, 4],
+    ["GRO", "Guerrero", 2, 5], ["CDMX", "Ciudad de México", 3, 5, ["Distrito Federal"]], ["PUE", "Puebla", 4, 5], ["CHIS", "Chiapas", 5, 5],
+    ["MOR", "Morelos", 3, 6], ["OAX", "Oaxaca", 4, 6],
+  ];
+
   /* ---------- Fechas ---------------------------------------------------- */
   const iso = (d) => d.toISOString().slice(0, 10);
   const aFecha = (iso) => {
@@ -6792,9 +7025,53 @@ window.FUENTE_PPL_EMBEBIDA = [
     return m ? `${m[3]}/${m[2]}/${m[1]}` : "Sin dato";
   }
 
+  /* ---------- Estadística (para la vista de gráficas) ---------- */
+  // Resume un conjunto de registros: por entidad (niveles, 10 años o más, plazo rebasado), por etapa,
+  // histograma por año cumplido (0 a 30+) y antigüedad mediana en años.
+  function estadisticas(registros, hoy) {
+    const porEntidad = new Map();
+    const etapas = new Map(ETAPAS.map((e) => [e, 0]));
+    const histograma = new Array(31).fill(0);
+    const dias = [];
+    let mas10 = 0, plazo = 0, sistema = 0;
+    for (const r of registros) {
+      const a = antiguedad(r.fechaAFP, hoy);
+      const al = alertas(r, hoy);
+      const conPlazo = al.some((x) => x.tipo === "plazo");
+      const clave = r.entidad || "Sin dato";
+      if (!porEntidad.has(clave)) porEntidad.set(clave, { entidad: clave, n1: 0, n2: 0, n3: 0, n4: 0, n5: 0, sd: 0, total: 0, mas10: 0, plazo: 0 });
+      const g = porEntidad.get(clave);
+      g[a.nivel]++; g.total++;
+      if (a.nivel === "n4" || a.nivel === "n5") { g.mas10++; mas10++; }
+      if (conPlazo) { g.plazo++; plazo++; }
+      if (al.some((x) => x.tipo === "sistema")) sistema++;
+      if (etapas.has(r.etapa)) etapas.set(r.etapa, etapas.get(r.etapa) + 1);
+      if (a.nivel !== "sd") { histograma[Math.min(30, a.anios)]++; dias.push(a.dias); }
+    }
+    dias.sort((x, y) => x - y);
+    const m = dias.length;
+    const medianaDias = !m ? null : m % 2 ? dias[(m - 1) / 2] : (dias[m / 2 - 1] + dias[m / 2]) / 2;
+    return {
+      total: registros.length, personas: personas(registros), mas10, plazo, sistema,
+      medianaAnios: medianaDias == null ? null : medianaDias / 365.25,
+      porEntidad: [...porEntidad.values()], etapas: [...etapas].map(([etapa, total]) => ({ etapa, total })), histograma,
+    };
+  }
+
+  // Entidad del mosaico que corresponde a un nombre capturado (tolera acentos, mayúsculas y nombres oficiales largos).
+  let porMosaico = null;
+  function mosaicoDe(entidad) {
+    if (!porMosaico) {
+      porMosaico = new Map();
+      for (const m of MOSAICO) for (const n of [m[1], ...(m[4] || [])]) porMosaico.set(normalizar(n), m);
+    }
+    return porMosaico.get(normalizar(entidad)) || null;
+  }
+
   return {
     NIVELES, SIN_DATO, POR_CLAVE, ETAPAS, MOTIVOS, ETIQUETA_MOTIVO, UMBRALES, FILTROS_VACIOS, CAMPOS_BUSQUEDA,
     TIPOS_PROCEDIMIENTO, RESULTADOS_REVISION, MOTIVOS_BAJA, DECLARATORIAS, declaratoriaDe, alertas, diasHabiles,
+    MOSAICO, mosaicoDe, estadisticas,
     proximoCambio, personas, coimputados, resumen, concentracion, comparar,
     antiguedad, nivelDe, contarPorNivel, revisar,
     normalizar, coincideBusqueda, buscar, filtrar, filtrarSinNivel, opcionesDependientes,
@@ -6805,7 +7082,7 @@ window.FUENTE_PPL_EMBEBIDA = [
   <script>
 /*
  * INTERFAZ — CAUSAS PENALES PPL
- *   datos (DatosPPL) → procesamiento (LogicaPPL) → tarjetas/filtros/búsqueda → listado o resumen → ficha
+ *   datos (DatosPPL) → procesamiento (LogicaPPL) → portada/tarjetas/filtros/búsqueda → listado, resumen o estadística → ficha
  * Este archivo solo pinta y responde a la persona usuaria; no contiene registros.
  */
 (function () {
@@ -6855,6 +7132,7 @@ window.FUENTE_PPL_EMBEBIDA = [
     visibles: [],
     vista: "listado",
     resumenPor: "entidad",
+    indicadorMapa: "total",       // total · mas10 · plazo
     horizonte: SEG.horizontePorDefecto,
     comparativo: null,
   };
@@ -6869,6 +7147,7 @@ window.FUENTE_PPL_EMBEBIDA = [
     detalleNivel: $("detalle-nivel"), fuente: $("fuente-texto"), avisos: $("avisos-datos"),
     depuracion: $("avisos-depuracion"), resultados: $("resultados"), resumen: $("resumen"),
     comparativo: $("comparativo"), proximosTotal: $("proximos-total"), btnProximos: $("btn-proximos"),
+    estadistica: $("estadistica"), globo: $("globo"),
   };
 
   /* ---------- Nivel de antigüedad ---------- */
@@ -6921,8 +7200,31 @@ window.FUENTE_PPL_EMBEBIDA = [
     el.avisos.hidden = !resultado.avisos.length;
     el.avisos.textContent = resultado.avisos.join(" ");
     pintarCorte();
+    pintarPortada();
     pintarDepuracion();
     actualizar();
+  }
+
+  /* ---------- Portada: titular y cifras clave del corte completo ---------- */
+  const fmt1 = (x) => x.toLocaleString("es-MX", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  function pintarPortada() {
+    const e = L.estadisticas(estado.todos);
+    const t = $("titular");
+    t.replaceChildren(`${e.total} ${e.total === 1 ? "causa" : "causas"} en prisión preventiva. `,
+      crear("span", "titular__gris", "Sin sentencia ejecutoriada."));
+    const cifras = [
+      [String(e.personas), "", e.personas === 1 ? "persona privada de la libertad" : "personas privadas de la libertad"],
+      [e.total ? String(Math.round((e.mas10 / e.total) * 100)) : "0", " %", `de las causas supera 10 años (${e.mas10})`],
+      [e.medianaAnios == null ? "—" : fmt1(e.medianaAnios), e.medianaAnios == null ? "" : " años", "de antigüedad mediana"],
+      [String(e.plazo), "", e.plazo === 1 ? "causa rebasa un plazo del CFPP" : "causas rebasan un plazo del CFPP"],
+    ];
+    $("cifras-clave").replaceChildren(...cifras.map(([v, u, texto]) => {
+      const c = crear("div", "cifra-clave");
+      const valor = crear("p", "cifra-clave__valor", v);
+      if (u) valor.append(crear("small", null, u));
+      c.append(valor, crear("p", "cifra-clave__texto", texto));
+      return c;
+    }));
   }
 
   function mostrarError(e) {
@@ -7262,6 +7564,149 @@ window.FUENTE_PPL_EMBEBIDA = [
     $("cuerpo-resumen").replaceChildren(...cuerpo);
   }
 
+  /* ---------- Estadística (gráficas con los filtros aplicados) ---------- */
+  // Globo flotante: repite lo que ya dice la etiqueta accesible de cada marca; solo es apoyo visual.
+  function conGlobo(nodo, titulo, lineas) {
+    nodo.setAttribute("aria-label", [titulo, ...lineas].join(". "));
+    const mostrar = (x, y) => {
+      el.globo.replaceChildren(crear("strong", null, titulo), ...lineas.map((l) => crear("span", null, l)));
+      el.globo.style.left = Math.max(8, Math.min(x + 16, window.innerWidth - el.globo.offsetWidth - 8)) + "px";
+      el.globo.style.top = Math.min(y + 16, window.innerHeight - el.globo.offsetHeight - 8) + "px";
+      el.globo.classList.add("globo--visible");
+    };
+    nodo.addEventListener("mousemove", (ev) => mostrar(ev.clientX, ev.clientY));
+    nodo.addEventListener("mouseleave", ocultarGlobo);
+    nodo.addEventListener("focus", () => { const r = nodo.getBoundingClientRect(); mostrar(r.left, r.bottom - 8); });
+    nodo.addEventListener("blur", ocultarGlobo);
+  }
+  function ocultarGlobo() { el.globo.classList.remove("globo--visible"); }
+
+  const INDICADORES = {
+    total: ["Causas", "Causas en seguimiento por entidad."],
+    mas10: ["10 años o más", "Causas con más de 10 años desde el auto de formal prisión."],
+    plazo: ["Plazo rebasado", "Causas que rebasan un plazo del CFPP."],
+  };
+  const plural = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
+
+  function pintarEstadistica() {
+    const e = L.estadisticas(estado.visibles);
+    $("estadistica-resumen").textContent = e.total
+      ? `${plural(e.total, "causa", "causas")} de ${plural(e.personas, "persona", "personas")} en ${plural(e.porEntidad.length, "entidad", "entidades")}; ` +
+        `${e.mas10} con 10 años o más y ${e.plazo} con un plazo del CFPP rebasado.`
+      : "No hay causas con los filtros aplicados.";
+
+    // Mapa de mosaicos
+    const ind = estado.indicadorMapa;
+    $("mapa-sub").textContent = INDICADORES[ind][1];
+    $("mapa-indicador").replaceChildren(...Object.entries(INDICADORES).map(([k, [t]]) => {
+      const b = boton("segmentado__boton", t.toUpperCase());
+      b.dataset.indicador = k;
+      b.setAttribute("aria-pressed", String(k === ind));
+      return b;
+    }));
+    const porNombre = new Map();
+    for (const g of e.porEntidad) {
+      const m = L.mosaicoDe(g.entidad);
+      if (m) porNombre.set(m[1], g);
+    }
+    const valores = [...porNombre.values()].map((g) => g[ind]);
+    const min = valores.length ? Math.min(...valores) : 0, max = valores.length ? Math.max(...valores) : 0;
+    const paso = (v) => (max === min ? 3 : 1 + Math.min(4, Math.floor(((v - min) / (max - min)) * 5)));
+    $("mapa").replaceChildren(...L.MOSAICO.map(([abrev, nombre, col, fila]) => {
+      const g = porNombre.get(nombre);
+      const tiene = g && g.total > 0;
+      const m = tiene ? boton(`mosaico m${paso(g[ind])}`, null) : crear("div", "mosaico m0");
+      m.style.gridColumn = String(col + 1);
+      m.style.gridRow = String(fila + 1);
+      m.append(crear("span", "mosaico__abrev", abrev));
+      if (tiene) {
+        m.append(crear("span", "mosaico__valor", String(g[ind])));
+        m.dataset.entidad = g.entidad;
+        conGlobo(m, nombre, [plural(g.total, "causa", "causas"), `${g.mas10} con 10 años o más`, `${g.plazo} con plazo del CFPP rebasado`]);
+      } else {
+        m.setAttribute("role", "img");
+        m.setAttribute("aria-label", `${nombre}: sin causas con los filtros aplicados`);
+        m.title = `${nombre}: sin causas`;
+      }
+      return m;
+    }));
+    const escala = [crear("span", null, String(min))];
+    for (let i = 1; i <= 5; i++) escala.push(crear("i", `m${i}`));
+    escala.push(crear("span", null, String(max)), crear("i", "m0 escala__sin"), crear("span", null, "Sin causas"));
+    $("mapa-escala").replaceChildren(...escala);
+    const fuera = e.porEntidad.filter((g) => !L.mosaicoDe(g.entidad)).reduce((s, g) => s + g.total, 0);
+    if (fuera) $("mapa-escala").append(crear("span", "escala__nota", `${fuera} sin entidad reconocida`));
+
+    // Barras apiladas por entidad (mismo orden que el resumen: casos de 10 años o más)
+    $("leyenda-niveles").replaceChildren(...L.NIVELES.map((n) => {
+      const s = crear("span");
+      s.append(crear("i", `t-${n.clave}`), `Nivel ${n.numero}`);
+      return s;
+    }));
+    const ents = [...e.porEntidad].sort((a, b) => b.mas10 - a.mas10 || b.total - a.total || a.entidad.localeCompare(b.entidad, "es"));
+    const maxT = Math.max(1, ...ents.map((g) => g.total));
+    $("barras-entidad").replaceChildren(...ents.map((g) => {
+      const f = boton("barra-fila", null);
+      f.dataset.entidad = g.entidad;
+      const pista = crear("span", "barra-fila__pista");
+      const barra = crear("span", "barra-fila__barra");
+      barra.style.width = (g.total / maxT) * 100 + "%";
+      for (const n of [...L.NIVELES, L.SIN_DATO]) {
+        if (!g[n.clave]) continue;
+        const seg = crear("span", `t-${n.clave}`);
+        seg.style.flexGrow = String(g[n.clave]);
+        barra.append(seg);
+      }
+      pista.append(barra);
+      f.append(crear("span", "barra-fila__nombre", g.entidad), pista, crear("span", "barra-fila__valor", String(g.total)));
+      conGlobo(f, g.entidad, [plural(g.total, "causa", "causas"),
+        L.NIVELES.map((n) => `N${n.numero}: ${g[n.clave]}`).join(" · ") + (g.sd ? ` · sin fecha: ${g.sd}` : "")]);
+      return f;
+    }));
+
+    // Etapas
+    const maxE = Math.max(1, ...e.etapas.map((x) => x.total));
+    $("barras-etapa").replaceChildren(...e.etapas.map((x) => {
+      const f = boton("barra-fila barra-fila--etapa", null);
+      f.dataset.etapa = x.etapa;
+      const pista = crear("span", "barra-fila__pista");
+      const barra = crear("span", "barra-fila__barra barra-fila__barra--simple");
+      barra.style.width = x.total ? Math.max(1, (x.total / maxE) * 100) + "%" : "0";
+      pista.append(barra);
+      f.append(crear("span", "barra-fila__nombre", x.etapa), pista, crear("span", "barra-fila__valor", String(x.total)));
+      conGlobo(f, x.etapa, [plural(x.total, "causa", "causas") + (e.total ? ` (${Math.round((x.total / e.total) * 100)} %)` : "")]);
+      return f;
+    }));
+
+    // Histograma por año cumplido
+    const maxH = Math.max(1, ...e.histograma);
+    const nivelDeAnio = (a) => (a < 2 ? "n1" : a < 5 ? "n2" : a < 10 ? "n3" : a < 20 ? "n4" : "n5");
+    $("histograma").setAttribute("aria-label", "Causas por años cumplidos: " +
+      e.histograma.map((v, a) => `${a === 30 ? "30 o más" : a} años: ${v}`).filter((t) => !t.endsWith(": 0")).join(", "));
+    $("histograma").replaceChildren(...e.histograma.map((v, a) => {
+      const c = crear("span", `histograma__columna t-${nivelDeAnio(a)}`);
+      c.style.height = (v / maxH) * 100 + "%";
+      conGlobo(c, a === 30 ? "30 años o más" : `${a} a ${a + 1} años`, [plural(v, "causa", "causas")]);
+      c.removeAttribute("aria-label");
+      return c;
+    }));
+
+    // Tabla equivalente
+    const cab = crear("tr");
+    for (const t of ["Entidad federativa", "N1", "N2", "N3", "N4", "N5", "Sin fecha", "10 años o más", "Plazo rebasado", "Total"]) {
+      const th = crear("th", t === "Entidad federativa" ? null : "num", t);
+      th.scope = "col";
+      cab.append(th);
+    }
+    $("cabeza-estadistica").replaceChildren(cab);
+    $("cuerpo-estadistica").replaceChildren(...ents.map((g) => {
+      const tr = crear("tr");
+      tr.append(crear("td", null, g.entidad));
+      for (const k of ["n1", "n2", "n3", "n4", "n5", "sd", "mas10", "plazo", "total"]) tr.append(crear("td", "num", String(g[k])));
+      return tr;
+    }));
+  }
+
   /* ---------- Actualización general ---------- */
   function actualizar() {
     leerFormulario();
@@ -7279,6 +7724,8 @@ window.FUENTE_PPL_EMBEBIDA = [
       el.vacio.hidden = ordenados.length > 0;
       el.tabla.hidden = ordenados.length === 0;
       pintarOrden();
+    } else if (estado.vista === "estadistica") {
+      pintarEstadistica();
     } else {
       pintarResumen();
     }
@@ -7288,8 +7735,10 @@ window.FUENTE_PPL_EMBEBIDA = [
     estado.vista = vista;
     $("vista-listado").setAttribute("aria-pressed", String(vista === "listado"));
     $("vista-resumen").setAttribute("aria-pressed", String(vista === "resumen"));
+    $("vista-estadistica").setAttribute("aria-pressed", String(vista === "estadistica"));
     el.resultados.hidden = vista !== "listado";
     el.resumen.hidden = vista !== "resumen";
+    el.estadistica.hidden = vista !== "estadistica";
     actualizar();
   }
 
@@ -7609,7 +8058,7 @@ window.FUENTE_PPL_EMBEBIDA = [
     e.preventDefault();
     clearTimeout(espera);
     actualizar();
-    const destino = estado.vista === "listado" ? el.resultados : el.resumen;
+    const destino = { listado: el.resultados, resumen: el.resumen, estadistica: el.estadistica }[estado.vista];
     destino.scrollIntoView({ block: "start" });
     if (estado.vista === "listado") el.resultados.focus({ preventScroll: true });
   });
@@ -7618,6 +8067,19 @@ window.FUENTE_PPL_EMBEBIDA = [
   $("btn-exportar").addEventListener("click", exportarVista);
   $("vista-listado").addEventListener("click", () => cambiarVista("listado"));
   $("vista-resumen").addEventListener("click", () => cambiarVista("resumen"));
+  $("vista-estadistica").addEventListener("click", () => cambiarVista("estadistica"));
+  // Gráficas: pulsar una entidad o una etapa lleva al listado filtrado (se conservan nivel, motivo y próximos).
+  el.estadistica.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-entidad], [data-etapa], [data-indicador]");
+    if (!b) return;
+    if (b.dataset.indicador) { estado.indicadorMapa = b.dataset.indicador; pintarEstadistica(); return; }
+    const f = estado.filtros;
+    const conservar = { niveles: [...f.niveles], motivo: f.motivo, proximos: f.proximos, alerta: f.alerta };
+    if (b.dataset.entidad) aplicarFiltros({ ...conservar, etapa: f.etapa, entidad: b.dataset.entidad });
+    else aplicarFiltros({ ...conservar, entidad: f.entidad, circuito: f.circuito, juzgado: f.juzgado, etapa: b.dataset.etapa });
+    ocultarGlobo();
+    el.resultados.scrollIntoView({ block: "start" });
+  });
   for (const por of ["entidad", "juzgado"]) {
     $("resumen-" + por).addEventListener("click", () => {
       estado.resumenPor = por;

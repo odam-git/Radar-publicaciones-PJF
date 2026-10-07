@@ -126,6 +126,13 @@ const SISTEMA = cuenta((r) => L.alertas(r, RELOJ).some((a) => a.tipo === "sistem
     assert.ok(ancho <= 0, "La página desborda " + ancho + " px");
   });
 
+  await prueba("Portada v5: titular con el total y cuatro cifras clave del corte", async () => {
+    assert.match(await pagina.textContent("#titular"), /^150 causas en prisión preventiva\. Sin sentencia ejecutoriada\.$/);
+    const cifras = await pagina.locator("#cifras-clave .cifra-clave__valor").allTextContents();
+    assert.deepStrictEqual(cifras.map((t) => t.replace(/\s+/g, " ").trim()), ["149", "39 %", "7.6 años", String(PLAZO)]);
+    assert.strictEqual(await pagina.evaluate(() => getComputedStyle(document.querySelector(".nav")).position), "sticky");
+  });
+
   console.log("\nAVISOS");
   await prueba("Aviso de 4 bajas con su motivo (ejecutoria, desvanecimiento, cese de la medida)", async () => {
     const aviso = pagina.locator("#aviso-bajas");
@@ -404,6 +411,58 @@ const SISTEMA = cuenta((r) => L.alertas(r, RELOJ).some((a) => a.tipo === "sistem
     await limpiar();
   });
 
+  console.log("\nESTADÍSTICA POR ENTIDAD (v5)");
+  await prueba("Vista ESTADÍSTICA: mapa con 32 entidades (10 con causas), barras, etapas, histograma y tabla", async () => {
+    await pagina.click("#vista-estadistica");
+    assert.ok(await pagina.isVisible("#estadistica") && await pagina.isHidden("#resultados"));
+    assert.strictEqual(await pagina.locator("#mapa .mosaico").count(), 32);
+    assert.strictEqual(await pagina.locator("#mapa button.mosaico").count(), 10);
+    assert.strictEqual(await pagina.locator("#barras-entidad .barra-fila").count(), 10);
+    assert.strictEqual(await pagina.locator("#barras-etapa .barra-fila").count(), L.ETAPAS.length);
+    assert.strictEqual(await pagina.locator("#histograma .histograma__columna").count(), 31);
+    assert.strictEqual(await pagina.locator("#cuerpo-estadistica tr").count(), 10);
+    assert.match(await pagina.textContent("#estadistica-resumen"), /^150 causas de 149 personas en 10 entidades; 59 con 10 años o más/);
+    const cdmx = pagina.locator('#mapa button[data-entidad="Ciudad de México"]');
+    assert.strictEqual(await cdmx.locator(".mosaico__valor").textContent(), String(cuenta((r) => r.entidad === "Ciudad de México")));
+    assert.match(await cdmx.getAttribute("aria-label"), /^Ciudad de México\. \d+ causas\. \d+ con 10 años o más\. \d+ con plazo del CFPP rebasado$/);
+    const barras = await pagina.locator("#barras-entidad .barra-fila__valor").allTextContents();
+    assert.strictEqual(barras.map(Number).reduce((a, b) => a + b, 0), 150);
+  });
+  await prueba("El mapa cambia de indicador y el globo informativo aparece al pasar el ratón", async () => {
+    await pagina.click('#mapa-indicador [data-indicador="mas10"]');
+    assert.strictEqual(await pagina.getAttribute('#mapa-indicador [data-indicador="mas10"]', "aria-pressed"), "true");
+    const mas10 = cuenta((r) => r.entidad === "Ciudad de México" && ["n4", "n5"].includes(L.antiguedad(r.fechaAFP, RELOJ).nivel));
+    assert.strictEqual(await pagina.locator('#mapa button[data-entidad="Ciudad de México"] .mosaico__valor').textContent(), String(mas10));
+    assert.match(await pagina.textContent("#mapa-sub"), /más de 10 años/);
+    await pagina.hover('#mapa button[data-entidad="Puebla"]');
+    await pagina.waitForFunction(() => document.getElementById("globo").classList.contains("globo--visible"));
+    assert.match(await pagina.textContent("#globo"), /^Puebla/);
+    await pagina.click('#mapa-indicador [data-indicador="total"]');
+  });
+  await prueba("Pulsar una entidad o una etapa lleva al listado filtrado", async () => {
+    await pagina.click('#mapa button[data-entidad="Ciudad de México"]');
+    assert.ok(await pagina.isVisible("#resultados"));
+    assert.strictEqual(await total(), cuenta((r) => r.entidad === "Ciudad de México"));
+    assert.strictEqual(await pagina.inputValue("#f-entidad"), "Ciudad de México");
+    await limpiar();
+    await pagina.click("#vista-estadistica");
+    await pagina.click('#barras-etapa [data-etapa="Conclusiones"]');
+    assert.strictEqual(await total(), cuenta((r) => r.etapa === "Conclusiones"));
+    assert.strictEqual(await pagina.inputValue("#f-etapa"), "Conclusiones");
+    await limpiar();
+  });
+  await prueba("Las gráficas respetan los filtros aplicados (nivel y entidad)", async () => {
+    await pagina.click("#vista-estadistica");
+    await tarjeta("n5").click();
+    const n5 = await pagina.locator("#barras-entidad .barra-fila__valor").allTextContents();
+    assert.strictEqual(n5.map(Number).reduce((a, b) => a + b, 0), 29);
+    assert.strictEqual((await pagina.locator("#histograma .histograma__columna").evaluateAll((c) => c.filter((x) => x.style.height !== "0%").map((x) => x.className))).every((k) => k.includes("t-n5")), true);
+    await pagina.selectOption("#f-entidad", "Jalisco");
+    assert.strictEqual(await pagina.locator("#mapa button.mosaico").count(), 1);
+    await limpiar();
+    await pagina.click("#vista-listado");
+  });
+
   console.log("\nCOMPARATIVO CONTRA EL CORTE ANTERIOR");
   await prueba("Cargar el corte anterior: 3 altas, 9 bajas con motivo, 5 cambios de etapa y niveles", async () => {
     await pagina.setInputFiles("#archivo-anterior", path.join(RAIZ, "datos/corte_anterior_ficticio.csv"));
@@ -490,7 +549,7 @@ const SISTEMA = cuenta((r) => L.alertas(r, RELOJ).some((a) => a.tipo === "sistem
     await p.goto(URL_APP);
     await p.waitForSelector("#cuerpo-tabla tr");
     const c = await p.evaluate(() => [getComputedStyle(document.body).backgroundColor, getComputedStyle(document.body).color]);
-    assert.deepStrictEqual(c, ["rgb(14, 20, 32)", "rgb(242, 245, 249)"]);
+    assert.deepStrictEqual(c, ["rgb(0, 0, 0)", "rgb(245, 245, 247)"]);
     if (CAPTURAS) await p.screenshot({ path: path.join(CAPTURAS, "oscuro.png") });
     await p.close();
   });

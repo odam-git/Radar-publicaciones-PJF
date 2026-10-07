@@ -79,6 +79,20 @@
     ["2016-06-14", "2016-02-26", ["Baja California", "Guerrero", "Jalisco", "Tamaulipas"]],
   ];
 
+  /* ---------- Mapa de mosaicos de la República (columna, fila) ---------- */
+  // Cuadrícula aproximada: cada entidad ocupa un cuadro del mismo tamaño para comparar sin sesgo de superficie.
+  const MOSAICO = [
+    ["BC", "Baja California", 0, 0], ["SON", "Sonora", 1, 0], ["CHIH", "Chihuahua", 2, 0], ["COAH", "Coahuila", 3, 0, ["Coahuila de Zaragoza"]],
+    ["NL", "Nuevo León", 4, 0], ["BCS", "Baja California Sur", 0, 1], ["SIN", "Sinaloa", 1, 1], ["DGO", "Durango", 2, 1],
+    ["ZAC", "Zacatecas", 3, 1], ["TAMS", "Tamaulipas", 4, 1], ["NAY", "Nayarit", 1, 2], ["AGS", "Aguascalientes", 2, 2],
+    ["SLP", "San Luis Potosí", 3, 2], ["VER", "Veracruz", 4, 2, ["Veracruz de Ignacio de la Llave"]], ["JAL", "Jalisco", 1, 3],
+    ["GTO", "Guanajuato", 2, 3], ["QRO", "Querétaro", 3, 3], ["HGO", "Hidalgo", 4, 3], ["YUC", "Yucatán", 7, 3],
+    ["COL", "Colima", 1, 4], ["MICH", "Michoacán", 2, 4, ["Michoacán de Ocampo"]], ["MEX", "Estado de México", 3, 4, ["México"]],
+    ["TLAX", "Tlaxcala", 4, 4], ["TAB", "Tabasco", 5, 4], ["CAM", "Campeche", 6, 4], ["QROO", "Quintana Roo", 7, 4],
+    ["GRO", "Guerrero", 2, 5], ["CDMX", "Ciudad de México", 3, 5, ["Distrito Federal"]], ["PUE", "Puebla", 4, 5], ["CHIS", "Chiapas", 5, 5],
+    ["MOR", "Morelos", 3, 6], ["OAX", "Oaxaca", 4, 6],
+  ];
+
   /* ---------- Fechas ---------------------------------------------------- */
   const iso = (d) => d.toISOString().slice(0, 10);
   const aFecha = (iso) => {
@@ -446,9 +460,53 @@
     return m ? `${m[3]}/${m[2]}/${m[1]}` : "Sin dato";
   }
 
+  /* ---------- Estadística (para la vista de gráficas) ---------- */
+  // Resume un conjunto de registros: por entidad (niveles, 10 años o más, plazo rebasado), por etapa,
+  // histograma por año cumplido (0 a 30+) y antigüedad mediana en años.
+  function estadisticas(registros, hoy) {
+    const porEntidad = new Map();
+    const etapas = new Map(ETAPAS.map((e) => [e, 0]));
+    const histograma = new Array(31).fill(0);
+    const dias = [];
+    let mas10 = 0, plazo = 0, sistema = 0;
+    for (const r of registros) {
+      const a = antiguedad(r.fechaAFP, hoy);
+      const al = alertas(r, hoy);
+      const conPlazo = al.some((x) => x.tipo === "plazo");
+      const clave = r.entidad || "Sin dato";
+      if (!porEntidad.has(clave)) porEntidad.set(clave, { entidad: clave, n1: 0, n2: 0, n3: 0, n4: 0, n5: 0, sd: 0, total: 0, mas10: 0, plazo: 0 });
+      const g = porEntidad.get(clave);
+      g[a.nivel]++; g.total++;
+      if (a.nivel === "n4" || a.nivel === "n5") { g.mas10++; mas10++; }
+      if (conPlazo) { g.plazo++; plazo++; }
+      if (al.some((x) => x.tipo === "sistema")) sistema++;
+      if (etapas.has(r.etapa)) etapas.set(r.etapa, etapas.get(r.etapa) + 1);
+      if (a.nivel !== "sd") { histograma[Math.min(30, a.anios)]++; dias.push(a.dias); }
+    }
+    dias.sort((x, y) => x - y);
+    const m = dias.length;
+    const medianaDias = !m ? null : m % 2 ? dias[(m - 1) / 2] : (dias[m / 2 - 1] + dias[m / 2]) / 2;
+    return {
+      total: registros.length, personas: personas(registros), mas10, plazo, sistema,
+      medianaAnios: medianaDias == null ? null : medianaDias / 365.25,
+      porEntidad: [...porEntidad.values()], etapas: [...etapas].map(([etapa, total]) => ({ etapa, total })), histograma,
+    };
+  }
+
+  // Entidad del mosaico que corresponde a un nombre capturado (tolera acentos, mayúsculas y nombres oficiales largos).
+  let porMosaico = null;
+  function mosaicoDe(entidad) {
+    if (!porMosaico) {
+      porMosaico = new Map();
+      for (const m of MOSAICO) for (const n of [m[1], ...(m[4] || [])]) porMosaico.set(normalizar(n), m);
+    }
+    return porMosaico.get(normalizar(entidad)) || null;
+  }
+
   return {
     NIVELES, SIN_DATO, POR_CLAVE, ETAPAS, MOTIVOS, ETIQUETA_MOTIVO, UMBRALES, FILTROS_VACIOS, CAMPOS_BUSQUEDA,
     TIPOS_PROCEDIMIENTO, RESULTADOS_REVISION, MOTIVOS_BAJA, DECLARATORIAS, declaratoriaDe, alertas, diasHabiles,
+    MOSAICO, mosaicoDe, estadisticas,
     proximoCambio, personas, coimputados, resumen, concentracion, comparar,
     antiguedad, nivelDe, contarPorNivel, revisar,
     normalizar, coincideBusqueda, buscar, filtrar, filtrarSinNivel, opcionesDependientes,

@@ -34,15 +34,12 @@
 
   <a class="saltar" href="#resultados">Saltar a los resultados</a>
 
-  <header class="encabezado">
-    <div class="contenedor encabezado__fila">
+  <!-- Barra superior translúcida -->
+  <header class="nav">
+    <div class="contenedor nav__fila">
       <div class="marca">
         <span class="marca__logo" aria-hidden="true"><svg><use href="#i-balanza"/></svg></span>
-        <div>
-          <h1>CAUSAS PENALES PPL</h1>
-          <p class="subtitulo">Sistema de consulta y seguimiento · Prisión preventiva · Sistema penal tradicional</p>
-          <p class="corte" id="texto-corte"></p>
-        </div>
+        <span class="marca__nombre">CAUSAS PENALES PPL</span>
       </div>
       <div class="encabezado__acciones">
         <p class="insignia insignia--clasificacion" id="clasificacion" hidden></p>
@@ -53,6 +50,16 @@
       </div>
     </div>
   </header>
+
+  <!-- Portada: titular y cifras clave del corte -->
+  <section class="portada" aria-labelledby="titular">
+    <div class="contenedor">
+      <p class="corte" id="texto-corte"></p>
+      <h1 id="titular">CAUSAS PENALES PPL</h1>
+      <p class="subtitulo">Sistema de consulta y seguimiento · Prisión preventiva · Sistema penal tradicional federal, con antigüedad, etapa procesal y alertas de plazo.</p>
+      <div class="cifras-clave" id="cifras-clave"></div>
+    </div>
+  </section>
 
   <main class="contenedor">
     <p id="avisos-datos" class="aviso aviso--naranja" role="status" hidden></p>
@@ -156,6 +163,7 @@
     <div class="vistas" role="group" aria-label="Vista de resultados">
       <button type="button" class="vistas__boton" id="vista-listado" aria-pressed="true">LISTADO</button>
       <button type="button" class="vistas__boton" id="vista-resumen" aria-pressed="false">RESUMEN POR ENTIDAD Y JUZGADO</button>
+      <button type="button" class="vistas__boton" id="vista-estadistica" aria-pressed="false">ESTADÍSTICA</button>
     </div>
 
     <!-- Listado -->
@@ -210,6 +218,50 @@
       </div>
     </section>
 
+    <!-- Estadística por entidad federativa: gráficas que respetan los filtros aplicados -->
+    <section id="estadistica" class="estadistica" aria-labelledby="titulo-estadistica" hidden>
+      <div class="estadistica__intro">
+        <h2 id="titulo-estadistica">Estadística por entidad federativa. <span>Con los filtros aplicados.</span></h2>
+        <p id="estadistica-resumen"></p>
+      </div>
+      <div class="graficas">
+        <article class="grafica" aria-labelledby="titulo-mapa">
+          <h3 id="titulo-mapa">Mapa de la República</h3>
+          <p class="grafica__sub" id="mapa-sub"></p>
+          <div class="segmentado" id="mapa-indicador" role="group" aria-label="Indicador del mapa"></div>
+          <div class="mapa" id="mapa" role="group" aria-label="Mapa de mosaicos por entidad. Pulse una entidad para ver sus causas."></div>
+          <div class="escala" id="mapa-escala"></div>
+        </article>
+        <article class="grafica" aria-labelledby="titulo-entidades">
+          <h3 id="titulo-entidades">Causas por entidad y nivel</h3>
+          <p class="grafica__sub">Ordenadas por casos de 10 años o más. Pulse una entidad para ver sus causas.</p>
+          <div class="leyenda" id="leyenda-niveles"></div>
+          <div class="barras" id="barras-entidad"></div>
+        </article>
+        <article class="grafica" aria-labelledby="titulo-etapas">
+          <h3 id="titulo-etapas">Etapa procesal</h3>
+          <p class="grafica__sub">Catálogo literal del CFPP. Pulse una etapa para ver sus causas.</p>
+          <div class="barras" id="barras-etapa"></div>
+        </article>
+        <article class="grafica" aria-labelledby="titulo-histograma">
+          <h3 id="titulo-histograma">Antigüedad</h3>
+          <p class="grafica__sub">Causas por años cumplidos desde el auto de formal prisión, con el color de su nivel.</p>
+          <div class="histograma" id="histograma" role="img"></div>
+          <div class="histograma__eje" aria-hidden="true"><span>0</span><span>5</span><span>10</span><span>15</span><span>20</span><span>25</span><span>30+ años</span></div>
+        </article>
+      </div>
+      <details class="grafica grafica--tabla">
+        <summary>Ver los datos como tabla</summary>
+        <div class="tabla-contenedor">
+          <table class="tabla tabla--estadistica">
+            <caption class="oculto-visual">Causas por entidad federativa y nivel de antigüedad, con los filtros aplicados.</caption>
+            <thead id="cabeza-estadistica"></thead>
+            <tbody id="cuerpo-estadistica"></tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
     <!-- Datos y metodología -->
     <section class="panel datos" aria-labelledby="titulo-datos">
       <h2 id="titulo-datos">Datos y metodología</h2>
@@ -238,6 +290,7 @@
           <li><strong>Sistema aplicable:</strong> si la averiguación previa inició en o después de la fecha en que el Código Nacional entró en vigor en la entidad del juzgado (declaratorias del Congreso de la Unión, DOF 2014–2016), se pide verificar la causa; no se excluye.</li>
           <li><strong>Revisión de la prisión preventiva:</strong> el quinto transitorio del decreto DOF 17-06-2016 permite solicitar la revisión de la medida dictada en el sistema anterior.</li>
           <li><strong>Motivo de la privación de libertad:</strong> indica si la persona está recluida solo por esta causa federal, también por otra causa (federal o local), solo por un proceso local o compurgando pena por otra causa.</li>
+          <li><strong>Estadística:</strong> las gráficas usan los mismos filtros que el listado. El mapa es una cuadrícula aproximada de la República en la que cada entidad ocupa un cuadro del mismo tamaño, para comparar sin que influya la superficie del territorio; el tono más oscuro indica el valor más alto del indicador elegido. La antigüedad mediana es el valor central: la mitad de las causas tiene más tiempo y la otra mitad menos.</li>
           <li><strong>Unidad de conteo:</strong> cada renglón es una causa por persona. Una persona puede tener varias causas y una causa puede tener varias personas (coimputados).</li>
           <li><strong>Fecha de corte:</strong> fecha en que se capturó la información. Las etapas y actuaciones corresponden a esa fecha; la antigüedad y las alertas se recalculan cada día.</li>
           <li><strong>Privacidad:</strong> la aplicación funciona sin conexión a Internet y no envía información a ningún servidor.</li>
@@ -263,6 +316,8 @@
       </div>
     </div>
   </dialog>
+
+  <div class="globo" id="globo" aria-hidden="true"></div>
 
   <!-- Orden de carga: configuración → datos → procesamiento → interfaz -->
   <script src="js/config.js"></script>

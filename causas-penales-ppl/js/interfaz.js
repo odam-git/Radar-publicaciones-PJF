@@ -1,6 +1,6 @@
 /*
  * INTERFAZ — CAUSAS PENALES PPL
- *   datos (DatosPPL) → procesamiento (LogicaPPL) → tarjetas/filtros/búsqueda → listado o resumen → ficha
+ *   datos (DatosPPL) → procesamiento (LogicaPPL) → portada/tarjetas/filtros/búsqueda → listado, resumen o estadística → ficha
  * Este archivo solo pinta y responde a la persona usuaria; no contiene registros.
  */
 (function () {
@@ -50,6 +50,7 @@
     visibles: [],
     vista: "listado",
     resumenPor: "entidad",
+    indicadorMapa: "total",       // total · mas10 · plazo
     horizonte: SEG.horizontePorDefecto,
     comparativo: null,
   };
@@ -64,6 +65,7 @@
     detalleNivel: $("detalle-nivel"), fuente: $("fuente-texto"), avisos: $("avisos-datos"),
     depuracion: $("avisos-depuracion"), resultados: $("resultados"), resumen: $("resumen"),
     comparativo: $("comparativo"), proximosTotal: $("proximos-total"), btnProximos: $("btn-proximos"),
+    estadistica: $("estadistica"), globo: $("globo"),
   };
 
   /* ---------- Nivel de antigüedad ---------- */
@@ -116,8 +118,31 @@
     el.avisos.hidden = !resultado.avisos.length;
     el.avisos.textContent = resultado.avisos.join(" ");
     pintarCorte();
+    pintarPortada();
     pintarDepuracion();
     actualizar();
+  }
+
+  /* ---------- Portada: titular y cifras clave del corte completo ---------- */
+  const fmt1 = (x) => x.toLocaleString("es-MX", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  function pintarPortada() {
+    const e = L.estadisticas(estado.todos);
+    const t = $("titular");
+    t.replaceChildren(`${e.total} ${e.total === 1 ? "causa" : "causas"} en prisión preventiva. `,
+      crear("span", "titular__gris", "Sin sentencia ejecutoriada."));
+    const cifras = [
+      [String(e.personas), "", e.personas === 1 ? "persona privada de la libertad" : "personas privadas de la libertad"],
+      [e.total ? String(Math.round((e.mas10 / e.total) * 100)) : "0", " %", `de las causas supera 10 años (${e.mas10})`],
+      [e.medianaAnios == null ? "—" : fmt1(e.medianaAnios), e.medianaAnios == null ? "" : " años", "de antigüedad mediana"],
+      [String(e.plazo), "", e.plazo === 1 ? "causa rebasa un plazo del CFPP" : "causas rebasan un plazo del CFPP"],
+    ];
+    $("cifras-clave").replaceChildren(...cifras.map(([v, u, texto]) => {
+      const c = crear("div", "cifra-clave");
+      const valor = crear("p", "cifra-clave__valor", v);
+      if (u) valor.append(crear("small", null, u));
+      c.append(valor, crear("p", "cifra-clave__texto", texto));
+      return c;
+    }));
   }
 
   function mostrarError(e) {
@@ -457,6 +482,149 @@
     $("cuerpo-resumen").replaceChildren(...cuerpo);
   }
 
+  /* ---------- Estadística (gráficas con los filtros aplicados) ---------- */
+  // Globo flotante: repite lo que ya dice la etiqueta accesible de cada marca; solo es apoyo visual.
+  function conGlobo(nodo, titulo, lineas) {
+    nodo.setAttribute("aria-label", [titulo, ...lineas].join(". "));
+    const mostrar = (x, y) => {
+      el.globo.replaceChildren(crear("strong", null, titulo), ...lineas.map((l) => crear("span", null, l)));
+      el.globo.style.left = Math.max(8, Math.min(x + 16, window.innerWidth - el.globo.offsetWidth - 8)) + "px";
+      el.globo.style.top = Math.min(y + 16, window.innerHeight - el.globo.offsetHeight - 8) + "px";
+      el.globo.classList.add("globo--visible");
+    };
+    nodo.addEventListener("mousemove", (ev) => mostrar(ev.clientX, ev.clientY));
+    nodo.addEventListener("mouseleave", ocultarGlobo);
+    nodo.addEventListener("focus", () => { const r = nodo.getBoundingClientRect(); mostrar(r.left, r.bottom - 8); });
+    nodo.addEventListener("blur", ocultarGlobo);
+  }
+  function ocultarGlobo() { el.globo.classList.remove("globo--visible"); }
+
+  const INDICADORES = {
+    total: ["Causas", "Causas en seguimiento por entidad."],
+    mas10: ["10 años o más", "Causas con más de 10 años desde el auto de formal prisión."],
+    plazo: ["Plazo rebasado", "Causas que rebasan un plazo del CFPP."],
+  };
+  const plural = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
+
+  function pintarEstadistica() {
+    const e = L.estadisticas(estado.visibles);
+    $("estadistica-resumen").textContent = e.total
+      ? `${plural(e.total, "causa", "causas")} de ${plural(e.personas, "persona", "personas")} en ${plural(e.porEntidad.length, "entidad", "entidades")}; ` +
+        `${e.mas10} con 10 años o más y ${e.plazo} con un plazo del CFPP rebasado.`
+      : "No hay causas con los filtros aplicados.";
+
+    // Mapa de mosaicos
+    const ind = estado.indicadorMapa;
+    $("mapa-sub").textContent = INDICADORES[ind][1];
+    $("mapa-indicador").replaceChildren(...Object.entries(INDICADORES).map(([k, [t]]) => {
+      const b = boton("segmentado__boton", t.toUpperCase());
+      b.dataset.indicador = k;
+      b.setAttribute("aria-pressed", String(k === ind));
+      return b;
+    }));
+    const porNombre = new Map();
+    for (const g of e.porEntidad) {
+      const m = L.mosaicoDe(g.entidad);
+      if (m) porNombre.set(m[1], g);
+    }
+    const valores = [...porNombre.values()].map((g) => g[ind]);
+    const min = valores.length ? Math.min(...valores) : 0, max = valores.length ? Math.max(...valores) : 0;
+    const paso = (v) => (max === min ? 3 : 1 + Math.min(4, Math.floor(((v - min) / (max - min)) * 5)));
+    $("mapa").replaceChildren(...L.MOSAICO.map(([abrev, nombre, col, fila]) => {
+      const g = porNombre.get(nombre);
+      const tiene = g && g.total > 0;
+      const m = tiene ? boton(`mosaico m${paso(g[ind])}`, null) : crear("div", "mosaico m0");
+      m.style.gridColumn = String(col + 1);
+      m.style.gridRow = String(fila + 1);
+      m.append(crear("span", "mosaico__abrev", abrev));
+      if (tiene) {
+        m.append(crear("span", "mosaico__valor", String(g[ind])));
+        m.dataset.entidad = g.entidad;
+        conGlobo(m, nombre, [plural(g.total, "causa", "causas"), `${g.mas10} con 10 años o más`, `${g.plazo} con plazo del CFPP rebasado`]);
+      } else {
+        m.setAttribute("role", "img");
+        m.setAttribute("aria-label", `${nombre}: sin causas con los filtros aplicados`);
+        m.title = `${nombre}: sin causas`;
+      }
+      return m;
+    }));
+    const escala = [crear("span", null, String(min))];
+    for (let i = 1; i <= 5; i++) escala.push(crear("i", `m${i}`));
+    escala.push(crear("span", null, String(max)), crear("i", "m0 escala__sin"), crear("span", null, "Sin causas"));
+    $("mapa-escala").replaceChildren(...escala);
+    const fuera = e.porEntidad.filter((g) => !L.mosaicoDe(g.entidad)).reduce((s, g) => s + g.total, 0);
+    if (fuera) $("mapa-escala").append(crear("span", "escala__nota", `${fuera} sin entidad reconocida`));
+
+    // Barras apiladas por entidad (mismo orden que el resumen: casos de 10 años o más)
+    $("leyenda-niveles").replaceChildren(...L.NIVELES.map((n) => {
+      const s = crear("span");
+      s.append(crear("i", `t-${n.clave}`), `Nivel ${n.numero}`);
+      return s;
+    }));
+    const ents = [...e.porEntidad].sort((a, b) => b.mas10 - a.mas10 || b.total - a.total || a.entidad.localeCompare(b.entidad, "es"));
+    const maxT = Math.max(1, ...ents.map((g) => g.total));
+    $("barras-entidad").replaceChildren(...ents.map((g) => {
+      const f = boton("barra-fila", null);
+      f.dataset.entidad = g.entidad;
+      const pista = crear("span", "barra-fila__pista");
+      const barra = crear("span", "barra-fila__barra");
+      barra.style.width = (g.total / maxT) * 100 + "%";
+      for (const n of [...L.NIVELES, L.SIN_DATO]) {
+        if (!g[n.clave]) continue;
+        const seg = crear("span", `t-${n.clave}`);
+        seg.style.flexGrow = String(g[n.clave]);
+        barra.append(seg);
+      }
+      pista.append(barra);
+      f.append(crear("span", "barra-fila__nombre", g.entidad), pista, crear("span", "barra-fila__valor", String(g.total)));
+      conGlobo(f, g.entidad, [plural(g.total, "causa", "causas"),
+        L.NIVELES.map((n) => `N${n.numero}: ${g[n.clave]}`).join(" · ") + (g.sd ? ` · sin fecha: ${g.sd}` : "")]);
+      return f;
+    }));
+
+    // Etapas
+    const maxE = Math.max(1, ...e.etapas.map((x) => x.total));
+    $("barras-etapa").replaceChildren(...e.etapas.map((x) => {
+      const f = boton("barra-fila barra-fila--etapa", null);
+      f.dataset.etapa = x.etapa;
+      const pista = crear("span", "barra-fila__pista");
+      const barra = crear("span", "barra-fila__barra barra-fila__barra--simple");
+      barra.style.width = x.total ? Math.max(1, (x.total / maxE) * 100) + "%" : "0";
+      pista.append(barra);
+      f.append(crear("span", "barra-fila__nombre", x.etapa), pista, crear("span", "barra-fila__valor", String(x.total)));
+      conGlobo(f, x.etapa, [plural(x.total, "causa", "causas") + (e.total ? ` (${Math.round((x.total / e.total) * 100)} %)` : "")]);
+      return f;
+    }));
+
+    // Histograma por año cumplido
+    const maxH = Math.max(1, ...e.histograma);
+    const nivelDeAnio = (a) => (a < 2 ? "n1" : a < 5 ? "n2" : a < 10 ? "n3" : a < 20 ? "n4" : "n5");
+    $("histograma").setAttribute("aria-label", "Causas por años cumplidos: " +
+      e.histograma.map((v, a) => `${a === 30 ? "30 o más" : a} años: ${v}`).filter((t) => !t.endsWith(": 0")).join(", "));
+    $("histograma").replaceChildren(...e.histograma.map((v, a) => {
+      const c = crear("span", `histograma__columna t-${nivelDeAnio(a)}`);
+      c.style.height = (v / maxH) * 100 + "%";
+      conGlobo(c, a === 30 ? "30 años o más" : `${a} a ${a + 1} años`, [plural(v, "causa", "causas")]);
+      c.removeAttribute("aria-label");
+      return c;
+    }));
+
+    // Tabla equivalente
+    const cab = crear("tr");
+    for (const t of ["Entidad federativa", "N1", "N2", "N3", "N4", "N5", "Sin fecha", "10 años o más", "Plazo rebasado", "Total"]) {
+      const th = crear("th", t === "Entidad federativa" ? null : "num", t);
+      th.scope = "col";
+      cab.append(th);
+    }
+    $("cabeza-estadistica").replaceChildren(cab);
+    $("cuerpo-estadistica").replaceChildren(...ents.map((g) => {
+      const tr = crear("tr");
+      tr.append(crear("td", null, g.entidad));
+      for (const k of ["n1", "n2", "n3", "n4", "n5", "sd", "mas10", "plazo", "total"]) tr.append(crear("td", "num", String(g[k])));
+      return tr;
+    }));
+  }
+
   /* ---------- Actualización general ---------- */
   function actualizar() {
     leerFormulario();
@@ -474,6 +642,8 @@
       el.vacio.hidden = ordenados.length > 0;
       el.tabla.hidden = ordenados.length === 0;
       pintarOrden();
+    } else if (estado.vista === "estadistica") {
+      pintarEstadistica();
     } else {
       pintarResumen();
     }
@@ -483,8 +653,10 @@
     estado.vista = vista;
     $("vista-listado").setAttribute("aria-pressed", String(vista === "listado"));
     $("vista-resumen").setAttribute("aria-pressed", String(vista === "resumen"));
+    $("vista-estadistica").setAttribute("aria-pressed", String(vista === "estadistica"));
     el.resultados.hidden = vista !== "listado";
     el.resumen.hidden = vista !== "resumen";
+    el.estadistica.hidden = vista !== "estadistica";
     actualizar();
   }
 
@@ -804,7 +976,7 @@
     e.preventDefault();
     clearTimeout(espera);
     actualizar();
-    const destino = estado.vista === "listado" ? el.resultados : el.resumen;
+    const destino = { listado: el.resultados, resumen: el.resumen, estadistica: el.estadistica }[estado.vista];
     destino.scrollIntoView({ block: "start" });
     if (estado.vista === "listado") el.resultados.focus({ preventScroll: true });
   });
@@ -813,6 +985,19 @@
   $("btn-exportar").addEventListener("click", exportarVista);
   $("vista-listado").addEventListener("click", () => cambiarVista("listado"));
   $("vista-resumen").addEventListener("click", () => cambiarVista("resumen"));
+  $("vista-estadistica").addEventListener("click", () => cambiarVista("estadistica"));
+  // Gráficas: pulsar una entidad o una etapa lleva al listado filtrado (se conservan nivel, motivo y próximos).
+  el.estadistica.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-entidad], [data-etapa], [data-indicador]");
+    if (!b) return;
+    if (b.dataset.indicador) { estado.indicadorMapa = b.dataset.indicador; pintarEstadistica(); return; }
+    const f = estado.filtros;
+    const conservar = { niveles: [...f.niveles], motivo: f.motivo, proximos: f.proximos, alerta: f.alerta };
+    if (b.dataset.entidad) aplicarFiltros({ ...conservar, etapa: f.etapa, entidad: b.dataset.entidad });
+    else aplicarFiltros({ ...conservar, entidad: f.entidad, circuito: f.circuito, juzgado: f.juzgado, etapa: b.dataset.etapa });
+    ocultarGlobo();
+    el.resultados.scrollIntoView({ block: "start" });
+  });
   for (const por of ["entidad", "juzgado"]) {
     $("resumen-" + por).addEventListener("click", () => {
       estado.resumenPor = por;

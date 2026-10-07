@@ -378,6 +378,34 @@ prueba("Comparar un corte consigo mismo no reporta cambios", () => {
   assert.deepStrictEqual([c.altas.length, c.bajas.length, c.cambiosEtapa.length, c.subieron.length], [0, 0, 0, 0]);
 });
 
+console.log("\nESTADÍSTICA (v5)");
+prueba("Estadística: totales, entidades, etapas e histograma cuadran con los datos", () => {
+  const e = L.estadisticas(R, HOY);
+  assert.deepStrictEqual([e.total, e.personas, e.mas10, e.sistema], [150, 149, 59, 2]);
+  assert.strictEqual(e.plazo, R.filter((r) => L.alertas(r, HOY).some((a) => a.tipo === "plazo")).length);
+  assert.strictEqual(e.porEntidad.reduce((s, g) => s + g.total, 0), 150);
+  assert.ok(e.porEntidad.every((g) => g.n1 + g.n2 + g.n3 + g.n4 + g.n5 + g.sd === g.total && g.mas10 === g.n4 + g.n5));
+  assert.strictEqual(e.etapas.reduce((s, x) => s + x.total, 0), 150);
+  assert.deepStrictEqual(e.etapas.map((x) => x.etapa), L.ETAPAS);
+  assert.strictEqual(e.histograma.length, 31);
+  assert.strictEqual(e.histograma.reduce((s, x) => s + x, 0), 149, "el registro sin fecha no entra al histograma");
+  assert.ok(e.medianaAnios > 7 && e.medianaAnios < 8, String(e.medianaAnios));
+});
+prueba("Estadística sin registros no falla (mediana nula, todo en cero)", () => {
+  const e = L.estadisticas([], HOY);
+  assert.deepStrictEqual([e.total, e.personas, e.mas10, e.plazo, e.medianaAnios, e.porEntidad.length], [0, 0, 0, 0, null, 0]);
+});
+prueba("Mapa: 32 entidades en cuadros distintos; reconoce nombres oficiales y acentos", () => {
+  assert.strictEqual(L.MOSAICO.length, 32);
+  assert.strictEqual(new Set(L.MOSAICO.map((m) => m[2] + "," + m[3])).size, 32);
+  assert.strictEqual(L.mosaicoDe("Distrito Federal")[0], "CDMX");
+  assert.strictEqual(L.mosaicoDe("méxico")[0], "MEX");
+  assert.strictEqual(L.mosaicoDe("VERACRUZ DE IGNACIO DE LA LLAVE")[0], "VER");
+  assert.strictEqual(L.mosaicoDe("Michoacan")[0], "MICH");
+  assert.strictEqual(L.mosaicoDe("Entidad inexistente"), null);
+  assert.ok(R.every((r) => L.mosaicoDe(r.entidad)));
+});
+
 console.log("\nORDEN Y CSV");
 prueba("Orden por antigüedad: más antiguos primero; sin fecha siempre al final", () => {
   const desc = L.ordenar(R, "antiguedad", "desc");

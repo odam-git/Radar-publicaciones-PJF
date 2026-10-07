@@ -1,6 +1,6 @@
 # CAUSAS PENALES PPL
 
-Sistema de consulta y seguimiento de **personas en prisión preventiva en causas del sistema penal tradicional federal (Código Federal de Procedimientos Penales) sin sentencia ejecutoriada** — prototipo funcional con datos 100 % ficticios. Versión 4.
+Sistema de consulta y seguimiento de **personas en prisión preventiva en causas del sistema penal tradicional federal (Código Federal de Procedimientos Penales) sin sentencia ejecutoriada** — prototipo funcional con datos 100 % ficticios. Versión 5.
 
 Aplicación web estática que se ejecuta en la propia computadora. No requiere Internet, no instala nada, no usa servicios externos (ni fuentes tipográficas, ni analítica, ni IA) y no envía información a ningún servidor.
 
@@ -59,8 +59,8 @@ causas-penales-ppl/
 ├── plantillas/
 │   └── plantilla_captura_ppl.xlsx  Hoja para los juzgados, con listas desplegables e instrucciones
 ├── pruebas/
-│   ├── pruebas_logica.js        62 pruebas de datos y lógica (Node)
-│   └── pruebas_interfaz.js      43 pruebas en navegador real (Playwright)
+│   ├── pruebas_logica.js        65 pruebas de datos y lógica (Node)
+│   └── pruebas_interfaz.js      48 pruebas en navegador real (Playwright)
 └── iniciar_servidor_local.bat
 ```
 
@@ -133,13 +133,17 @@ La tabla muestra una marca ⚠ con el número de alertas; la ficha las enlista c
 
 **Comparativo contra el corte anterior:** botón *COMPARAR CON CORTE ANTERIOR* → elegir el CSV del mes pasado. Muestra altas, bajas (con su motivo: el capturado en *Motivo de baja*, amparo directo en trámite o "ya no aparece en el corte actual"), cambios de etapa y quienes subieron de nivel. La llave de comparación es *ID de persona + causa + juzgado*.
 
+**Portada (v5):** titular con el total de causas y cuatro cifras clave del corte completo: personas, porcentaje de causas con más de 10 años, antigüedad mediana y causas con un plazo del CFPP rebasado.
+
+**Estadística por entidad federativa (v5):** vista *ESTADÍSTICA* con un mapa de mosaicos de la República (un cuadro por entidad; indicador a elegir: causas, 10 años o más o plazo rebasado), barras por entidad apiladas por nivel, barras por etapa procesal e histograma de antigüedad por año cumplido con el color de su nivel. Todo respeta los filtros; al pulsar una entidad o una etapa se abre el listado filtrado; cada gráfica tiene etiqueta accesible y los datos están también en tabla (*Ver los datos como tabla*). La escala del mapa usa un solo tono validado para daltonismo y contraste en modo claro y oscuro.
+
 **Resumen por entidad y juzgado:** tabla con los casos por nivel, "X de Y" con 10 años o más (la cifra que define el orden), total y una barra de distribución; la frase superior indica cuánto concentran los 5 primeros. *VER CAUSAS* lleva al listado filtrado. Respeta los filtros aplicados.
 
 **Personas y causas:** cada renglón es una causa por persona; la tarjeta Total muestra causas y personas (por *ID de persona*). La ficha avisa si la causa tiene coimputados y permite verlos.
 
 **Fecha de corte y clasificación:** la fecha de corte se toma de la columna *Fecha de corte* (o de `config.js`). La leyenda de clasificación (`clasificacion` en `config.js`) aparece en el encabezado, la impresión y los archivos exportados.
 
-**Diseño y accesibilidad (revisión con las habilidades *apple-design* e *impeccable-design*):** escala tipográfica de 4 tamaños, espaciado en retícula de 8 px, transiciones breves que se desactivan con "reducir movimiento", texto base en porcentaje (crece con la letra del navegador), anillo de foco doble visible en fondo claro y oscuro, modo oscuro automático según el sistema (contraste de texto ≥ 7:1), ficha a pantalla completa en pantallas angostas o con zoom alto, filtros secundarios en *MÁS FILTROS*, filas alternadas y botones en mayúsculas.
+**Diseño y accesibilidad (v5, estilo inspirado en Apple; habilidades *apple-design*, *impeccable-design* y *dataviz*):** barra superior translúcida, superficies neutras, botones tipo píldora (en mayúsculas), avisos agrupados en una sola tarjeta, tipografía del sistema (San Francisco en Mac, Segoe UI en Windows), escala tipográfica de 4 tamaños, espaciado en retícula de 8 px, transiciones breves que se desactivan con "reducir movimiento", texto base en porcentaje (crece con la letra del navegador), anillo de foco doble visible en fondo claro y oscuro, modo oscuro automático según el sistema (contraste de texto ≥ 7:1), ficha a pantalla completa en pantallas angostas o con zoom alto, filtros secundarios en *MÁS FILTROS*, filas alternadas y botones en mayúsculas.
 
 ---
 
@@ -211,7 +215,7 @@ node pruebas/pruebas_logica.js                         (sin dependencias)
 npm install playwright && node pruebas/pruebas_interfaz.js   (navegador real; solo desarrollo)
 ```
 
-Cubren: 150 registros en seguimiento; nombres, expedientes y causas ficticios; bajas con motivo y amparos directos fuera del seguimiento con sus avisos; alertas de plazo (arts. 147, 152, 291, 97, 368/360) con límites exactos y días hábiles; declaratorias por entidad y alerta de sistema aplicable; ficha con alertas, datos procesales y revisión de la medida; columna Alertas en la exportación; rechazo de archivos vacíos o sin columnas indispensables; texto con etiquetas HTML mostrado como texto (sin inyección); aviso de datos por revisar; semáforo con límites exactos de 2/5/10/20/30 años, más de 30, sin fecha y 29 de febrero; tarjetas-botón (uno o varios niveles); buscador por cada campo; filtros individuales, dependientes y combinados; pena solo informativa; motivo de la privación de libertad y aviso de proceso local; próximos a cambiar de nivel; comparativo contra el corte anterior; resumen por entidad y juzgado; coimputados; personas y causas; fecha de corte y clasificación; exportar vista; botones en mayúsculas; foco visible; modo oscuro; zoom al 200 % con ficha a pantalla completa; ojo → registro correcto (incluidas homonimias); cierre con X, CERRAR, clic fuera y Esc; contador; LIMPIAR FILTROS; orden; encabezado fijo; carga de CSV; ejecución por `file://` y por servidor local; y ausencia de solicitudes externas.
+Cubren: portada y cifras clave; vista de estadística (mapa de 32 entidades, cambio de indicador, globo informativo, clic que filtra el listado, gráficas que respetan filtros, tabla equivalente); 150 registros en seguimiento; nombres, expedientes y causas ficticios; bajas con motivo y amparos directos fuera del seguimiento con sus avisos; alertas de plazo (arts. 147, 152, 291, 97, 368/360) con límites exactos y días hábiles; declaratorias por entidad y alerta de sistema aplicable; ficha con alertas, datos procesales y revisión de la medida; columna Alertas en la exportación; rechazo de archivos vacíos o sin columnas indispensables; texto con etiquetas HTML mostrado como texto (sin inyección); aviso de datos por revisar; semáforo con límites exactos de 2/5/10/20/30 años, más de 30, sin fecha y 29 de febrero; tarjetas-botón (uno o varios niveles); buscador por cada campo; filtros individuales, dependientes y combinados; pena solo informativa; motivo de la privación de libertad y aviso de proceso local; próximos a cambiar de nivel; comparativo contra el corte anterior; resumen por entidad y juzgado; coimputados; personas y causas; fecha de corte y clasificación; exportar vista; botones en mayúsculas; foco visible; modo oscuro; zoom al 200 % con ficha a pantalla completa; ojo → registro correcto (incluidas homonimias); cierre con X, CERRAR, clic fuera y Esc; contador; LIMPIAR FILTROS; orden; encabezado fijo; carga de CSV; ejecución por `file://` y por servidor local; y ausencia de solicitudes externas.
 
 ---
 
