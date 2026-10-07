@@ -57,7 +57,7 @@
   <main class="contenedor">
     <p id="avisos-datos" class="aviso aviso--naranja" role="status" hidden></p>
 
-    <!-- Avisos: sentencias ejecutoriadas, datos por revisar y reclusión por proceso local -->
+    <!-- Avisos: bajas, amparo directo, datos por revisar, plazos, sistema aplicable y reclusión por proceso local -->
     <div id="avisos-depuracion" class="avisos-depuracion"></div>
 
     <!-- Semáforo: regla de años + tarjetas que funcionan como botones de filtro -->
@@ -128,6 +128,10 @@
           <div class="campo">
             <label for="f-motivo" class="etiqueta">Motivo de la privación de libertad</label>
             <select id="f-motivo" name="motivo"></select>
+          </div>
+          <div class="campo">
+            <label for="f-alerta" class="etiqueta">Alertas</label>
+            <select id="f-alerta" name="alerta"></select>
           </div>
         </div>
 
@@ -226,15 +230,18 @@
       <details class="metodologia">
         <summary>Nota metodológica</summary>
         <ul>
-          <li><strong>Universo:</strong> personas privadas de la libertad en prisión preventiva en causas penales federales del sistema penal tradicional (Código Federal de Procedimientos Penales) que no tienen sentencia firme. Incluye a quienes tienen sentencia de primera instancia recurrida o pendiente de causar ejecutoria. El tratamiento de las causas en amparo directo está pendiente de revisión normativa.</li>
-          <li><strong>Antigüedad:</strong> tiempo transcurrido desde la fecha del auto de formal prisión hasta el día de la consulta. Cada rango incluye su límite superior (exactamente 2 años es Nivel 1). Más de 30 años se mantiene en Nivel 5.</li>
+          <li><strong>Universo:</strong> personas en prisión preventiva en causas penales federales del sistema penal tradicional que no tienen sentencia ejecutoriada. Los procedimientos iniciados antes de la entrada en vigor del sistema acusatorio "serán concluidos conforme a las disposiciones vigentes con anterioridad" (CPEUM, transitorio Cuarto del decreto DOF 18-06-2008); para ellos rige el Código Federal de Procedimientos Penales (CFPP).</li>
+          <li><strong>Etapas:</strong> el catálogo sigue el CFPP: instrucción (arts. 1o y 147), instrucción agotada o cerrada (art. 150), conclusiones (art. 291), audiencia de vista (art. 305), sentencia de primera instancia con plazo para apelar (arts. 360 y 368), segunda instancia (arts. 4o, 363 y 364), reposición del procedimiento (arts. 386 a 388) y procedimiento suspendido (art. 468).</li>
+          <li><strong>Fuera del seguimiento:</strong> las sentencias ejecutoriadas (CFPP, art. 360) y los registros con motivo de baja se listan para darlos de baja. Las causas con amparo directo se listan aparte: el amparo directo procede contra sentencias definitivas (CPEUM, art. 107, fracc. V; Ley de Amparo, art. 170) y la persona queda a disposición del órgano de amparo (Ley de Amparo, art. 191).</li>
+          <li><strong>Antigüedad:</strong> tiempo transcurrido desde la fecha del auto de formal prisión hasta el día de la consulta. Cada rango incluye su límite superior (exactamente 2 años es Nivel 1); más de 30 años se mantiene en Nivel 5.</li>
+          <li><strong>Alertas de plazo:</strong> instrucción con más de 10 meses desde el auto de formal prisión (art. 147) o más de 30 días en procedimiento sumario (art. 152); más de 60 días hábiles en conclusiones (art. 291); más de 30 días hábiles después de la audiencia de vista sin sentencia (art. 97); más de 5 días hábiles después de la sentencia sin cambio de etapa (arts. 368 y 360). Los días hábiles se cuentan de lunes a viernes, sin descontar días inhábiles oficiales; las alertas indican qué verificar, no resuelven el caso. Sustento: CPEUM, art. 17 ("en los plazos y términos que fijen las leyes").</li>
+          <li><strong>Sistema aplicable:</strong> si la averiguación previa inició en o después de la fecha en que el Código Nacional entró en vigor en la entidad del juzgado (declaratorias del Congreso de la Unión, DOF 2014–2016), se pide verificar la causa; no se excluye.</li>
+          <li><strong>Revisión de la prisión preventiva:</strong> el quinto transitorio del decreto DOF 17-06-2016 permite solicitar la revisión de la medida dictada en el sistema anterior.</li>
+          <li><strong>Motivo de la privación de libertad:</strong> indica si la persona está recluida solo por esta causa federal, también por otra causa (federal o local), solo por un proceso local o compurgando pena por otra causa.</li>
           <li><strong>Unidad de conteo:</strong> cada renglón es una causa por persona. Una persona puede tener varias causas y una causa puede tener varias personas (coimputados).</li>
-          <li><strong>Motivo de la privación de libertad:</strong> indica si la persona está recluida solo por esta causa federal, también por otra causa (federal o local), solo por un proceso local (en la causa federal no hay prisión preventiva vigente) o compurgando pena por otra causa.</li>
-          <li><strong>Sentencias ejecutoriadas:</strong> los registros con etapa "Sentencia ejecutoriada" o con fecha de ejecutoria no se muestran ni se cuentan; se listan en el aviso para darlos de baja.</li>
-          <li><strong>Fecha de corte:</strong> fecha en que se capturó la información. Las etapas y actuaciones corresponden a esa fecha; la antigüedad se recalcula cada día.</li>
+          <li><strong>Fecha de corte:</strong> fecha en que se capturó la información. Las etapas y actuaciones corresponden a esa fecha; la antigüedad y las alertas se recalculan cada día.</li>
           <li><strong>Privacidad:</strong> la aplicación funciona sin conexión a Internet y no envía información a ningún servidor.</li>
-        </ul>
-      </details>
+        </ul>      </details>
     </section>
   </main>
 

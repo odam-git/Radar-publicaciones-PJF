@@ -1,6 +1,6 @@
 # CAUSAS PENALES PPL
 
-Sistema de consulta y seguimiento de **personas en prisión preventiva oficiosa sin sentencia firme** — prototipo funcional con datos 100 % ficticios.
+Sistema de consulta y seguimiento de **personas en prisión preventiva en causas del sistema penal tradicional federal (Código Federal de Procedimientos Penales) sin sentencia ejecutoriada** — prototipo funcional con datos 100 % ficticios. Versión 4.
 
 Aplicación web estática que se ejecuta en la propia computadora. No requiere Internet, no instala nada, no usa servicios externos (ni fuentes tipográficas, ni analítica, ni IA) y no envía información a ningún servidor.
 
@@ -47,7 +47,7 @@ causas-penales-ppl/
 │   ├── logica.js               Procesamiento: semáforo de antigüedad, búsqueda, filtros, orden, revisión
 │   └── interfaz.js             Pinta tarjetas, filtros, tabla, avisos y ficha (no contiene registros)
 ├── datos/
-│   ├── datos_ppl_ficticios.csv   Fuente principal (150 en seguimiento + 2 ejecutoriadas de prueba)
+│   ├── datos_ppl_ficticios.csv   Fuente principal (150 en seguimiento + 4 bajas + 3 amparos directos de prueba)
 │   ├── corte_anterior_ficticio.csv  Corte del mes anterior, para probar el comparativo
 │   ├── datos_ppl_ficticios.xlsx  Misma información en Excel
 │   └── datos_ppl_ficticios.js    Copia para el modo doble clic (generada)
@@ -59,8 +59,8 @@ causas-penales-ppl/
 ├── plantillas/
 │   └── plantilla_captura_ppl.xlsx  Hoja para los juzgados, con listas desplegables e instrucciones
 ├── pruebas/
-│   ├── pruebas_logica.js        51 pruebas de datos y lógica (Node)
-│   └── pruebas_interfaz.js      38 pruebas en navegador real (Playwright)
+│   ├── pruebas_logica.js        62 pruebas de datos y lógica (Node)
+│   └── pruebas_interfaz.js      43 pruebas en navegador real (Playwright)
 └── iniciar_servidor_local.bat
 ```
 
@@ -70,7 +70,7 @@ Flujo: **fuente de datos → `datos.js` (lectura y normalización) → `logica.j
 
 ## 3. Reglas de funcionamiento
 
-**Universo:** personas en prisión preventiva oficiosa **sin sentencia firme**.
+**Universo:** personas en prisión preventiva en causas tramitadas conforme al **CFPP** (sistema tradicional) **sin sentencia ejecutoriada**. Fundamento: el proceso penal federal comprende la primera y la segunda instancia (art. 4o CFPP); la sentencia de segunda instancia es irrevocable (art. 360, fracc. II); los procedimientos iniciados antes del sistema acusatorio se concluyen conforme a las disposiciones anteriores (transitorio Cuarto del decreto constitucional DOF 18-06-2008).
 
 **Semáforo de antigüedad**, contado desde la **Fecha de auto de formal prisión** hasta hoy (se calcula solo). Cada rango incluye su límite superior:
 
@@ -87,13 +87,41 @@ Flujo: **fuente de datos → `datos.js` (lectura y normalización) → `logica.j
 - Cada indicador lleva número de nivel y texto, no solo color.
 - Las **tarjetas superiores** son botones: se pueden activar uno o varios niveles y se combinan con los demás filtros.
 
-**Sentencia ejecutoriada:** si la etapa dice "ejecutoriada" o la columna *Fecha de ejecutoria* tiene dato, el registro **sale del seguimiento** (no aparece en tabla ni conteos) y se **lista en un aviso rojo** para darlo de baja de la hoja.
+**Fuera del seguimiento** (no aparecen en tabla ni conteos; cada grupo tiene su propio aviso con la lista):
+- **Bajas** (aviso rojo): etapa "Sentencia ejecutoriada", *Fecha de ejecutoria* capturada o *Motivo de baja* capturado. Catálogo de motivos: sentencia ejecutoriada (art. 360 CFPP), libertad provisional bajo caución (art. 399), desvanecimiento de datos (art. 422), sobreseimiento (art. 298), conclusiones no acusatorias (art. 291), cese o sustitución de la medida (quinto transitorio, DOF 17-06-2016), amparo directo promovido (art. 170 Ley de Amparo) y otro.
+- **Amparo directo** (aviso morado): la sentencia definitiva ya existe y la persona queda a disposición del Tribunal Colegiado (arts. 170 y 191 Ley de Amparo; art. 107, fracc. V, CPEUM).
 
-**Etapas procesales (catálogo):** Instrucción · Cierre de instrucción / conclusiones · Sentencia de primera instancia · Apelación (Tribunal de Alzada) · Amparo directo · Reposición del procedimiento. Una etapa fuera del catálogo se señala en el aviso de revisión.
+**Etapas procesales (catálogo literal del CFPP):** Instrucción · Instrucción agotada / cerrada · Conclusiones · Audiencia de vista / citado para sentencia · Sentencia de primera instancia (plazo para apelar) · Segunda instancia (apelación) · Reposición del procedimiento · Procedimiento suspendido (art. 468). Una etapa fuera del catálogo se señala en el aviso de revisión.
 
-**Pena:** no aparece en tabla, filtros ni colores. Solo se muestra como **dato informativo** en la ficha cuando hay sentencia de primera instancia no firme (se puede quitar con `mostrarPenaNoFirme: false` en `config.js`).
+**Alertas de plazo** (indican qué verificar; no sustituyen la revisión del expediente; los días hábiles excluyen sábados y domingos, no los inhábiles oficiales). Se apoyan en el art. 17, segundo párrafo, de la CPEUM (justicia pronta):
 
-**Exportar vista:** descarga en la computadora un CSV con lo que esté filtrado (no sube nada).
+| Alerta | Condición | Fundamento |
+|---|---|---|
+| Instrucción ordinaria | Más de 10 meses desde el auto de formal prisión | CFPP, art. 147 |
+| Instrucción sumaria | Más de 30 días desde el auto de formal prisión | CFPP, art. 152, inciso b) |
+| Conclusiones | Más de 60 días hábiles desde el cierre de instrucción | CFPP, art. 291 |
+| Audiencia de vista | Más de 30 días hábiles sin sentencia | CFPP, art. 97 |
+| Sentencia de primera instancia | Más de 5 días hábiles: verificar si se apeló o causó ejecutoria | CFPP, arts. 368 y 360, fracc. I |
+
+**Verificar sistema aplicable:** si la *Fecha de inicio de la averiguación previa* es igual o posterior a la entrada en vigor del Código Nacional en la entidad del juzgado, la causa se marca para verificar que corresponda al sistema tradicional. Fechas tomadas de las declaratorias publicadas en el DOF:
+
+| Declaratoria (DOF) | Entrada en vigor | Entidades |
+|---|---|---|
+| 24/09/2014 | 24/11/2014 | Durango, Puebla |
+| 12/12/2014 | 16/03/2015 | Yucatán, Zacatecas |
+| 29/04/2015 | 01/08/2015 | Baja California Sur, Guanajuato, Querétaro, San Luis Potosí |
+| 25/09/2015 | 30/11/2015 | Chiapas, Chihuahua, Coahuila, Nayarit, Oaxaca, Sinaloa, Tlaxcala |
+| 25/09/2015 | 29/02/2016 | Aguascalientes, Colima, Estado de México, Hidalgo, Morelos, Nuevo León, Quintana Roo, Tabasco, Ciudad de México |
+| 26/02/2016 | 29/04/2016 | Campeche, Michoacán, Sonora, Veracruz |
+| 26/02/2016 | 14/06/2016 | Baja California, Guerrero, Jalisco, Tamaulipas y el resto del territorio |
+
+La tabla muestra una marca ⚠ con el número de alertas; la ficha las enlista con su fundamento; el filtro *Alerta* (en MÁS FILTROS) y los botones *VER ESTOS CASOS* de los avisos las filtran.
+
+**Revisión de la prisión preventiva:** la ficha muestra si se solicitó, la fecha y el resultado (quinto transitorio del decreto DOF 17-06-2016).
+
+**Pena:** no aparece en tabla, filtros ni colores. Solo se muestra como **dato informativo** en la ficha cuando hay sentencia de primera instancia no firme (etapas de sentencia de primera instancia o segunda instancia) (se puede quitar con `mostrarPenaNoFirme: false` en `config.js`).
+
+**Exportar vista:** descarga en la computadora un CSV con lo que esté filtrado, incluida la columna *Alertas* con su fundamento (no sube nada). Los textos que empiezan con `=`, `+`, `-` o `@` se anteponen con un apóstrofo para que Excel no los ejecute como fórmula.
 
 **Buscador:** no distingue mayúsculas ni acentos ("nuevo leon" = "Nuevo León"). Si la frase escrita aparece completa en algún campo, muestra exactamente esas coincidencias; si no, combina palabras ("lopez jalisco" encuentra a López en Jalisco). Funciona junto con los filtros.
 
@@ -103,7 +131,7 @@ Flujo: **fuente de datos → `datos.js` (lectura y normalización) → `logica.j
 
 **Próximos a cambiar de nivel:** cuenta y filtra a quienes cumplirán 2, 5, 10, 20 o 30 años en los próximos 30, 90 o 180 días. Como cada rango incluye su límite, el cambio ocurre el día siguiente al aniversario.
 
-**Comparativo contra el corte anterior:** botón *COMPARAR CON CORTE ANTERIOR* → elegir el CSV del mes pasado. Muestra altas, bajas (indicando si fue por ejecutoria), cambios de etapa y quienes subieron de nivel. La llave de comparación es *ID de persona + causa + juzgado*.
+**Comparativo contra el corte anterior:** botón *COMPARAR CON CORTE ANTERIOR* → elegir el CSV del mes pasado. Muestra altas, bajas (con su motivo: el capturado en *Motivo de baja*, amparo directo en trámite o "ya no aparece en el corte actual"), cambios de etapa y quienes subieron de nivel. La llave de comparación es *ID de persona + causa + juzgado*.
 
 **Resumen por entidad y juzgado:** tabla con los casos por nivel, "X de Y" con 10 años o más (la cifra que define el orden), total y una barra de distribución; la frase superior indica cuánto concentran los 5 primeros. *VER CAUSAS* lleva al listado filtrado. Respeta los filtros aplicados.
 
@@ -111,19 +139,20 @@ Flujo: **fuente de datos → `datos.js` (lectura y normalización) → `logica.j
 
 **Fecha de corte y clasificación:** la fecha de corte se toma de la columna *Fecha de corte* (o de `config.js`). La leyenda de clasificación (`clasificacion` en `config.js`) aparece en el encabezado, la impresión y los archivos exportados.
 
-**Accesibilidad (revisión con la habilidad *apple-design*, guardada en `.claude/skills/apple-design`):** texto base en porcentaje (crece con la letra del navegador), anillo de foco doble visible en fondo claro y oscuro, modo oscuro automático según el sistema (contraste de texto ≥ 7:1), ficha a pantalla completa en pantallas angostas o con zoom alto, filtros secundarios en *MÁS FILTROS*, filas alternadas y botones en mayúsculas.
+**Diseño y accesibilidad (revisión con las habilidades *apple-design* e *impeccable-design*):** escala tipográfica de 4 tamaños, espaciado en retícula de 8 px, transiciones breves que se desactivan con "reducir movimiento", texto base en porcentaje (crece con la letra del navegador), anillo de foco doble visible en fondo claro y oscuro, modo oscuro automático según el sistema (contraste de texto ≥ 7:1), ficha a pantalla completa en pantallas angostas o con zoom alto, filtros secundarios en *MÁS FILTROS*, filas alternadas y botones en mayúsculas.
 
 ---
 
 ## 4. Sustituir los datos ficticios por un Excel/CSV
 
-**Plantilla para los juzgados:** `plantillas/plantilla_captura_ppl.xlsx` trae los encabezados exactos, listas desplegables (entidad, etapa, motivo, situación de la otra causa), validación de fechas y pena, una hoja de instrucciones y un renglón de ejemplo. Al terminar, se guarda como *CSV UTF-8* y se carga en la aplicación.
+**Plantilla para los juzgados:** `plantillas/plantilla_captura_ppl.xlsx` trae los encabezados exactos, listas desplegables (entidad, tipo de procedimiento, etapa, motivo, situación de la otra causa, revisión de la medida y motivo de baja), validación de fechas y pena, una hoja de instrucciones y un renglón de ejemplo. Al terminar, se guarda como *CSV UTF-8* y se carga en la aplicación.
 
 La hoja debe conservar los encabezados (se toleran diferencias de acentos y mayúsculas):
 
-`ID · ID de persona · Nombre completo · Expediente · Causa penal · Delito(s) · Entidad Federativa · Circuito · Juzgado de Distrito · Lugar de reclusión · Motivo de la privación de libertad · Otra causa: autoridad · Otra causa: situación · Fecha de auto de formal prisión · Etapa procesal · Instancia actual · Último acto procesal · Fecha del último acto procesal · Fecha de sentencia de primera instancia · Pena impuesta (no firme) · Fecha de ejecutoria · Fecha de corte · Observaciones`
+`ID · ID de persona · Nombre completo · Expediente · Causa penal · Delito(s) · Entidad Federativa · Circuito · Juzgado de Distrito · Lugar de reclusión · Motivo de la privación de libertad · Otra causa: autoridad · Otra causa: situación · Fecha de inicio de la averiguación previa · Fecha de auto de formal prisión · Tipo de procedimiento · Etapa procesal · Instancia actual · Fecha de cierre de instrucción · Fecha de la audiencia de vista · Último acto procesal · Fecha del último acto procesal · Fecha de sentencia de primera instancia · Pena impuesta (no firme) · Revisión de la medida: solicitada · Revisión de la medida: fecha · Revisión de la medida: resultado · Fecha de ejecutoria · Motivo de baja · Fecha de corte · Observaciones`
 
-- Son opcionales: *ID de persona* (recomendado), los datos de la otra causa, la fecha del último acto, sentencia, pena, ejecutoria y fecha de corte.
+- Son opcionales: *ID de persona* (recomendado), los datos de la otra causa, las fechas procesales (inicio de la averiguación previa, cierre, audiencia, último acto, sentencia), pena, revisión de la medida, ejecutoria, motivo de baja y fecha de corte. Sin ellas, la app funciona y simplemente no calcula la alerta correspondiente.
+- Un archivo vacío o sin las columnas indispensables (*Causa penal* y *Fecha de auto de formal prisión*) **se rechaza** con un aviso y se conservan los datos que ya estaban en pantalla.
 - *Fechas:* `AAAA-MM-DD` o `DD/MM/AAAA`.
 
 Tres formas, de la más rápida a la más permanente:
@@ -182,7 +211,7 @@ node pruebas/pruebas_logica.js                         (sin dependencias)
 npm install playwright && node pruebas/pruebas_interfaz.js   (navegador real; solo desarrollo)
 ```
 
-Cubren: 150 registros en seguimiento; nombres, expedientes y causas ficticios; exclusión y aviso de ejecutoriadas; aviso de datos por revisar; semáforo con límites exactos de 2/5/10/20/30 años, más de 30, sin fecha y 29 de febrero; tarjetas-botón (uno o varios niveles); buscador por cada campo; filtros individuales, dependientes y combinados; pena solo informativa; motivo de la privación de libertad y aviso de proceso local; próximos a cambiar de nivel; comparativo contra el corte anterior; resumen por entidad y juzgado; coimputados; personas y causas; fecha de corte y clasificación; exportar vista; botones en mayúsculas; foco visible; modo oscuro; zoom al 200 % con ficha a pantalla completa; ojo → registro correcto (incluidas homonimias); cierre con X, CERRAR, clic fuera y Esc; contador; LIMPIAR FILTROS; orden; encabezado fijo; carga de CSV; ejecución por `file://` y por servidor local; y ausencia de solicitudes externas.
+Cubren: 150 registros en seguimiento; nombres, expedientes y causas ficticios; bajas con motivo y amparos directos fuera del seguimiento con sus avisos; alertas de plazo (arts. 147, 152, 291, 97, 368/360) con límites exactos y días hábiles; declaratorias por entidad y alerta de sistema aplicable; ficha con alertas, datos procesales y revisión de la medida; columna Alertas en la exportación; rechazo de archivos vacíos o sin columnas indispensables; texto con etiquetas HTML mostrado como texto (sin inyección); aviso de datos por revisar; semáforo con límites exactos de 2/5/10/20/30 años, más de 30, sin fecha y 29 de febrero; tarjetas-botón (uno o varios niveles); buscador por cada campo; filtros individuales, dependientes y combinados; pena solo informativa; motivo de la privación de libertad y aviso de proceso local; próximos a cambiar de nivel; comparativo contra el corte anterior; resumen por entidad y juzgado; coimputados; personas y causas; fecha de corte y clasificación; exportar vista; botones en mayúsculas; foco visible; modo oscuro; zoom al 200 % con ficha a pantalla completa; ojo → registro correcto (incluidas homonimias); cierre con X, CERRAR, clic fuera y Esc; contador; LIMPIAR FILTROS; orden; encabezado fijo; carga de CSV; ejecución por `file://` y por servidor local; y ausencia de solicitudes externas.
 
 ---
 
@@ -196,5 +225,6 @@ Cubren: 150 registros en seguimiento; nombres, expedientes y causas ficticios; e
 - **Cifrado** de los archivos de datos y del equipo; **respaldos** cifrados y periódicos.
 - **Exportación** a Excel/PDF de los resultados filtrados, con marca de agua.
 - **Alerta por inactividad:** ya se captura la fecha del último acto procesal; falta el aviso de asuntos sin movimiento.
-- **Verificación del sistema aplicable** con las fechas de las declaratorias del Código Nacional (pendiente de cotejar con el DOF).
+- **Días inhábiles oficiales** en el cómputo de plazos (hoy solo se excluyen sábados y domingos).
+- **MODO PRESENTACIÓN** (oculta nombres al instante para proyectar) y **cifrado del archivo de datos con contraseña** (AES-256 con la criptografía del propio navegador, sin Internet).
 - **Tarjetas en lugar de tabla en celulares**, enlace que conserve los filtros e impresión con mejor formato.

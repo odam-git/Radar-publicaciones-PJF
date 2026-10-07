@@ -40,16 +40,47 @@
     "Compurga pena por otra causa": "Compurga pena por otra causa",
   };
 
+  // Catálogo literal del Código Federal de Procedimientos Penales (CFPP).
   const ETAPAS = [
-    "Instrucción",
-    "Cierre de instrucción / conclusiones",
-    "Sentencia de primera instancia",
-    "Apelación (Tribunal de Alzada)",
-    "Amparo directo",
-    "Reposición del procedimiento",
+    "Instrucción",                                        // arts. 1o fracc. III y 147
+    "Instrucción agotada / cerrada",                      // art. 150
+    "Conclusiones",                                       // art. 291
+    "Audiencia de vista / citado para sentencia",         // art. 305
+    "Sentencia de primera instancia (plazo para apelar)", // arts. 360 y 368
+    "Segunda instancia (apelación)",                      // arts. 4o, 363 y 364
+    "Reposición del procedimiento",                       // arts. 386 a 388
+    "Procedimiento suspendido (art. 468)",                // art. 468
+  ];
+  const TIPOS_PROCEDIMIENTO = ["Ordinario", "Sumario"];
+  const RESULTADOS_REVISION = ["Pendiente de resolver", "Se mantuvo la prisión preventiva", "Se sustituyó la medida", "Cesó la medida"];
+  const MOTIVOS_BAJA = [
+    "Sentencia ejecutoriada (art. 360 CFPP)",
+    "Libertad provisional bajo caución (art. 399 CFPP)",
+    "Libertad por desvanecimiento de datos (art. 422 CFPP)",
+    "Sobreseimiento (art. 298 CFPP)",
+    "Conclusiones no acusatorias / inmediata libertad (art. 291 CFPP)",
+    "Cese o sustitución de la medida (quinto transitorio, DOF 17-06-2016)",
+    "Amparo directo promovido (art. 170 Ley de Amparo)",
+    "Otro (especificar en observaciones)",
+  ];
+
+  /* ---------- Declaratorias de entrada en vigor del CNPP (ámbito federal) ----
+   * Emitidas por el Congreso de la Unión conforme al artículo segundo transitorio del CNPP.
+   * [fecha de entrada en vigor, fecha de publicación en el DOF, entidades]
+   */
+  const DECLARATORIAS = [
+    ["2014-11-24", "2014-09-24", ["Durango", "Puebla"]],
+    ["2015-03-16", "2014-12-12", ["Yucatán", "Zacatecas"]],
+    ["2015-08-01", "2015-04-29", ["Baja California Sur", "Guanajuato", "Querétaro", "San Luis Potosí"]],
+    ["2015-11-30", "2015-09-25", ["Chiapas", "Chihuahua", "Coahuila", "Coahuila de Zaragoza", "Nayarit", "Oaxaca", "Sinaloa", "Tlaxcala"]],
+    ["2016-02-29", "2015-09-25", ["Aguascalientes", "Colima", "Estado de México", "México", "Hidalgo", "Morelos", "Nuevo León",
+      "Quintana Roo", "Tabasco", "Ciudad de México", "Distrito Federal"]],
+    ["2016-04-29", "2016-02-26", ["Campeche", "Michoacán", "Michoacán de Ocampo", "Sonora", "Veracruz", "Veracruz de Ignacio de la Llave"]],
+    ["2016-06-14", "2016-02-26", ["Baja California", "Guerrero", "Jalisco", "Tamaulipas"]],
   ];
 
   /* ---------- Fechas ---------------------------------------------------- */
+  const iso = (d) => d.toISOString().slice(0, 10);
   const aFecha = (iso) => {
     const m = String(iso || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
     return m ? new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])) : null;
@@ -93,6 +124,78 @@
     return c;
   }
 
+  /* ---------- Alertas con fundamento ------------------------------------ */
+  let porDeclaratoria = null; // se construye al primer uso
+  function declaratoriaDe(entidad) {
+    if (!porDeclaratoria) {
+      porDeclaratoria = new Map();
+      for (const [vigor, dof, entidades] of DECLARATORIAS) for (const e of entidades) porDeclaratoria.set(normalizar(e), { vigor, dof });
+    }
+    return porDeclaratoria.get(normalizar(entidad)) || null;
+  }
+
+  function sumarMeses(fecha, meses) {
+    const d = new Date(fecha);
+    d.setUTCMonth(d.getUTCMonth() + meses);
+    if (d.getUTCDate() !== fecha.getUTCDate()) d.setUTCDate(0);
+    return d;
+  }
+  // Días de lunes a viernes después de `desde` y hasta `hasta` (no descuenta días inhábiles oficiales).
+  // Días de lunes a viernes después de «desde» y hasta «hasta» inclusive (no descuenta días inhábiles oficiales).
+  function diasHabiles(desde, hasta) {
+    const dias = Math.round((hasta - desde) / 86400000);
+    if (!(dias > 0)) return 0;
+    let n = Math.floor(dias / 7) * 5;
+    const d = new Date(desde.getTime() + Math.floor(dias / 7) * 7 * 86400000);
+    for (let i = 0; i < dias % 7; i++) {
+      d.setUTCDate(d.getUTCDate() + 1);
+      const s = d.getUTCDay();
+      if (s !== 0 && s !== 6) n++;
+    }
+    return n;
+  }
+
+  /*
+   * Alertas objetivas de un registro: plazos del CFPP y sistema procesal aplicable.
+   * Devuelve [{ tipo: "plazo" | "sistema", texto, fundamento }].
+   */
+  function alertas(r, hoy) {
+    const h = hoyUTC(hoy);
+    const lista = [];
+    const afp = aFecha(r.fechaAFP);
+    const fc = (iso) => formatearFechaCorta(iso);
+    if (r.etapa === ETAPAS[0] && afp) {
+      if (normalizar(r.tipoProcedimiento) === "sumario") {
+        const limite = new Date(afp); limite.setUTCDate(limite.getUTCDate() + 30);
+        if (h > limite) lista.push({ tipo: "plazo", texto: "Procedimiento sumario con más de 30 días sin cerrar la instrucción.", fundamento: "CFPP, art. 152, inciso b)" });
+      } else if (h > sumarMeses(afp, 10)) {
+        lista.push({ tipo: "plazo", texto: "La instrucción supera 10 meses desde el auto de formal prisión.", fundamento: "CFPP, art. 147 (delito con pena máxima mayor de dos años)" });
+      }
+    }
+    const cierre = aFecha(r.fechaCierre);
+    if (r.etapa === ETAPAS[2] && cierre && diasHabiles(cierre, h) > 60) {
+      lista.push({ tipo: "plazo", texto: "Más de 60 días hábiles desde el cierre de instrucción: rebasa los plazos máximos para formular conclusiones.", fundamento: "CFPP, art. 291" });
+    }
+    const audiencia = aFecha(r.fechaAudiencia);
+    if (r.etapa === ETAPAS[3] && audiencia && diasHabiles(audiencia, h) > 30) {
+      lista.push({ tipo: "plazo", texto: "Más de 30 días hábiles desde la audiencia de vista sin sentencia.", fundamento: "CFPP, art. 97" });
+    }
+    const sentencia = aFecha(r.fechaSentencia);
+    if (r.etapa === ETAPAS[4] && sentencia && diasHabiles(sentencia, h) > 5) {
+      lista.push({ tipo: "plazo", texto: "Más de 5 días hábiles desde la sentencia: verificar si se apeló o si causó ejecutoria.", fundamento: "CFPP, arts. 368 y 360, fracc. I" });
+    }
+    const ap = aFecha(r.fechaInicioAP);
+    const decl = declaratoriaDe(r.entidad);
+    if (ap && decl && iso(ap) >= decl.vigor) {
+      lista.push({
+        tipo: "sistema",
+        texto: `La averiguación previa inició el ${fc(iso(ap))}, en o después de la entrada en vigor del CNPP en ${r.entidad} (${fc(decl.vigor)}): verificar que la causa corresponda al sistema tradicional.`,
+        fundamento: `CPEUM, transitorio Cuarto del decreto DOF 18-06-2008; declaratoria DOF ${fc(decl.dof)}`,
+      });
+    }
+    return lista;
+  }
+
   /* ---------- Revisión de calidad de datos ------------------------------ */
   function revisar(registros, hoy) {
     const h = hoyUTC(hoy);
@@ -104,6 +207,10 @@
       if (!ETAPAS.includes(r.etapa)) {
         problemas.push({ registro: r, motivo: r.etapa ? `Etapa procesal fuera del catálogo: "${r.etapa}"` : "Sin etapa procesal" });
       }
+      const i = ETAPAS.indexOf(r.etapa);
+      if (i >= 2 && i <= 5 && !aFecha(r.fechaCierre)) problemas.push({ registro: r, motivo: "Falta la fecha de cierre de instrucción" });
+      if (i >= 3 && i <= 5 && !aFecha(r.fechaAudiencia)) problemas.push({ registro: r, motivo: "Falta la fecha de la audiencia de vista" });
+      if ((i === 4 || i === 5) && !aFecha(r.fechaSentencia)) problemas.push({ registro: r, motivo: "Falta la fecha de sentencia de primera instancia" });
     }
     return problemas;
   }
@@ -137,7 +244,7 @@
 
   /* ---------- Filtros --------------------------------------------------- */
   const FILTROS_VACIOS = Object.freeze({
-    texto: "", entidad: "", circuito: "", juzgado: "", causa: "", nombre: "", etapa: "", motivo: "",
+    texto: "", entidad: "", circuito: "", juzgado: "", causa: "", nombre: "", etapa: "", motivo: "", alerta: "",
     niveles: [], proximos: 0,
   });
 
@@ -153,7 +260,8 @@
       (!nombre || normalizar(r.nombre).includes(nombre)) &&
       (!f.etapa || r.etapa === f.etapa) &&
       (!f.motivo || r.motivoPrivacion === f.motivo) &&
-      (!f.proximos || !!proximoCambio(r.fechaAFP, hoy, f.proximos))
+      (!f.proximos || !!proximoCambio(r.fechaAFP, hoy, f.proximos)) &&
+      (!f.alerta || alertas(r, hoy).some((a) => f.alerta === "cualquiera" || a.tipo === f.alerta))
     );
     return buscar(porFiltros, f.texto);
   }
@@ -286,11 +394,14 @@
   /* ---------- Comparativo contra el corte anterior ---------------------- */
   const llaveCausa = (r) => [llavePersona(r), normalizar(r.causa), r.juzgado].join("|");
 
-  function comparar(actuales, anteriores, corteActual, corteAnterior, ejecutoriadasActuales) {
+  // `salidas`: { bajas, amparos } del corte actual, para explicar por qué salió cada registro.
+  function comparar(actuales, anteriores, corteActual, corteAnterior, salidas) {
     const fa = aFecha(corteActual), fp = aFecha(corteAnterior);
     const mapaAnt = new Map(anteriores.map((r) => [llaveCausa(r), r]));
     const mapaAct = new Map(actuales.map((r) => [llaveCausa(r), r]));
-    const ejecutoriadas = new Set((ejecutoriadasActuales || []).map(llaveCausa));
+    const motivoSalida = new Map();
+    for (const r of (salidas && salidas.bajas) || []) motivoSalida.set(llaveCausa(r), r.motivoBaja || "Baja");
+    for (const r of (salidas && salidas.amparos) || []) motivoSalida.set(llaveCausa(r), "Sentencia definitiva: amparo directo en trámite");
     const altas = [], cambiosEtapa = [], subieron = [], bajas = [];
     for (const r of actuales) {
       const a = mapaAnt.get(llaveCausa(r));
@@ -300,9 +411,7 @@
       if (nA !== nR && nA !== "sd" && nR !== "sd") subieron.push({ registro: r, antes: nA, ahora: nR });
     }
     for (const a of anteriores) {
-      if (!mapaAct.has(llaveCausa(a))) {
-        bajas.push({ registro: a, motivo: ejecutoriadas.has(llaveCausa(a)) ? "Sentencia ejecutoriada" : "Ya no aparece en el corte actual" });
-      }
+      if (!mapaAct.has(llaveCausa(a))) bajas.push({ registro: a, motivo: motivoSalida.get(llaveCausa(a)) || "Ya no aparece en el corte actual" });
     }
     return { altas, bajas, cambiosEtapa, subieron };
   }
@@ -339,6 +448,7 @@
 
   return {
     NIVELES, SIN_DATO, POR_CLAVE, ETAPAS, MOTIVOS, ETIQUETA_MOTIVO, UMBRALES, FILTROS_VACIOS, CAMPOS_BUSQUEDA,
+    TIPOS_PROCEDIMIENTO, RESULTADOS_REVISION, MOTIVOS_BAJA, DECLARATORIAS, declaratoriaDe, alertas, diasHabiles,
     proximoCambio, personas, coimputados, resumen, concentracion, comparar,
     antiguedad, nivelDe, contarPorNivel, revisar,
     normalizar, coincideBusqueda, buscar, filtrar, filtrarSinNivel, opcionesDependientes,

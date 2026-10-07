@@ -39,7 +39,8 @@
 
   const estado = {
     todos: [],
-    ejecutoriadas: [],
+    bajas: [],
+    amparos: [],
     fechaCorte: "",
     origen: "",
     claves: new WeakMap(),       // registro → clave interna (para abrir la ficha correcta)
@@ -56,7 +57,7 @@
   const el = {
     buscador: $("buscador"), entidad: $("f-entidad"), circuito: $("f-circuito"),
     juzgado: $("f-juzgado"), causa: $("f-causa"), nombre: $("f-nombre"),
-    etapa: $("f-etapa"), nivel: $("f-nivel"), motivo: $("f-motivo"), horizonte: $("f-horizonte"),
+    etapa: $("f-etapa"), nivel: $("f-nivel"), motivo: $("f-motivo"), alerta: $("f-alerta"), horizonte: $("f-horizonte"),
     lCausas: $("l-causas"), lNombres: $("l-nombres"), masFiltros: $("mas-filtros"), btnMas: $("btn-mas-filtros"),
     tarjetas: $("tarjetas"), regla: $("regla"), total: $("total"), contador: $("contador"), cuerpo: $("cuerpo-tabla"),
     vacio: $("vacio"), tabla: $("tabla"), dialogo: $("detalle"), detalle: $("detalle-cuerpo"),
@@ -98,7 +99,8 @@
   /* ---------- Carga de datos ---------- */
   function recibirDatos(resultado) {
     estado.todos = resultado.registros;
-    estado.ejecutoriadas = resultado.ejecutoriadas || [];
+    estado.bajas = resultado.bajas || [];
+    estado.amparos = resultado.amparos || [];
     estado.fechaCorte = resultado.fechaCorte || "";
     estado.origen = resultado.origen;
     estado.claves = new WeakMap();
@@ -120,6 +122,11 @@
 
   function mostrarError(e) {
     el.fuente.textContent = "No fue posible cargar los datos. Revise que el archivo tenga los encabezados de la plantilla.";
+    avisarArchivoRechazado(e);
+  }
+
+  // Un archivo elegido que no se puede leer no reemplaza los datos que ya se muestran.
+  function avisarArchivoRechazado(e) {
     el.avisos.hidden = false;
     el.avisos.textContent = e.message;
   }
@@ -148,15 +155,35 @@
     return det;
   }
 
+  const lineaCausa = (r) => `ID ${r.id} · Causa ${r.causa || "sin dato"} · Expediente ${r.expediente || "sin dato"} · ${r.juzgado || ""}`;
+
+  function avisoConBoton(clase, id, iconoId, texto, botonId) {
+    const caja = crear("div", `depuracion ${clase}`);
+    caja.id = id;
+    const fila = crear("div", "depuracion__fila");
+    const ver = boton("depuracion__ver", "VER ESTOS CASOS");
+    ver.id = botonId;
+    fila.append(icono(iconoId, "icono"), crear("span", "depuracion__texto", texto), ver);
+    caja.append(fila);
+    return caja;
+  }
+
+  const TEXTO_ALERTA = { cualquiera: "Con cualquier alerta", plazo: "Plazo del CFPP rebasado", sistema: "Verificar sistema aplicable" };
+
   function pintarDepuracion() {
     const bloques = [];
-    const n = estado.ejecutoriadas.length;
+    const n = estado.bajas.length;
     if (n) {
-      bloques.push(bloqueAviso("depuracion--baja", "aviso-ejecutoriadas", "i-alerta",
-        `${n} ${n === 1 ? "registro" : "registros"} con sentencia ejecutoriada. ${n === 1 ? "Debe" : "Deben"} darse de baja del seguimiento.`,
-        estado.ejecutoriadas.map((r) =>
-          `ID ${r.id} · Causa ${r.causa || "sin dato"} · Expediente ${r.expediente || "sin dato"} · ${r.juzgado || ""}` +
+      bloques.push(bloqueAviso("depuracion--baja", "aviso-bajas", "i-alerta",
+        `${n} ${n === 1 ? "registro debe" : "registros deben"} darse de baja del seguimiento.`,
+        estado.bajas.map((r) => `${lineaCausa(r)} · ${r.motivoBaja}` +
           (r.fechaEjecutoria ? ` · Ejecutoria: ${L.formatearFechaCorta(r.fechaEjecutoria)}` : ""))));
+    }
+    const m = estado.amparos.length;
+    if (m) {
+      bloques.push(bloqueAviso("depuracion--amparo", "aviso-amparos", "i-info",
+        `${m} ${m === 1 ? "causa tiene" : "causas tienen"} sentencia definitiva con amparo directo en trámite: fuera del seguimiento (a disposición del Tribunal Colegiado, art. 191 Ley de Amparo).`,
+        estado.amparos.map((r) => `${lineaCausa(r)}${r.instancia ? " · " + r.instancia : ""}`)));
     }
     const problemas = L.revisar(estado.todos);
     if (problemas.length) {
@@ -164,18 +191,23 @@
         `${problemas.length} ${problemas.length === 1 ? "dato requiere" : "datos requieren"} revisión en la hoja de captura.`,
         problemas.map((p) => `ID ${p.registro.id} · Causa ${p.registro.causa || "sin dato"} · ${p.motivo}`)));
     }
+    const conAlerta = estado.todos.map((r) => L.alertas(r));
+    const plazo = conAlerta.filter((l) => l.some((x) => x.tipo === "plazo")).length;
+    const sistema = conAlerta.filter((l) => l.some((x) => x.tipo === "sistema")).length;
+    if (plazo) {
+      bloques.push(avisoConBoton("depuracion--revision", "aviso-plazos", "i-reloj",
+        `${plazo} ${plazo === 1 ? "causa rebasa" : "causas rebasan"} un plazo del Código Federal de Procedimientos Penales (arts. 97, 147, 152, 291, 360 y 368).`,
+        "btn-ver-plazos"));
+    }
+    if (sistema) {
+      bloques.push(avisoConBoton("depuracion--revision", "aviso-sistema", "i-alerta",
+        `${sistema} ${sistema === 1 ? "causa debe" : "causas deben"} verificarse: la averiguación previa inició cuando ya regía el Código Nacional en la entidad.`,
+        "btn-ver-sistema"));
+    }
     const locales = estado.todos.filter((r) => r.motivoPrivacion === "Solo por causa del fuero común").length;
     if (locales) {
-      const caja = crear("div", "depuracion depuracion--info");
-      caja.id = "aviso-local";
-      const fila = crear("div", "depuracion__fila");
-      const ver = boton("depuracion__ver", "VER ESTOS CASOS");
-      ver.id = "btn-ver-locales";
-      fila.append(icono("i-info", "icono"),
-        crear("span", "depuracion__texto", `${locales} PPL en reclusión solo por un proceso local (fuero común).`),
-        ver);
-      caja.append(fila);
-      bloques.push(caja);
+      bloques.push(avisoConBoton("depuracion--info", "aviso-local", "i-info",
+        `${locales} PPL en reclusión solo por un proceso local (fuero común).`, "btn-ver-locales"));
     }
     el.depuracion.replaceChildren(...bloques);
   }
@@ -262,6 +294,7 @@
     llenarLista(el.lNombres, op.nombres);
     f.etapa = llenarSelect(el.etapa, L.ETAPAS, "Todas", f.etapa);
     f.motivo = llenarSelect(el.motivo, L.MOTIVOS, "Todos", f.motivo);
+    f.alerta = llenarSelect(el.alerta, Object.entries(TEXTO_ALERTA), "Todas", f.alerta);
 
     // El selector de nivel refleja las tarjetas (una sola o varias).
     const opNivel = L.NIVELES.map((n) => [n.clave, `Nivel ${n.numero} · ${n.descripcion}`]);
@@ -269,7 +302,7 @@
     llenarSelect(el.nivel, opNivel, "Todos", f.niveles.length > 1 ? "varios" : f.niveles[0] || "");
 
     // Indica cuántos filtros ocultos están activos.
-    const ocultosActivos = [f.causa, f.nombre, f.etapa, f.motivo, f.niveles.length ? "x" : ""].filter(Boolean).length;
+    const ocultosActivos = [f.causa, f.nombre, f.etapa, f.motivo, f.alerta, f.niveles.length ? "x" : ""].filter(Boolean).length;
     el.btnMas.textContent = (el.masFiltros.hidden ? "MÁS FILTROS" : "MENOS FILTROS") + (ocultosActivos ? ` (${ocultosActivos} ACTIVOS)` : "");
   }
 
@@ -277,7 +310,7 @@
     Object.assign(estado.filtros, {
       texto: el.buscador.value, entidad: el.entidad.value, circuito: el.circuito.value,
       juzgado: el.juzgado.value, causa: el.causa.value, nombre: el.nombre.value,
-      etapa: el.etapa.value, motivo: el.motivo.value,
+      etapa: el.etapa.value, motivo: el.motivo.value, alerta: el.alerta.value,
     });
   }
 
@@ -327,6 +360,15 @@
     const tr = crear("tr");
     const tdAlerta = crear("td", "col-alerta");
     tdAlerta.append(indicadorNivel(a));
+    const al = L.alertas(r);
+    if (al.length) {
+      const marca = crear("span", "marca-alerta");
+      marca.setAttribute("role", "img");
+      marca.append(icono("i-alerta"), crear("span", null, String(al.length)));
+      marca.setAttribute("aria-label", `${al.length} ${al.length === 1 ? "alerta" : "alertas"}: ` + al.map((x) => x.texto).join(" "));
+      marca.title = al.map((x) => `${x.texto} (${x.fundamento})`).join("\n");
+      tdAlerta.append(marca);
+    }
     tr.append(
       tdAlerta,
       celda("col-circuito", r.circuito, r.entidad),
@@ -459,7 +501,7 @@
     estado.filtros = { ...L.FILTROS_VACIOS, niveles: [], ...nuevos };
     el.causa.value = nuevos.causa || "";
     refrescarOpciones();  // coloca entidad, circuito, juzgado, etapa y motivo en sus selectores
-    if (nuevos.causa || nuevos.motivo || nuevos.etapa) mostrarMasFiltros(true);
+    if (nuevos.causa || nuevos.motivo || nuevos.etapa || nuevos.alerta) mostrarMasFiltros(true);
     cambiarVista("listado");
   }
 
@@ -513,6 +555,21 @@
       partes.push(caja);
     }
 
+    // 1 ter. Alertas con su fundamento
+    const alertasR = L.alertas(r);
+    if (alertasR.length) {
+      const caja = crear("div", "alertas-ficha");
+      caja.id = "ficha-alertas";
+      const ul = crear("ul");
+      for (const x of alertasR) {
+        const li = crear("li");
+        li.append(crear("span", null, x.texto), crear("span", "fundamento", "Fundamento: " + x.fundamento));
+        ul.append(li);
+      }
+      caja.append(ul);
+      partes.push(seccion("Alertas", caja));
+    }
+
     // 2. Ubicación y reclusión
     const ubicacion = crear("div", "ficha-fila");
     ubicacion.append(
@@ -548,6 +605,25 @@
       ant.append(nota);
     }
     partes.push(seccion("Antigüedad y etapa procesal", ant));
+
+    // 4 bis. Datos procesales (CFPP)
+    const procesales = crear("div", "recuadro recuadro--datos");
+    procesales.append(
+      dato("Tipo de procedimiento", r.tipoProcedimiento || "Sin dato"),
+      dato("Inicio de la averiguación previa", L.formatearFecha(r.fechaInicioAP)),
+      dato("Cierre de instrucción", r.fechaCierre ? L.formatearFecha(r.fechaCierre) : "No aplica / sin dato"),
+      dato("Audiencia de vista", r.fechaAudiencia ? L.formatearFecha(r.fechaAudiencia) : "No aplica / sin dato"),
+    );
+    partes.push(seccion("Datos procesales", procesales));
+
+    // 4 ter. Revisión de la medida (quinto transitorio, DOF 17-06-2016)
+    const revision = crear("div", "recuadro recuadro--datos");
+    revision.append(
+      dato("Solicitada", r.revisionSolicitada || "Sin dato"),
+      dato("Fecha", r.revisionFecha ? L.formatearFecha(r.revisionFecha) : "—"),
+      dato("Resultado", r.revisionResultado || "—"),
+    );
+    partes.push(seccion("Revisión de la prisión preventiva (quinto transitorio, DOF 17-06-2016)", revision));
 
     // 5. Delitos
     partes.push(seccion("Delitos / materia del proceso", crear("div", "recuadro", r.delito || "Sin dato")));
@@ -627,7 +703,8 @@
     estado.comparativo = {
       nombre: archivo.name,
       fechaAnterior,
-      resultado: L.comparar(estado.todos, ant.registros, estado.fechaCorte || hoyISO(), fechaAnterior, estado.ejecutoriadas),
+      resultado: L.comparar(estado.todos, ant.registros, estado.fechaCorte || hoyISO(), fechaAnterior,
+        { bajas: estado.bajas, amparos: estado.amparos }),
     };
     pintarComparativo();
     el.comparativo.scrollIntoView({ block: "start" });
@@ -641,6 +718,7 @@
     for (const [k, n] of [["entidad", "entidad"], ["circuito", "circuito"], ["juzgado", "juzgado"], ["causa", "causa"], ["nombre", "nombre"], ["etapa", "etapa"], ["motivo", "motivo"]]) {
       if (f[k]) partes.push(`${n}: ${f[k]}`);
     }
+    if (f.alerta) partes.push("alerta: " + TEXTO_ALERTA[f.alerta]);
     if (f.niveles.length) partes.push("niveles: " + f.niveles.map((k) => "N" + L.POR_CLAVE[k].numero).join(", "));
     if (f.proximos) partes.push(`cambian de nivel en ${f.proximos} días`);
     return partes.length ? partes.join("; ") : "sin filtros";
@@ -649,14 +727,16 @@
   function exportarVista() {
     const columnas = window.DatosPPL.MAPA_COLUMNAS.filter((c) => estado.visibles.some((r) => c.clave in r));
     const esc = (v) => {
-      const t = v == null ? "" : String(v);
+      let t = v == null ? "" : String(v);
+      // Evita que Excel interprete un texto capturado como fórmula (inyección de fórmulas).
+      if (/^[=+\-@\t\r]/.test(t)) t = "'" + t;
       return /[",\n\r]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
     };
     const filas = [];
     if (CONFIG.clasificacion) filas.push([CONFIG.clasificacion]);
     filas.push([`Corte de datos: ${estado.fechaCorte ? L.formatearFechaCorta(estado.fechaCorte) : "sin fecha"}; exportado: ${L.formatearFechaCorta(hoyISO())}; filtros: ${describirFiltros()}`]);
     filas.push([]);
-    filas.push(["Nivel de antigüedad", "Antigüedad", "Próximo cambio de nivel", ...columnas.map((c) => c.columna)]);
+    filas.push(["Nivel de antigüedad", "Antigüedad", "Próximo cambio de nivel", "Alertas", ...columnas.map((c) => c.columna)]);
     for (const r of estado.visibles) {
       const a = infoNivel(r);
       const p = proximo(r);
@@ -664,6 +744,7 @@
         a.nivel === "sd" ? "Sin dato" : `Nivel ${a.def.numero} (${rangoTexto(a)})`,
         L.formatearAntiguedad(a),
         p ? textoCambio(p) : "",
+        L.alertas(r).map((x) => `${x.texto} (${x.fundamento})`).join(" | "),
         ...columnas.map((c) => r[c.clave]),
       ]);
     }
@@ -683,7 +764,7 @@
   const enEspera = () => { clearTimeout(espera); espera = setTimeout(actualizar, 180); };
   el.buscador.addEventListener("input", enEspera);
   [el.causa, el.nombre].forEach((i) => i.addEventListener("input", enEspera));
-  [el.entidad, el.circuito, el.juzgado, el.etapa, el.motivo].forEach((s) => s.addEventListener("change", actualizar));
+  [el.entidad, el.circuito, el.juzgado, el.etapa, el.motivo, el.alerta].forEach((s) => s.addEventListener("change", actualizar));
   el.nivel.addEventListener("change", () => {
     const v = el.nivel.value;
     if (v !== "varios") estado.filtros.niveles = v ? [v] : [];
@@ -715,6 +796,8 @@
 
   el.depuracion.addEventListener("click", (e) => {
     if (e.target.closest("#btn-ver-locales")) aplicarFiltros({ motivo: "Solo por causa del fuero común" });
+    if (e.target.closest("#btn-ver-plazos")) aplicarFiltros({ alerta: "plazo" });
+    if (e.target.closest("#btn-ver-sistema")) aplicarFiltros({ alerta: "sistema" });
   });
 
   $("formulario").addEventListener("submit", (e) => {
@@ -796,7 +879,7 @@
       const lector = new FileReader();
       lector.onload = () => {
         try { alCargar(lector.result, archivo); }
-        catch (err) { mostrarError(err); }
+        catch (err) { avisarArchivoRechazado(err); }
         e.target.value = "";
       };
       lector.readAsText(archivo, "utf-8");

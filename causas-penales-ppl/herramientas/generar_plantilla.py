@@ -3,13 +3,15 @@
 Genera plantillas/plantilla_captura_ppl.xlsx: la hoja que llenan los juzgados.
 
 - Hoja "Captura": encabezados exactos que lee la aplicación, con listas desplegables
-  (entidad, etapa procesal, motivo de la privación de libertad, situación de la otra causa),
+  (entidad, tipo de procedimiento, etapa procesal, motivo de la privación de libertad, situación de la
+  otra causa, revisión de la medida y motivo de baja),
   validación de fechas y de pena, y renglones de ejemplo ficticios en gris.
 - Hoja "Instrucciones": qué va en cada columna, si es obligatoria y en qué formato.
 - Hoja "Catálogos": las listas que alimentan los desplegables.
 
 Uso:  python3 herramientas/generar_plantilla.py      (requiere: pip install openpyxl)
 """
+import sys
 from pathlib import Path
 
 from openpyxl import Workbook
@@ -28,17 +30,16 @@ ENTIDADES = [
     "Querétaro", "Quintana Roo", "San Luis Potosí", "Sinaloa", "Sonora", "Tabasco", "Tamaulipas",
     "Tlaxcala", "Veracruz", "Yucatán", "Zacatecas",
 ]
-ETAPAS = [
-    "Instrucción", "Cierre de instrucción / conclusiones", "Sentencia de primera instancia",
-    "Apelación (Tribunal de Alzada)", "Amparo directo", "Reposición del procedimiento",
-    "Sentencia ejecutoriada",
-]
-MOTIVOS = [
-    "Solo por esta causa federal", "Por esta causa y por otra causa federal",
-    "Por esta causa y por causa del fuero común", "Solo por causa del fuero común",
-    "Compurga pena por otra causa",
-]
-SITUACIONES = ["En proceso", "Sentenciada (no firme)", "Compurgando pena"]
+# Los catálogos se toman del generador de datos para que plantilla, datos y aplicación coincidan.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from generar_datos_ficticios import (  # noqa: E402
+    COLUMNAS as COLUMNAS_DATOS, ETAPAS_V4, MOTIVOS, MOTIVOS_BAJA, RESULTADOS_REVISION, SITUACIONES_OTRA as SITUACIONES,
+)
+
+# Opciones de captura: las 8 etapas en seguimiento más las dos que sacan el registro del universo.
+ETAPAS = ETAPAS_V4 + ["Amparo directo", "Sentencia ejecutoriada"]
+TIPOS = ["Ordinario", "Sumario"]
+SI_NO = ["Sí", "No"]
 
 # (columna, obligatoria, tipo, descripción)
 COLUMNAS = [
@@ -48,32 +49,44 @@ COLUMNAS = [
     ("Expediente", "Sí", "texto", "Número de expediente."),
     ("Causa penal", "Sí", "texto", "Número de causa penal vigente."),
     ("Delito(s)", "Sí", "texto", "Separar varios delitos con punto y coma."),
-    ("Entidad Federativa", "Sí", "lista", "Elegir de la lista."),
+    ("Entidad Federativa", "Sí", "lista", "Entidad del Juzgado de Distrito. Con la fecha de inicio de la averiguación previa permite verificar el sistema aplicable."),
     ("Circuito", "Sí", "texto", "Por ejemplo: Sexto Circuito."),
     ("Juzgado de Distrito", "Sí", "texto", "Denominación completa del juzgado."),
     ("Lugar de reclusión", "Sí", "texto", "Centro penitenciario."),
     ("Motivo de la privación de libertad", "Sí", "lista", "Elegir de la lista."),
     ("Otra causa: autoridad", "Si aplica", "texto", "Solo si el motivo menciona otra causa: autoridad que la conoce."),
     ("Otra causa: situación", "Si aplica", "lista", "Solo si el motivo menciona otra causa."),
-    ("Fecha de auto de formal prisión", "Sí", "fecha", "Fecha del PRIMER auto de formal prisión (DD/MM/AAAA). Base del semáforo."),
-    ("Etapa procesal", "Sí", "lista", "Elegir de la lista. 'Sentencia ejecutoriada' saca el registro del seguimiento."),
-    ("Instancia actual", "Sí", "texto", "Órgano que conoce actualmente (juzgado, tribunal de alzada con toca, tribunal colegiado)."),
+    ("Fecha de inicio de la averiguación previa", "Recomendado", "fecha",
+     "DD/MM/AAAA. Si es igual o posterior a la entrada en vigor del Código Nacional en la entidad, la aplicación pide verificar el sistema (transitorio Cuarto, DOF 18-06-2008)."),
+    ("Fecha de auto de formal prisión", "Sí", "fecha", "Fecha del PRIMER auto de formal prisión (DD/MM/AAAA). Base del semáforo (art. 161 CFPP)."),
+    ("Tipo de procedimiento", "Sí", "lista", "Ordinario o Sumario (art. 152 CFPP). Define el plazo de la instrucción."),
+    ("Etapa procesal", "Sí", "lista",
+     "Elegir de la lista. 'Sentencia ejecutoriada' da de baja el registro; 'Amparo directo' lo saca del seguimiento (a disposición del Tribunal Colegiado, art. 191 Ley de Amparo)."),
+    ("Instancia actual", "Sí", "texto", "Órgano que conoce actualmente (juzgado, tribunal unitario con toca, tribunal colegiado)."),
+    ("Fecha de cierre de instrucción", "Si aplica", "fecha", "DD/MM/AAAA. Desde conclusiones en adelante (art. 150 CFPP)."),
+    ("Fecha de la audiencia de vista", "Si aplica", "fecha", "DD/MM/AAAA. Desde la audiencia de vista en adelante (arts. 305 y 97 CFPP)."),
     ("Último acto procesal", "Sí", "texto", "Reseña breve de la última actuación."),
     ("Fecha del último acto procesal", "Sí", "fecha", "DD/MM/AAAA."),
     ("Fecha de sentencia de primera instancia", "Si aplica", "fecha", "Solo si ya hay sentencia de primera instancia (no firme)."),
-    ("Pena impuesta (no firme)", "Si aplica", "número", "En años; se admiten decimales (12.5)."),
-    ("Fecha de ejecutoria", "Si aplica", "fecha", "Llenar solo si la sentencia causó ejecutoria; el registro saldrá del seguimiento."),
+    ("Pena impuesta (no firme)", "Si aplica", "número", "En años; se admiten decimales (12.5). Solo se muestra como dato informativo."),
+    ("Revisión de la medida: solicitada", "Sí", "lista", "Sí o No (quinto transitorio, DOF 17-06-2016)."),
+    ("Revisión de la medida: fecha", "Si aplica", "fecha", "DD/MM/AAAA de la solicitud o resolución."),
+    ("Revisión de la medida: resultado", "Si aplica", "lista", "Elegir de la lista."),
+    ("Fecha de ejecutoria", "Si aplica", "fecha", "Llenar solo si la sentencia causó ejecutoria (art. 360 CFPP); el registro saldrá del seguimiento."),
+    ("Motivo de baja", "Si aplica", "lista", "Solo si el registro sale del seguimiento; elegir de la lista."),
     ("Fecha de corte", "Sí", "fecha", "Fecha en que se llenó la información (la misma para todos los renglones)."),
     ("Observaciones", "No", "texto", "Información adicional relevante."),
 ]
+assert [c[0] for c in COLUMNAS] == COLUMNAS_DATOS, "Las columnas de la plantilla deben coincidir con las del generador"
 
 EJEMPLO = [
     "1", "PER-0001", "Persona Ficticia Ejemplo", "EXP-FIC-0001/2010", "CP-FIC-001/2010",
     "Delito genérico de ejemplo", "Puebla", "Sexto Circuito", "Juzgado Primero de Distrito en Materia Penal en Puebla",
-    "Centro de Reinserción Ficticio", "Solo por esta causa federal", "", "", "15/03/2010", "Instrucción",
-    "Juzgado Primero de Distrito en Materia Penal en Puebla", "Se desahogó una prueba testimonial.",
-    "10/09/2026", "", "", "", "01/10/2026", "Renglón de ejemplo: bórrelo antes de capturar.",
+    "Centro de Reinserción Ficticio", "Solo por esta causa federal", "", "", "02/02/2010", "15/03/2010", "Ordinario",
+    "Instrucción", "Juzgado Primero de Distrito en Materia Penal en Puebla", "", "", "Se desahogó una prueba testimonial.",
+    "10/09/2026", "", "", "No", "", "", "", "", "01/10/2026", "Renglón de ejemplo: bórrelo antes de capturar.",
 ]
+assert len(EJEMPLO) == len(COLUMNAS)
 
 
 def main():
@@ -95,8 +108,10 @@ def main():
 
     # Catálogos
     cat = wb.create_sheet("Catálogos")
-    for col, (titulo, valores) in enumerate([("Entidades", ENTIDADES), ("Etapas", ETAPAS),
-                                             ("Motivos", MOTIVOS), ("Situaciones", SITUACIONES)], start=1):
+    catalogos = [("Entidades", ENTIDADES), ("Etapas", ETAPAS), ("Motivos", MOTIVOS), ("Situaciones", SITUACIONES),
+                 ("Tipo de procedimiento", TIPOS), ("Sí / No", SI_NO), ("Resultado de la revisión", RESULTADOS_REVISION),
+                 ("Motivo de baja", MOTIVOS_BAJA)]
+    for col, (titulo, valores) in enumerate(catalogos, start=1):
         cat.cell(row=1, column=col, value=titulo).font = Font(bold=True)
         for f, v in enumerate(valores, start=2):
             cat.cell(row=f, column=col, value=v)
@@ -114,6 +129,10 @@ def main():
     lista(letra["Etapa procesal"], "B", len(ETAPAS))
     lista(letra["Motivo de la privación de libertad"], "C", len(MOTIVOS))
     lista(letra["Otra causa: situación"], "D", len(SITUACIONES))
+    lista(letra["Tipo de procedimiento"], "E", len(TIPOS))
+    lista(letra["Revisión de la medida: solicitada"], "F", len(SI_NO))
+    lista(letra["Revisión de la medida: resultado"], "G", len(RESULTADOS_REVISION))
+    lista(letra["Motivo de baja"], "H", len(MOTIVOS_BAJA))
 
     for nombre, _, tipo, _ in COLUMNAS:
         rango = f"{letra[nombre]}2:{letra[nombre]}{FILAS}"

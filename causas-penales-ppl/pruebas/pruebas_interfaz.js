@@ -28,6 +28,8 @@ const cuenta = (fn) => R.filter(fn).length;
 const PROX90 = cuenta((r) => L.proximoCambio(r.fechaAFP, RELOJ, 90));
 const PROX30 = cuenta((r) => L.proximoCambio(r.fechaAFP, RELOJ, 30));
 const LOCALES = cuenta((r) => r.motivoPrivacion === "Solo por causa del fuero común");
+const PLAZO = cuenta((r) => L.alertas(r, RELOJ).some((a) => a.tipo === "plazo"));
+const SISTEMA = cuenta((r) => L.alertas(r, RELOJ).some((a) => a.tipo === "sistema"));
 
 (async () => {
   const navegador = await chromium.launch(
@@ -125,15 +127,43 @@ const LOCALES = cuenta((r) => r.motivoPrivacion === "Solo por causa del fuero co
   });
 
   console.log("\nAVISOS");
-  await prueba("Aviso de 2 sentencias ejecutoriadas con lista para dar de baja", async () => {
-    const aviso = pagina.locator("#aviso-ejecutoriadas");
-    assert.match(await aviso.locator("summary").textContent(), /2 registros con sentencia ejecutoriada/);
+  await prueba("Aviso de 4 bajas con su motivo (ejecutoria, desvanecimiento, cese de la medida)", async () => {
+    const aviso = pagina.locator("#aviso-bajas");
+    assert.match(await aviso.locator("summary").textContent(), /4 registros deben darse de baja/);
     await aviso.locator("summary").click();
     const lista = await aviso.locator("li").allTextContents();
-    assert.ok(lista.length === 2 && lista[0].includes("CP-FIC-900/2019") && lista[1].includes("CP-FIC-901/2019"));
+    assert.strictEqual(lista.length, 4);
+    assert.ok(lista[0].includes("CP-FIC-900/2019") && /Sentencia ejecutoriada \(art\. 360 CFPP\).*Ejecutoria: \d\d\/\d\d\/2026/.test(lista[0]));
+    assert.ok(lista[2].includes("desvanecimiento de datos (art. 422 CFPP)"));
+    assert.ok(lista[3].includes("quinto transitorio"));
     await aviso.locator("summary").click();
     await escribir("CP-FIC-900");
     assert.strictEqual(await total(), 0);
+    await limpiar();
+  });
+  await prueba("Aviso aparte de 3 amparos directos: fuera de la tabla y de los conteos", async () => {
+    const aviso = pagina.locator("#aviso-amparos");
+    assert.match(await aviso.locator("summary").textContent(), /3 causas tienen sentencia definitiva con amparo directo en trámite.*art\. 191 Ley de Amparo/);
+    await aviso.locator("summary").click();
+    const lista = await aviso.locator("li").allTextContents();
+    assert.ok(lista.length === 3 && lista.every((t) => /CP-FIC-90[456]\/2019.*Tribunal Colegiado/.test(t)));
+    await aviso.locator("summary").click();
+    await escribir("CP-FIC-905");
+    assert.strictEqual(await total(), 0);
+    await limpiar();
+  });
+  await prueba(`Aviso de plazos del CFPP (${PLAZO}) y de sistema aplicable (${SISTEMA}) con botón que filtra`, async () => {
+    assert.match(await pagina.textContent("#aviso-plazos"), new RegExp(`${PLAZO} causas rebasan un plazo del Código Federal`));
+    assert.match(await pagina.textContent("#aviso-sistema"), new RegExp(`${SISTEMA} causas deben verificarse`));
+    await pagina.click("#btn-ver-plazos");
+    assert.strictEqual(await total(), PLAZO);
+    assert.strictEqual(await pagina.inputValue("#f-alerta"), "plazo");
+    assert.ok(await pagina.isVisible("#f-alerta"), "MÁS FILTROS se abre para mostrar el filtro activo");
+    assert.strictEqual(await pagina.locator("#cuerpo-tabla .marca-alerta").count(), PLAZO);
+    await pagina.click("#btn-ver-sistema");
+    assert.strictEqual(await total(), SISTEMA);
+    const etiqueta = await pagina.locator("#cuerpo-tabla .marca-alerta").first().getAttribute("aria-label");
+    assert.match(etiqueta, /Código Nacional|sistema/i);
     await limpiar();
   });
   await prueba("Aviso de revisión: 1 registro sin fecha de auto de formal prisión", async () => {
@@ -224,9 +254,11 @@ const LOCALES = cuenta((r) => r.motivoPrivacion === "Solo por causa del fuero co
     await pagina.click("#btn-mas-filtros");
     assert.ok(await pagina.isVisible("#f-etapa"));
     assert.strictEqual(await pagina.getAttribute("#btn-mas-filtros", "aria-expanded"), "true");
-    await pagina.selectOption("#f-etapa", "Amparo directo");
+    const etapas = await pagina.locator("#f-etapa option").allTextContents();
+    assert.deepStrictEqual(etapas.slice(1), L.ETAPAS);
+    await pagina.selectOption("#f-etapa", "Conclusiones");
     assert.match(await pagina.textContent("#btn-mas-filtros"), /\(1 ACTIVOS\)/);
-    assert.ok((await pagina.locator("#cuerpo-tabla td.col-etapa").allTextContents()).every((t) => t === "Amparo directo"));
+    assert.ok((await pagina.locator("#cuerpo-tabla td.col-etapa").allTextContents()).every((t) => t === "Conclusiones"));
     await limpiar();
   });
   await prueba("5. Dependencia Entidad → Circuito → Juzgado", async () => {
@@ -240,7 +272,7 @@ const LOCALES = cuenta((r) => r.motivoPrivacion === "Solo por causa del fuero co
   await prueba("6. Combinados: nivel + etapa + motivo + texto; LIMPIAR restablece todo", async () => {
     await tarjeta("n5").click();
     await abrirMas();
-    await pagina.selectOption("#f-etapa", "Apelación (Tribunal de Alzada)");
+    await pagina.selectOption("#f-etapa", L.ETAPAS[5]);
     const n = await total();
     assert.ok(n > 0 && n < 29);
     await pagina.selectOption("#f-motivo", "Solo por esta causa federal");
@@ -281,6 +313,21 @@ const LOCALES = cuenta((r) => r.motivoPrivacion === "Solo por causa del fuero co
     await pagina.click("#btn-x");
     await pagina.waitForFunction(() => document.title === "CAUSAS PENALES PPL");
   });
+  await prueba("Ficha v4: alertas con fundamento, datos procesales y revisión de la medida", async () => {
+    await escribir("CP-FIC-105/2024");
+    await pagina.click("#cuerpo-tabla .boton-ojo");
+    const alertas = await pagina.locator("#ficha-alertas li").allTextContents();
+    assert.ok(alertas.length === 1 && /5 días hábiles.*Fundamento: CFPP, arts\. 368 y 360, fracc\. I/.test(alertas[0]), alertas.join(" | "));
+    const texto = await pagina.textContent("#detalle-cuerpo");
+    for (const r of ["Datos procesales", "Tipo de procedimiento", "Inicio de la averiguación previa",
+      "Revisión de la prisión preventiva (quinto transitorio, DOF 17-06-2016)"]) assert.ok(texto.includes(r), "Falta " + r);
+    await pagina.click("#btn-cerrar");
+    await escribir("CP-FIC-101/2021");
+    await pagina.click("#cuerpo-tabla .boton-ojo");
+    assert.strictEqual(await pagina.locator("#ficha-alertas").count(), L.alertas(R.find((r) => r.causa === "CP-FIC-101/2021"), RELOJ).length ? 1 : 0);
+    await pagina.click("#btn-cerrar");
+    await limpiar();
+  });
   await prueba("Coimputados: la ficha los indica y VER COIMPUTADOS filtra la causa", async () => {
     await escribir("CP-FIC-140/1997");
     assert.strictEqual(await total(), 3);
@@ -301,7 +348,7 @@ const LOCALES = cuenta((r) => r.motivoPrivacion === "Solo por causa del fuero co
     await pagina.click("#btn-cerrar");
     await limpiar();
     await abrirMas();
-    await pagina.selectOption("#f-etapa", "Apelación (Tribunal de Alzada)");
+    await pagina.selectOption("#f-etapa", L.ETAPAS[5]);
     await pagina.locator("#cuerpo-tabla .boton-ojo").first().click();
     assert.match(await pagina.textContent("#detalle-cuerpo"), /Dato informativo:.*no firme/);
     await pagina.click("#btn-cerrar");
@@ -358,16 +405,19 @@ const LOCALES = cuenta((r) => r.motivoPrivacion === "Solo por causa del fuero co
   });
 
   console.log("\nCOMPARATIVO CONTRA EL CORTE ANTERIOR");
-  await prueba("Cargar el corte anterior: 3 altas, 4 bajas, 5 cambios de etapa y niveles", async () => {
+  await prueba("Cargar el corte anterior: 3 altas, 9 bajas con motivo, 5 cambios de etapa y niveles", async () => {
     await pagina.setInputFiles("#archivo-anterior", path.join(RAIZ, "datos/corte_anterior_ficticio.csv"));
     await pagina.waitForSelector("#comparativo:not([hidden])");
     const cifras = await pagina.locator("#comparativo .cifra strong").allTextContents();
-    assert.deepStrictEqual(cifras.slice(0, 3), ["3", "4", "5"]);
+    assert.deepStrictEqual(cifras.slice(0, 3), ["3", "9", "5"]);
     assert.ok(Number(cifras[3]) > 0);
     assert.match(await pagina.textContent("#comparativo"), /Corte anterior: 1 de septiembre de 2026/);
     const bajas = pagina.locator("#comparativo details").nth(1);
     await bajas.locator("summary").click();
-    assert.strictEqual((await bajas.locator("li").allTextContents()).filter((t) => t.includes("Sentencia ejecutoriada")).length, 2);
+    const lista = await bajas.locator("li").allTextContents();
+    assert.strictEqual(lista.filter((t) => t.includes("Sentencia ejecutoriada")).length, 2);
+    assert.strictEqual(lista.filter((t) => t.includes("amparo directo en trámite")).length, 3);
+    assert.strictEqual(lista.filter((t) => t.includes("Ya no aparece en el corte actual")).length, 2);
   });
   await prueba("El ojo de una alta abre su ficha; QUITAR COMPARATIVO lo oculta", async () => {
     const altas = pagina.locator("#comparativo details").first();
@@ -386,20 +436,48 @@ const LOCALES = cuenta((r) => r.motivoPrivacion === "Solo por causa del fuero co
     const lineas = fs.readFileSync(await descarga.path(), "utf8").replace(/^﻿/, "").split(/\r\n/);
     assert.match(lineas[0], /Información confidencial/);
     assert.match(lineas[1], /Corte de datos: 01\/10\/2026.*filtros: niveles: N5/);
-    assert.match(lineas[3], /^Nivel de antigüedad,Antigüedad,Próximo cambio de nivel,ID,ID de persona,Nombre completo/);
+    assert.match(lineas[3], /^Nivel de antigüedad,Antigüedad,Próximo cambio de nivel,Alertas,ID,ID de persona,Nombre completo/);
     assert.strictEqual(lineas.length - 4, 29);
     await limpiar();
   });
-  await prueba("Cargar CSV propio: ejecutoriada al aviso y más de 30 años en rojo", async () => {
+  await prueba("Cargar CSV propio (columnas mínimas): baja y amparo a sus avisos, más de 30 años en rojo", async () => {
     const csv = "ID;Nombre completo;Causa penal;Fecha de auto de formal prisión;Etapa procesal;Fecha de ejecutoria;Fecha de corte\n" +
-      "1;Persona Ficticia Uno;CP-X-1;10/05/1990;Amparo directo;;15/09/2026\n" +
+      "1;Persona Ficticia Uno;CP-X-1;10/05/1990;Segunda instancia (apelación);;15/09/2026\n" +
       "2;Persona Ficticia Dos;CP-X-2;01/02/2025;Instrucción;;15/09/2026\n" +
-      "3;Persona Ficticia Tres;CP-X-3;01/02/2010;Sentencia ejecutoriada;15/09/2026;15/09/2026\n";
+      "3;Persona Ficticia Tres;CP-X-3;01/02/2010;Sentencia ejecutoriada;15/09/2026;15/09/2026\n" +
+      "4;=HIPERVINCULO(\"x\");CP-X-4;01/02/2012;Amparo directo;;15/09/2026\n";
     await pagina.setInputFiles("#archivo-csv", { name: "prueba.csv", mimeType: "text/csv", buffer: Buffer.from(csv) });
     await esperarTotal(2);
-    assert.match(await pagina.textContent("#aviso-ejecutoriadas summary"), /1 registro con sentencia ejecutoriada/);
+    assert.match(await pagina.textContent("#aviso-bajas summary"), /1 registro debe darse de baja/);
+    assert.match(await pagina.textContent("#aviso-amparos summary"), /1 causa tiene sentencia definitiva/);
+    assert.deepStrictEqual(errores, []);
     assert.match(await pagina.textContent("#texto-corte"), /15 de septiembre de 2026/);
     assert.strictEqual((await filas().first().locator(".nivel").textContent()).trim(), "N5 +30");
+    await pagina.click("#btn-recargar");
+    await esperarTotal(150);
+  });
+  await prueba("Robustez: un CSV vacío o sin columnas indispensables se rechaza y se conservan los datos", async () => {
+    await pagina.setInputFiles("#archivo-csv", { name: "vacio.csv", mimeType: "text/csv", buffer: Buffer.from("") });
+    await pagina.waitForFunction(() => /vacio\.csv.*no contiene filas/.test(document.getElementById("avisos-datos").textContent));
+    assert.strictEqual(await total(), 150);
+    await pagina.setInputFiles("#archivo-csv", { name: "otra.csv", mimeType: "text/csv", buffer: Buffer.from("A;B\n1;2\n") });
+    await pagina.waitForFunction(() => /otra\.csv.*Causa penal.*Se conservan los datos actuales/.test(document.getElementById("avisos-datos").textContent));
+    assert.strictEqual(await total(), 150);
+    await pagina.setInputFiles("#archivo-anterior", { name: "mal.csv", mimeType: "text/csv", buffer: Buffer.from("A;B\n1;2\n") });
+    await pagina.waitForFunction(() => /mal\.csv/.test(document.getElementById("avisos-datos").textContent));
+    assert.ok(await pagina.isHidden("#comparativo"));
+    assert.deepStrictEqual(errores, []);
+    await pagina.click("#btn-recargar");
+    await esperarTotal(150);
+  });
+  await prueba("Texto capturado con etiquetas HTML se muestra como texto (sin inyección)", async () => {
+    const csv = "ID;Nombre completo;Causa penal;Fecha de auto de formal prisión;Etapa procesal\n" +
+      '1;<img src=x onerror="window.__xss=1">;CP-X-9;01/02/2020;Instrucción\n';
+    await pagina.setInputFiles("#archivo-csv", { name: "xss.csv", mimeType: "text/csv", buffer: Buffer.from(csv) });
+    await esperarTotal(1);
+    assert.strictEqual(await pagina.locator("#cuerpo-tabla img").count(), 0);
+    assert.strictEqual(await pagina.evaluate(() => window.__xss), undefined);
+    assert.match(await pagina.textContent("#cuerpo-tabla"), /<img src=x/);
     await pagina.click("#btn-recargar");
     await esperarTotal(150);
   });

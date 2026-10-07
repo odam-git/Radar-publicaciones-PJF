@@ -39,10 +39,13 @@ COLUMNAS = [
     "ID", "ID de persona", "Nombre completo", "Expediente", "Causa penal", "Delito(s)",
     "Entidad Federativa", "Circuito", "Juzgado de Distrito", "Lugar de reclusión",
     "Motivo de la privación de libertad", "Otra causa: autoridad", "Otra causa: situación",
-    "Fecha de auto de formal prisión", "Etapa procesal", "Instancia actual",
+    "Fecha de inicio de la averiguación previa", "Fecha de auto de formal prisión",
+    "Tipo de procedimiento", "Etapa procesal", "Instancia actual",
+    "Fecha de cierre de instrucción", "Fecha de la audiencia de vista",
     "Último acto procesal", "Fecha del último acto procesal",
     "Fecha de sentencia de primera instancia", "Pena impuesta (no firme)",
-    "Fecha de ejecutoria", "Fecha de corte", "Observaciones",
+    "Revisión de la medida: solicitada", "Revisión de la medida: fecha", "Revisión de la medida: resultado",
+    "Fecha de ejecutoria", "Motivo de baja", "Fecha de corte", "Observaciones",
 ]
 FECHA_CORTE_ANTERIOR = date(2026, 9, 1)
 
@@ -136,6 +139,8 @@ GEOGRAFIA = {
     ], ["Centro Estatal de Reinserción Barrancas (ficticio)", "Centro Federal de Reinserción Frontera (ficticio)"]),
 }
 
+# Catálogo de la versión 3: solo se usa para conservar la secuencia aleatoria original;
+# después se traduce al catálogo literal del CFPP (ETAPAS_V4).
 ETAPAS = [
     "Instrucción",
     "Cierre de instrucción / conclusiones",
@@ -145,6 +150,76 @@ ETAPAS = [
     "Reposición del procedimiento",
 ]
 ETAPAS_CON_SENTENCIA = ETAPAS[2:5]
+
+# Catálogo literal del Código Federal de Procedimientos Penales (versión 4).
+ETAPAS_V4 = [
+    "Instrucción",                                        # arts. 1o fracc. III y 147
+    "Instrucción agotada / cerrada",                      # art. 150
+    "Conclusiones",                                       # art. 291
+    "Audiencia de vista / citado para sentencia",         # art. 305
+    "Sentencia de primera instancia (plazo para apelar)", # arts. 360 y 368
+    "Segunda instancia (apelación)",                      # arts. 4o, 363 y 364
+    "Reposición del procedimiento",                       # arts. 386 a 388
+    "Procedimiento suspendido (art. 468)",                # art. 468
+]
+ACTOS_V4 = {
+    ETAPAS_V4[0]: ["Se desahogó la prueba testimonial ofrecida por la defensa",
+                   "Se ordenó girar exhorto para el desahogo de una diligencia",
+                   "Se difirió la audiencia de careos por falta de traslado",
+                   "Se admitieron las pruebas periciales ofrecidas por las partes"],
+    ETAPAS_V4[1]: ["Se declaró agotada la instrucción y se puso el proceso a la vista de las partes",
+                   "Se declaró cerrada la instrucción"],
+    ETAPAS_V4[2]: ["Se puso la causa a la vista del Ministerio Público para formular conclusiones",
+                   "El Ministerio Público formuló conclusiones acusatorias; vista a la defensa"],
+    ETAPAS_V4[3]: ["Se celebró la audiencia de vista; el asunto quedó en estado de sentencia",
+                   "Se citó a la audiencia de vista"],
+    ETAPAS_V4[4]: ["Se dictó sentencia de primera instancia; corre el plazo para apelar",
+                   "Se notificó la sentencia de primera instancia a las partes"],
+    ETAPAS_V4[5]: ["Se admitió la apelación contra la sentencia de primera instancia; pendiente de resolución",
+                   "El tribunal de apelación señaló fecha para la vista"],
+    ETAPAS_V4[6]: ["El tribunal de apelación ordenó la reposición del procedimiento",
+                   "Se repuso el procedimiento a partir de la diligencia anulada"],
+    ETAPAS_V4[7]: ["Se suspendió el procedimiento por incapacidad mental sobrevenida del procesado (art. 468, fracc. III)"],
+}
+TRADUCCION_ETAPAS = {
+    "Instrucción": [ETAPAS_V4[0]],
+    "Cierre de instrucción / conclusiones": ETAPAS_V4[1:4],
+    "Sentencia de primera instancia": [ETAPAS_V4[4]],
+    "Apelación (Tribunal de Alzada)": [ETAPAS_V4[5]],
+    "Amparo directo": [ETAPAS_V4[5]],  # el amparo directo sale del universo; aquí se vuelve segunda instancia
+    "Reposición del procedimiento": [ETAPAS_V4[6]],
+}
+CON_CIERRE = ETAPAS_V4[1:6]
+CON_AUDIENCIA = ETAPAS_V4[3:6]
+CON_SENTENCIA_V4 = ETAPAS_V4[4:6]
+
+# Fechas de entrada en vigor del CNPP en el ámbito federal (declaratorias del Congreso de la Unión).
+DECLARATORIAS = {
+    "Durango": date(2014, 11, 24), "Puebla": date(2014, 11, 24),
+    "Yucatán": date(2015, 3, 16), "Zacatecas": date(2015, 3, 16),
+    "Baja California Sur": date(2015, 8, 1), "Guanajuato": date(2015, 8, 1), "Querétaro": date(2015, 8, 1),
+    "San Luis Potosí": date(2015, 8, 1),
+    "Chiapas": date(2015, 11, 30), "Chihuahua": date(2015, 11, 30), "Coahuila": date(2015, 11, 30),
+    "Nayarit": date(2015, 11, 30), "Oaxaca": date(2015, 11, 30), "Sinaloa": date(2015, 11, 30), "Tlaxcala": date(2015, 11, 30),
+    "Aguascalientes": date(2016, 2, 29), "Colima": date(2016, 2, 29), "Estado de México": date(2016, 2, 29),
+    "Hidalgo": date(2016, 2, 29), "Morelos": date(2016, 2, 29), "Nuevo León": date(2016, 2, 29),
+    "Quintana Roo": date(2016, 2, 29), "Tabasco": date(2016, 2, 29), "Ciudad de México": date(2016, 2, 29),
+    "Campeche": date(2016, 4, 29), "Michoacán": date(2016, 4, 29), "Sonora": date(2016, 4, 29), "Veracruz": date(2016, 4, 29),
+    "Baja California": date(2016, 6, 14), "Guerrero": date(2016, 6, 14), "Jalisco": date(2016, 6, 14), "Tamaulipas": date(2016, 6, 14),
+}
+MOTIVOS_BAJA = [
+    "Sentencia ejecutoriada (art. 360 CFPP)",
+    "Libertad provisional bajo caución (art. 399 CFPP)",
+    "Libertad por desvanecimiento de datos (art. 422 CFPP)",
+    "Sobreseimiento (art. 298 CFPP)",
+    "Conclusiones no acusatorias / inmediata libertad (art. 291 CFPP)",
+    "Cese o sustitución de la medida (quinto transitorio, DOF 17-06-2016)",
+    "Amparo directo promovido (art. 170 Ley de Amparo)",
+    "Otro (especificar en observaciones)",
+]
+RESULTADOS_REVISION = ["Pendiente de resolver", "Se mantuvo la prisión preventiva",
+                       "Se sustituyó la medida", "Cesó la medida"]
+VIGOR_DECRETO_2016 = date(2016, 6, 18)
 
 # Probabilidad de cada etapa según el nivel de antigüedad (1 = reciente … 5 = más antigua).
 PESOS_ETAPA = {
@@ -309,6 +384,14 @@ def generar():
             "Etapa procesal": etapa,
             "Instancia actual": instancia,
             "Último acto procesal": acto,
+            "Fecha de inicio de la averiguación previa": "",
+            "Tipo de procedimiento": "",
+            "Fecha de cierre de instrucción": "",
+            "Fecha de la audiencia de vista": "",
+            "Revisión de la medida: solicitada": "",
+            "Revisión de la medida: fecha": "",
+            "Revisión de la medida: resultado": "",
+            "Motivo de baja": "",
             "Fecha del último acto procesal": fecha_acto.isoformat(),
             "Fecha de sentencia de primera instancia": sentencia,
             "Pena impuesta (no firme)": pena,
@@ -316,6 +399,8 @@ def generar():
             "Fecha de corte": FECHA_REFERENCIA.isoformat(),
             "Observaciones": rnd.choice(OBSERVACIONES),
         })
+
+    adaptar_v4(registros)
 
     # --- Casos de prueba deliberados (todos ficticios) ---------------------
     homonimos = ["José Luis Hernández Ruiz", "María Fernanda López Castro", "Juan Pablo Ramírez Soto"]
@@ -341,7 +426,9 @@ def generar():
             for campo in ["Expediente", "Causa penal", "Delito(s)", "Entidad Federativa", "Circuito",
                           "Juzgado de Distrito", "Lugar de reclusión", "Fecha de auto de formal prisión",
                           "Etapa procesal", "Instancia actual", "Último acto procesal",
-                          "Fecha del último acto procesal", "Fecha de sentencia de primera instancia"]:
+                          "Fecha del último acto procesal", "Fecha de sentencia de primera instancia",
+                          "Fecha de inicio de la averiguación previa", "Tipo de procedimiento",
+                          "Fecha de cierre de instrucción", "Fecha de la audiencia de vista"]:
                 registros[j][campo] = base[campo]
             if not base["Fecha de sentencia de primera instancia"]:
                 registros[j]["Pena impuesta (no firme)"] = ""
@@ -353,11 +440,25 @@ def generar():
     registros[INDICE_SIN_FECHA]["Fecha de auto de formal prisión"] = ""
     registros[INDICE_SIN_FECHA]["Observaciones"] = "Registro de prueba sin fecha de auto de formal prisión."
 
-    # Dos registros con sentencia ejecutoriada (deben salir del seguimiento y listarse en el aviso).
-    for k, (etapa, ejecutoria) in enumerate([
-        ("Sentencia ejecutoriada", "2026-08-14"),
-        ("Apelación (Tribunal de Alzada)", "2026-09-03"),  # etapa sin actualizar, pero con fecha de ejecutoria
-    ]):
+    # Registros fuera del seguimiento (IDs 151 a 157), todos ficticios:
+    #   bajas: 151 ejecutoria, 152 fecha de ejecutoria sin actualizar la etapa,
+    #          153 desvanecimiento de datos, 154 cese de la medida tras su revisión;
+    #   amparo directo en trámite: 155, 156 y 157 (sentencia definitiva; fuera del universo).
+    salidas = [
+        ({"Etapa procesal": "Sentencia ejecutoriada", "Fecha de ejecutoria": "2026-08-14",
+          "Motivo de baja": MOTIVOS_BAJA[0]}, "Registro de prueba: sentencia ejecutoriada."),
+        ({"Etapa procesal": ETAPAS_V4[5], "Fecha de ejecutoria": "2026-09-03", "Motivo de baja": ""},
+         "Registro de prueba: tiene fecha de ejecutoria aunque la etapa no se actualizó."),
+        ({"Etapa procesal": ETAPAS_V4[0], "Motivo de baja": MOTIVOS_BAJA[2]},
+         "Registro de prueba: obtuvo libertad por desvanecimiento de datos."),
+        ({"Etapa procesal": ETAPAS_V4[0], "Motivo de baja": MOTIVOS_BAJA[5], "Revisión de la medida: solicitada": "Sí",
+          "Revisión de la medida: fecha": "2026-07-20", "Revisión de la medida: resultado": "Cesó la medida"},
+         "Registro de prueba: cesó la prisión preventiva tras su revisión."),
+        ({"Etapa procesal": "Amparo directo", "Motivo de baja": ""}, "Registro de prueba: amparo directo en trámite."),
+        ({"Etapa procesal": "Amparo directo", "Motivo de baja": ""}, "Registro de prueba: amparo directo en trámite."),
+        ({"Etapa procesal": "Amparo directo", "Motivo de baja": ""}, "Registro de prueba: amparo directo en trámite."),
+    ]
+    for k, (cambios, obs) in enumerate(salidas):
         base = dict(registros[30 + k])
         n = TOTAL + k + 1
         base.update({
@@ -366,28 +467,35 @@ def generar():
             "Nombre completo": nombre_aleatorio(rnd),
             "Expediente": f"EXP-FIC-{9000 + k}/2019",
             "Causa penal": f"CP-FIC-{900 + k}/2019",
-            "Etapa procesal": etapa,
-            "Fecha de ejecutoria": ejecutoria,
-            "Observaciones": "Registro de prueba con sentencia ejecutoriada: debe darse de baja del seguimiento.",
+            "Fecha de ejecutoria": "",
+            "Observaciones": obs,
         })
+        base.update(cambios)
+        if cambios["Etapa procesal"] == "Amparo directo":
+            base["Instancia actual"] = f"Tribunal Colegiado en Materia Penal del {base['Circuito']} (A.D. FIC-{40 + k}/2026)"
+            base["Último acto procesal"] = "Se promovió amparo directo contra la sentencia de segunda instancia; la persona quedó a disposición del Tribunal Colegiado (art. 191 Ley de Amparo)."
+            if not base["Fecha de sentencia de primera instancia"]:
+                base["Fecha de sentencia de primera instancia"] = "2022-05-10"
+                base["Pena impuesta (no firme)"] = 18
         registros.append(base)
 
     return registros
 
 
 ANTERIOR_DE_ETAPA = {
-    "Cierre de instrucción / conclusiones": "Instrucción",
-    "Sentencia de primera instancia": "Cierre de instrucción / conclusiones",
-    "Apelación (Tribunal de Alzada)": "Sentencia de primera instancia",
+    ETAPAS_V4[2]: ETAPAS_V4[1],
+    ETAPAS_V4[3]: ETAPAS_V4[2],
+    ETAPAS_V4[4]: ETAPAS_V4[3],
+    ETAPAS_V4[5]: ETAPAS_V4[4],
 }
 
 
 def generar_corte_anterior(registros):
     """Corte ficticio del 1 de septiembre de 2026 para probar el comparativo:
     3 altas (no existían), 2 bajas (ya no aparecen), 5 cambios de etapa y las 2
-    ejecutoriadas de hoy todavía en seguimiento."""
+    registros que hoy están fuera del seguimiento (bajas y amparo directo) todavía activos."""
     rnd = random.Random(SEMILLA + 2)
-    activos = [r for r in registros if not r["Fecha de ejecutoria"]]
+    activos = [r for r in registros if r["ID"] <= TOTAL]
     altas = {r["ID"] for r in activos if r["Fecha de auto de formal prisión"] >= "2026-01-01"}
     altas = set(sorted(altas)[:3])
     anteriores = []
@@ -397,9 +505,11 @@ def generar_corte_anterior(registros):
             continue
         a = dict(r)
         a["Fecha de corte"] = FECHA_CORTE_ANTERIOR.isoformat()
-        if a["Fecha de ejecutoria"]:  # hace un mes aún no causaba ejecutoria
-            a["Fecha de ejecutoria"] = ""
-            a["Etapa procesal"] = "Apelación (Tribunal de Alzada)"
+        if r["ID"] > TOTAL:  # hace un mes todavía estaban en seguimiento
+            a.update({"Fecha de ejecutoria": "", "Motivo de baja": "",
+                      "Etapa procesal": ETAPAS_V4[0] if r["Etapa procesal"] == ETAPAS_V4[0] else ETAPAS_V4[5]})
+            if a["Revisión de la medida: resultado"] == "Cesó la medida":
+                a["Revisión de la medida: resultado"] = "Pendiente de resolver"
         elif cambios < 5 and a["Etapa procesal"] in ANTERIOR_DE_ETAPA and r["ID"] % 7 == 0:
             a["Etapa procesal"] = ANTERIOR_DE_ETAPA[a["Etapa procesal"]]
             cambios += 1
@@ -412,6 +522,71 @@ def generar_corte_anterior(registros):
                   "Observaciones": "Registro de prueba: obtuvo su libertad antes del corte actual (dato ficticio)."})
         anteriores.append(b)
     return anteriores
+
+
+def adaptar_v4(registros):
+    """Traduce las etapas al catálogo literal del CFPP y agrega los rubros de la versión 4
+    con fechas coherentes: averiguación previa < auto de formal prisión < cierre de instrucción
+    < audiencia de vista < sentencia < último acto <= fecha de referencia."""
+    rnd = random.Random(SEMILLA + 3)
+    hoy = FECHA_REFERENCIA
+
+    def entre(a, b):
+        return a if b <= a else a + timedelta(days=rnd.randint(0, (b - a).days))
+
+    verificar = 0
+    for r in registros:
+        afp = date.fromisoformat(r["Fecha de auto de formal prisión"])
+        etapa = rnd.choice(TRADUCCION_ETAPAS[r["Etapa procesal"]])
+        if etapa == ETAPAS_V4[0] and (hoy - afp).days > 3650 and rnd.random() < 0.12:
+            etapa = ETAPAS_V4[7]
+        sentencia = date.fromisoformat(r["Fecha de sentencia de primera instancia"]) if r["Fecha de sentencia de primera instancia"] else None
+        if etapa not in CON_SENTENCIA_V4:
+            sentencia = None
+            r["Fecha de sentencia de primera instancia"], r["Pena impuesta (no firme)"] = "", ""
+        tope = (sentencia or hoy) - timedelta(days=20)
+
+        decl = DECLARATORIAS[r["Entidad Federativa"]]
+        ap = afp - timedelta(days=rnd.randint(20, 900))
+        # Procedimiento iniciado antes de la declaratoria (sistema tradicional), salvo dos casos de prueba.
+        if ap >= decl:
+            if verificar < 2 and afp >= decl + timedelta(days=400):
+                ap = decl + timedelta(days=30)
+                verificar += 1
+            else:
+                ap = decl - timedelta(days=rnd.randint(30, 1500))
+        r["Fecha de inicio de la averiguación previa"] = ap.isoformat()
+        r["Tipo de procedimiento"] = "Sumario" if rnd.random() < 0.08 else "Ordinario"
+
+        ultimo = afp
+        if etapa in CON_CIERRE:
+            cierre = entre(afp + timedelta(days=90), max(afp + timedelta(days=90), tope - timedelta(days=40)))
+            r["Fecha de cierre de instrucción"] = cierre.isoformat()
+            ultimo = cierre
+            if etapa in CON_AUDIENCIA:
+                aud = entre(cierre + timedelta(days=15), max(cierre + timedelta(days=15), tope - timedelta(days=1)))
+                r["Fecha de la audiencia de vista"] = aud.isoformat()
+                ultimo = aud
+        if sentencia:
+            ultimo = max(ultimo, sentencia)
+        acto = date.fromisoformat(r["Fecha del último acto procesal"])
+        if acto <= ultimo:
+            acto = min(hoy, ultimo + timedelta(days=rnd.randint(1, 60)))
+        r["Fecha del último acto procesal"] = min(acto, hoy).isoformat()
+        r["Último acto procesal"] = rnd.choice(ACTOS_V4[etapa]) + "."
+        if etapa == ETAPAS_V4[5]:
+            r["Instancia actual"] = f"Tribunal Colegiado de Apelación del {r['Circuito']} (Toca FIC-{rnd.randint(1, 300)}/{acto.year})"
+        else:
+            r["Instancia actual"] = r["Juzgado de Distrito"]
+        r["Etapa procesal"] = etapa
+
+        if rnd.random() < 0.25:
+            inicio = max(afp, VIGOR_DECRETO_2016)
+            r["Revisión de la medida: solicitada"] = "Sí"
+            r["Revisión de la medida: fecha"] = entre(inicio, hoy - timedelta(days=1)).isoformat()
+            r["Revisión de la medida: resultado"] = rnd.choices(RESULTADOS_REVISION[:2], weights=[25, 75])[0]
+        else:
+            r["Revisión de la medida: solicitada"] = "No"
 
 
 def escribir_csv(registros, ruta):
@@ -472,4 +647,4 @@ def escribir_js(registros, ruta):
 if __name__ == "__main__":
     regs = generar()
     escribir(regs)
-    print(f"Generados {len(regs)} registros ficticios ({TOTAL} en seguimiento) en {DIR_DATOS}")
+    print(f"Generados {len(regs)} registros ficticios ({TOTAL} en seguimiento, {len(regs) - TOTAL} fuera) en {DIR_DATOS}")

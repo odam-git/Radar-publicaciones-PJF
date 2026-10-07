@@ -34,14 +34,22 @@
     { clave: "motivoPrivacion", columna: "Motivo de la privación de libertad", alias: ["motivo de privacion", "situacion de reclusion", "situacion"] },
     { clave: "otraAutoridad", columna: "Otra causa: autoridad",      alias: ["otra causa autoridad"], opcional: true },
     { clave: "otraSituacion", columna: "Otra causa: situación",      alias: ["otra causa situacion"], opcional: true },
+    { clave: "fechaInicioAP", columna: "Fecha de inicio de la averiguación previa", alias: ["inicio de la averiguacion previa", "fecha de inicio del procedimiento"], opcional: true },
     { clave: "fechaAFP",      columna: "Fecha de auto de formal prisión", alias: ["fecha de afp", "fecha auto de formal prision", "auto de formal prision"] },
+    { clave: "tipoProcedimiento", columna: "Tipo de procedimiento",  alias: ["procedimiento"], opcional: true },
     { clave: "etapa",         columna: "Etapa procesal",             alias: ["etapa"] },
     { clave: "instancia",     columna: "Instancia actual",           alias: ["instancia"] },
+    { clave: "fechaCierre",   columna: "Fecha de cierre de instrucción", alias: ["cierre de instruccion"], opcional: true },
+    { clave: "fechaAudiencia", columna: "Fecha de la audiencia de vista", alias: ["audiencia de vista"], opcional: true },
     { clave: "ultimoActo",    columna: "Último acto procesal",       alias: ["ultimo acto", "resena jurisdiccional"] },
     { clave: "fechaUltimoActo", columna: "Fecha del último acto procesal", alias: ["fecha ultimo acto"], opcional: true },
     { clave: "fechaSentencia", columna: "Fecha de sentencia de primera instancia", alias: ["fecha de sentencia"], opcional: true },
     { clave: "penaNoFirme",   columna: "Pena impuesta (no firme)",   alias: ["pena", "pena impuesta"], opcional: true },
+    { clave: "revisionSolicitada", columna: "Revisión de la medida: solicitada", alias: ["revision solicitada"], opcional: true },
+    { clave: "revisionFecha", columna: "Revisión de la medida: fecha", alias: ["revision fecha"], opcional: true },
+    { clave: "revisionResultado", columna: "Revisión de la medida: resultado", alias: ["revision resultado"], opcional: true },
     { clave: "fechaEjecutoria", columna: "Fecha de ejecutoria",      alias: ["ejecutoria"], opcional: true },
+    { clave: "motivoBaja",    columna: "Motivo de baja",             alias: ["baja"], opcional: true },
     { clave: "fechaCorte",    columna: "Fecha de corte",             alias: ["corte"], opcional: true },
     { clave: "observaciones", columna: "Observaciones",              alias: [] },
   ];
@@ -106,24 +114,33 @@
     return mapa;
   }
 
-  // La sentencia ejecutoriada saca el registro del seguimiento de prisión preventiva.
-  const esEjecutoriada = (r) => sinAcentos(r.etapa).includes("ejecutori") || !!r.fechaEjecutoria;
+  /*
+   * Salida del universo (personas en prisión preventiva sin sentencia ejecutoriada):
+   *  - Amparo directo: se promueve contra sentencia definitiva (CPEUM art. 107 fracc. V;
+   *    Ley de Amparo art. 170) y la persona queda a disposición del tribunal de amparo (art. 191).
+   *  - Baja: sentencia ejecutoriada (CFPP art. 360), fecha de ejecutoria o cualquier motivo de baja.
+   */
+  const esAmparoDirecto = (r) => sinAcentos(r.etapa).includes("amparo directo") || sinAcentos(r.motivoBaja).includes("amparo directo");
+  const esBaja = (r) => !esAmparoDirecto(r) && (sinAcentos(r.etapa).includes("ejecutori") || !!r.fechaEjecutoria || !!r.motivoBaja);
+  const motivoDeBaja = (r) => r.motivoBaja || ((sinAcentos(r.etapa).includes("ejecutori") || r.fechaEjecutoria) ? "Sentencia ejecutoriada (art. 360 CFPP)" : "");
 
   /*
    * Convierte filas "tal como vienen de la hoja" en registros internos.
-   * Devuelve { registros, ejecutoriadas, avisos }:
-   *   registros     → en seguimiento (se muestran)
-   *   ejecutoriadas → con sentencia ejecutoriada (solo se listan en el aviso de baja)
-   *   avisos        → problemas de estructura de la hoja
+   * Devuelve { registros, bajas, amparos, avisos }:
+   *   registros → en seguimiento (se muestran)
+   *   bajas     → deben darse de baja (solo se listan en el aviso)
+   *   amparos   → sentencia definitiva con amparo directo en trámite (aviso propio)
+   *   avisos    → problemas de estructura de la hoja
    */
   function normalizarFilas(filas) {
     const avisos = [];
-    if (!filas.length) return { registros: [], ejecutoriadas: [], avisos: ["La fuente no contiene filas."] };
+    const vacio = { registros: [], bajas: [], amparos: [], avisos };
+    if (!filas.length) { avisos.push("La fuente no contiene filas."); return vacio; }
     const mapa = resolverColumnas(Object.keys(filas[0]));
     const faltantes = MAPA_COLUMNAS.filter((d) => !mapa[d.clave] && !d.opcional).map((d) => d.columna);
     if (faltantes.length) avisos.push("Columnas no encontradas: " + faltantes.join(", ") + ".");
 
-    const registros = [], ejecutoriadas = [];
+    const registros = [], bajas = [], amparos = [];
     filas.forEach((fila, i) => {
       const r = {};
       for (const def of MAPA_COLUMNAS) {
@@ -131,16 +148,16 @@
         r[def.clave] = typeof v === "string" ? v.trim() : v == null ? "" : String(v);
       }
       r.id = String(r.id || i + 1);
-      r.fechaAFP = aFechaISO(r.fechaAFP);
-      r.fechaSentencia = aFechaISO(r.fechaSentencia);
-      r.fechaUltimoActo = aFechaISO(r.fechaUltimoActo);
-      r.fechaCorte = aFechaISO(r.fechaCorte);
+      for (const f of ["fechaInicioAP", "fechaAFP", "fechaCierre", "fechaAudiencia", "fechaSentencia",
+        "fechaUltimoActo", "revisionFecha", "fechaCorte"]) r[f] = aFechaISO(r[f]);
       r.fechaEjecutoria = aFechaISO(r.fechaEjecutoria) || r.fechaEjecutoria;
       const pena = aNumeroPena(r.penaNoFirme);
       r.penaNoFirme = Number.isNaN(pena) ? null : pena;
-      (esEjecutoriada(r) ? ejecutoriadas : registros).push(r);
+      if (esAmparoDirecto(r)) amparos.push(r);
+      else if (esBaja(r)) { r.motivoBaja = motivoDeBaja(r); bajas.push(r); }
+      else registros.push(r);
     });
-    return { registros, ejecutoriadas, avisos };
+    return { registros, bajas, amparos, avisos };
   }
 
   /* ---------- Privacidad (minimización / seudonimización) ---------------- */
@@ -203,25 +220,36 @@
 
   // Para archivos que la persona usuaria elige con "Cargar archivo CSV".
   // Se leen en el navegador; no se suben a ningún lugar.
+  // Columnas sin las cuales un archivo elegido por el usuario no se carga (se conservan los datos actuales).
+  const INDISPENSABLES = ["causa", "fechaAFP"];
+
   function cargarDesdeTextoCSV(texto, nombreArchivo, config) {
-    return prepararRegistros(parsearCSV(texto), "Archivo " + nombreArchivo, config);
+    const filas = parsearCSV(texto);
+    if (!filas.length) throw new Error(`El archivo «${nombreArchivo}» no contiene filas. Se conservan los datos actuales.`);
+    const mapa = resolverColumnas(Object.keys(filas[0]));
+    const faltan = MAPA_COLUMNAS.filter((d) => INDISPENSABLES.includes(d.clave) && !mapa[d.clave]).map((d) => d.columna);
+    if (faltan.length) {
+      throw new Error(`El archivo «${nombreArchivo}» no tiene las columnas indispensables (${faltan.join(", ")}). Se conservan los datos actuales.`);
+    }
+    return prepararRegistros(filas, "Archivo " + nombreArchivo, config);
   }
 
   function prepararRegistros(filas, origen, config) {
-    const { registros, ejecutoriadas, avisos } = normalizarFilas(filas);
+    const { registros, bajas, amparos, avisos } = normalizarFilas(filas);
     // Fecha de corte: la más reciente que traiga la hoja; si no trae, la de la configuración.
-    const fechaCorte = [...registros, ...ejecutoriadas].map((r) => r.fechaCorte).filter(Boolean).sort().pop()
+    const fechaCorte = [...registros, ...bajas, ...amparos].map((r) => r.fechaCorte).filter(Boolean).sort().pop()
       || (config.fuente && config.fuente.fechaCorte) || "";
     return {
       fechaCorte,
       registros: aplicarPrivacidad(registros, config.privacidad),
-      ejecutoriadas: aplicarPrivacidad(ejecutoriadas, config.privacidad),
+      bajas: aplicarPrivacidad(bajas, config.privacidad),
+      amparos: aplicarPrivacidad(amparos, config.privacidad),
       origen, avisos,
     };
   }
 
   return {
-    MAPA_COLUMNAS, parsearCSV, normalizarFilas, esEjecutoriada, aplicarPrivacidad,
+    MAPA_COLUMNAS, parsearCSV, normalizarFilas, esAmparoDirecto, esBaja, aplicarPrivacidad,
     cargarDatos, cargarDesdeTextoCSV, aFechaISO, aNumeroPena,
   };
 });
