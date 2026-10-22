@@ -4,7 +4,8 @@
 - A. Informe integral (revisión completa)
 - B. Corrección puntual
 - C. Comparación de versiones
-- D. Reglas de redacción del informe
+- D. Sin observaciones (texto técnicamente adecuado)
+- E. Reglas de redacción del informe
 
 Ajusta la extensión a la complejidad del documento. Omite secciones que no tengan contenido escribiendo "Sin observaciones" en una línea, en lugar de tablas vacías.
 
@@ -101,7 +102,25 @@ No agregues tabla, resumen ejecutivo ni lista de comprobación salvo que el usua
 
 ---
 
-## D. Reglas de redacción del informe
+## D. Sin observaciones (texto técnicamente adecuado)
+
+```markdown
+**Conclusión:** no advierto defectos de técnica normativa que justifiquen cambiar el texto.
+
+**Lo que comprobé:** [3 a 5 líneas: estructura, numeración, términos definidos, remisiones internas (n de n), transitorios].
+
+**Pendiente de comprobar fuera del texto:** [referencias externas no proporcionadas, elementos de formalización, si los hay].
+
+[Si aplica, una línea:] **Punto que requiere análisis jurídico independiente:** [disposición → aspecto a verificar].
+
+**Limitaciones:** [materiales no disponibles].
+```
+
+Sin tabla de hallazgos ni lista de comprobación extensa. Si hay una o dos observaciones de prioridad baja, agrégalas como lista breve marcada "opcional".
+
+---
+
+## E. Reglas de redacción del informe
 
 - Cita el texto observado entre comillas latinas o dobles, de forma literal y breve.
 - Localiza con la nomenclatura del propio documento ("Art. 5, fr. III", "Lineamiento Sexto", "Transitorio Segundo", "Considerando III").

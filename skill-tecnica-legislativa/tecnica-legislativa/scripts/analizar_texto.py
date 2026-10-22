@@ -513,34 +513,49 @@ def imprimir_decreto(texto, cuerpo_art):
 # ---------------------------------------------------------------------------
 
 RE_INICIO_DEF = re.compile(r"se\s+(?:entender[áa]|entiende|entienden|entender[áa]n)\s+por", re.I)
-RE_DEF_FRACCION = re.compile(r"^\s*(?:[IVXLC]+|[a-z]|\d+)\s*[\.\)\-–]+\s*([^:]{2,80}?)\s*:\s*\S")
+RE_DEF_FRACCION = re.compile(r"^\s*(?:[IVXLC]+|[a-z]|\d+)\s*[\.\)\-–]+\s*([^:]{2,80}?)\s*:\s*(\S.*)$")
+# Definición en línea: "se entenderá por Sala la sala de juntas…" o "se entenderá por «Sala»: …".
+RE_DEF_LINEA = re.compile(
+    r"se\s+(?:entender[áa]|entiende)n?\s+por\s+[\"«“]?([A-ZÁÉÍÓÚÑ][\wáéíóúñ]*(?:\s+(?:de|del|y|[A-ZÁÉÍÓÚÑ][\wáéíóúñ]*))*)[\"»”]?"
+    r"\s*(?::|,)?\s+((?:el|la|los|las|al|a|un|una)\b.*)$")
+ARTICULOS = r"(?:el|la|los|las|un|una|al)"
+# Palabras con mayúscula que no deben tomarse por términos definidos.
+NO_TERMINOS = {"Artículo", "Artículos", "Transitorio", "Transitorios", "Capítulo", "Título", "Sección", "Anexo", "Único", "Única"}
+
+
+def descripcion_nuclear(definicion):
+    """Primer sintagma de la definición: 'La sala de juntas de la Unidad…' -> ['sala', 'de', 'juntas']."""
+    palabras = re.sub(rf"^{ARTICULOS}\s+", "", definicion.strip(), flags=re.I).split()
+    nucleo = [w.strip(",;.:") for w in palabras[:3]]
+    return nucleo if len(nucleo) == 3 and nucleo[1].lower() in ("de", "del") else []
 
 
 def cmd_terminos(lineas):
     print("# Términos definidos y su uso (candidatos: confirmar leyendo el texto)\n")
     inicio = next((i for i, l in enumerate(lineas) if RE_INICIO_DEF.search(l)), None)
-    if inicio is None:
-        print("- No se detectó un bloque de definiciones con la fórmula 'se entenderá por'. Revise manualmente.")
-        return
-    terminos, fin = [], inicio
-    for i in range(inicio + 1, min(len(lineas), inicio + 200)):
-        l = lineas[i].strip()
-        if not l:
-            continue
-        m = RE_DEF_FRACCION.match(l)
+    terminos, fin = [], inicio if inicio is not None else -1
+    if inicio is not None:
+        m = RE_DEF_LINEA.search(lineas[inicio])
         if m:
-            terminos.append((m.group(1).strip().strip("*\"“”«»"), i + 1))
-            fin = i
-        elif RE_ARTICULO_NUM.match(l) or RE_ORDINAL_SUELTO.match(l) or RE_DIVISION.match(l):
-            break
-    if not terminos:
-        print(f"- Se detectó 'se entenderá por' en la línea {inicio + 1}, pero no un listado 'Término: definición'.")
-        return
+            terminos.append((m.group(1).strip(), inicio + 1, m.group(2)))
+        for i in range(inicio + 1, min(len(lineas), inicio + 200)):
+            l = lineas[i].strip()
+            if not l:
+                continue
+            m = RE_DEF_FRACCION.match(l)
+            if m:
+                terminos.append((m.group(1).strip().strip("*\"“”«»"), i + 1, m.group(2)))
+                fin = i
+            elif RE_ARTICULO_NUM.match(l) or RE_ORDINAL_SUELTO.match(l) or RE_DIVISION.match(l):
+                break
     resto = "\n".join(lineas[fin + 1:])
-    print(f"Bloque de definiciones en las líneas {inicio + 1}–{fin + 1}. Términos: {len(terminos)}\n")
-    print("| Término | Línea | Usos exactos posteriores | Variantes de mayúsculas | Posibles denominaciones alternativas |")
-    print("|---|---|---|---|---|")
-    for termino, linea in terminos:
+    if not terminos:
+        print("- No se detectaron definiciones con la fórmula 'se entenderá por'. Revise manualmente.\n")
+    else:
+        print(f"Definiciones detectadas a partir de la línea {inicio + 1}. Términos: {len(terminos)}\n")
+        print("| Término | Línea | Usos exactos posteriores | Variantes de mayúsculas | Posibles denominaciones alternativas |")
+        print("|---|---|---|---|---|")
+    for termino, linea, definicion in terminos:
         # Se cuentan también los plurales regulares ("Solicitud" / "Solicitudes").
         exactos = len(re.findall(rf"(?<!\w){re.escape(termino)}(?:e?s)?(?!\w)", resto))
         variantes = sorted({v for v in re.findall(rf"(?<!\w){re.escape(termino)}(?:e?s)?(?!\w)", resto, re.I)
@@ -552,10 +567,36 @@ def cmd_terminos(lineas):
             for m in re.finditer(rf"(?<!\w)([A-ZÁÉÍÓÚÑ][\wáéíóúñ]+)\s+{cola}(?!\w)", resto):
                 if m.group(1) != palabras[0]:
                     alternativas.add(m.group(0))
+        # Uso de la descripción en lugar del término ("la sala de juntas", "el salón de juntas").
+        nucleo = descripcion_nuclear(definicion)
+        if nucleo:
+            cola = re.escape(" ".join(nucleo[1:]))
+            for m in re.finditer(rf"(?<!\w)([\wáéíóúñ]+)\s+{cola}(?!\w)", resto, re.I):
+                cabeza = m.group(1).lower()
+                # Sólo se sugiere si la palabra inicial coincide o se parece a la de la definición
+                # ("sala"/"salón"), para no confundir sintagmas ajenos que comparten la preposición.
+                if cabeza != termino.lower() and cabeza[:3] == nucleo[0].lower()[:3]:
+                    alternativas.add(m.group(0))
         print(f"| {termino} | {linea} | {exactos} | {', '.join(variantes) or '—'} | {', '.join(sorted(alternativas)) or '—'} |")
+
+    # Expresiones con mayúscula inicial a mitad de oración que no están definidas.
+    definidos = {t.lower() for t, _, _ in terminos}
+    candidatos = {}
+    for m in re.finditer(r"(?<=[a-záéíóúñ0-9,;] )([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+(?:de|del)\s+[a-záéíóúñ]+|\s+(?:de\s+|del\s+|de\s+la\s+|de\s+los\s+)?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*)", resto):
+        frase = m.group(1)
+        base = re.sub(r"(?:e?s)$", "", frase.lower())
+        if (frase in NO_TERMINOS or ordinal_a_numero(frase) or frase.lower() in definidos
+                or any(base == re.sub(r"(?:e?s)$", "", d) or d.startswith(frase.lower() + " ") for d in definidos)):
+            continue
+        candidatos[frase] = candidatos.get(frase, 0) + 1
+    if candidatos:
+        print("\n## Expresiones con mayúscula inicial no definidas (a mitad de oración)")
+        print("Pueden ser denominaciones de órganos u ordenamientos (correctas) o términos que perdieron su definición.")
+        for frase, n in sorted(candidatos.items()):
+            print(f"- {frase} ({n})")
     print("\nInterpretación: 0 usos sugiere término definido innecesario o sustituido por otra denominación;"
-          " las variantes y alternativas son candidatas a uso inconsistente. El script no detecta sinónimos"
-          " de una sola palabra (p. ej. 'salón' por 'Sala'): búsquelos manualmente.")
+          " las variantes y alternativas son candidatas a uso inconsistente. El script no detecta todos los"
+          " sinónimos de una sola palabra: búsquelos manualmente.")
 
 
 # ---------------------------------------------------------------------------
@@ -611,6 +652,8 @@ def cmd_comparar(l1, l2):
             if j in usados or (t1 == "transitorio") != (t2 == "transitorio"):
                 continue
             r = difflib.SequenceMatcher(None, c1, c2).ratio()
+            if e1 == e2:
+                r += 0.2  # a igual número, se presume la misma unidad salvo que el texto difiera mucho
             if r > puntaje:
                 mejor, puntaje = j, r
         if mejor is not None and puntaje >= 0.55:
