@@ -1,0 +1,1 @@
+Te comparto un proyecto de decreto de reforma (documento.md). Incluí al inicio el extracto del texto vigente de la ley que se reforma. Revisa la técnica legislativa del decreto, en especial si el artículo único está bien formulado y si los transitorios son claros.

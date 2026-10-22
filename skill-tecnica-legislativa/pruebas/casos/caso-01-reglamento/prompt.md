@@ -1,0 +1,1 @@
+Revisa la técnica legislativa del proyecto de reglamento que te adjunto (archivo documento.md). Es un proyecto interno del Instituto, todavía en elaboración. Necesito el informe completo de observaciones con propuestas de redacción.

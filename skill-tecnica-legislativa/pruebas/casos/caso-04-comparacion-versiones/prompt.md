@@ -1,0 +1,1 @@
+Tengo dos versiones del mismo acuerdo (version-1.md y version-2.md). Compáralas e identifica qué cambió, qué se perdió y si la versión 2 quedó con problemas de técnica por la edición. La versión 2 es la que se quiere aprobar.
