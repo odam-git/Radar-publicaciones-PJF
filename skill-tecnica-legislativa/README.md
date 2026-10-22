@@ -42,7 +42,8 @@ skill-tecnica-legislativa/
 │   └── informe-agente-{1,2,3}-*.md  # Informes completos de los tres subagentes
 ├── pruebas/                     # Casos ficticios, claves, resultados y matriz (no se empaqueta)
 ├── herramientas/
-│   └── empaquetar.py            # Valida la Skill y genera el ZIP
+│   ├── empaquetar.py            # Valida la Skill y genera el ZIP
+│   └── probar_script.py         # Prueba de regresión del script contra los casos ficticios
 └── dist/
     └── tecnica-legislativa-vX.Y.Z.zip   # Paquete instalable
 ```
@@ -57,7 +58,7 @@ Conforme a la documentación oficial de Agent Skills, Claude carga siempre el no
 
 1. Edite los archivos fuente en `tecnica-legislativa/`.
 2. Actualice `VERSION`, la línea "Versión" de `SKILL.md` y `CHANGELOG.md`.
-3. Si cambió la metodología (apartados 1, 3, 5 o 6 de `SKILL.md`) o el script, repita las pruebas (`pruebas/README.md`).
+3. Si cambió el script, ejecute `python3 herramientas/probar_script.py` (debe superar todas las comprobaciones). Si cambió la metodología (apartados 1, 3, 5 o 6 de `SKILL.md`), repita además las pruebas de la Skill (`pruebas/README.md`).
 4. Genere el paquete: `python3 herramientas/empaquetar.py` (valida frontmatter, longitud, enlaces y estructura del ZIP).
 5. Instale la nueva versión siguiendo `INSTALACION.md`, apartado 6.
 

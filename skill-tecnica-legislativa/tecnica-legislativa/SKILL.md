@@ -61,14 +61,16 @@ Copia esta lista en tu razonamiento y avanza en orden:
 `scripts/analizar_texto.py` (Python 3, sólo biblioteca estándar) realiza comprobaciones mecánicas. Ejecútalo; no necesitas leer su código.
 
 ```bash
-python3 scripts/analizar_texto.py estructura documento.txt     # numeración, puntuación de enumeraciones, remisiones, fórmula de decretos
+python3 scripts/analizar_texto.py estructura documento.txt     # numeración, puntuación de enumeraciones, remisiones, fórmula de decretos, alertas léxicas
 python3 scripts/analizar_texto.py terminos documento.txt       # términos definidos: usos, variantes, denominaciones alternativas, expresiones con mayúscula no definidas
 python3 scripts/analizar_texto.py comparar v1.txt v2.txt       # correspondencia entre versiones, cambios de modales y de plazos
 ```
 
 - Acepta .txt, .md y .docx; para .pdf intenta pypdf o pdftotext. Si el usuario pegó el texto en la conversación, guárdalo primero en un archivo .txt.
 - Si un archivo contiene a la vez el texto vigente y el proyecto, usa `--desde "frase inicial"` y `--hasta "frase final"` para analizar sólo una parte.
-- Limitaciones: no reconoce remisiones relativas ("artículo anterior"), párrafos, sinónimos de una palabra ni formatos atípicos. Si el script falla o no hay ejecución de código, haz las comprobaciones manualmente y dilo en "Limitaciones".
+- Omite las notas del compilador y los encabezados de página de las compilaciones de la Cámara de Diputados, y revisa por separado cada bloque de transitorios de los decretos de reforma.
+- Cada **alerta léxica** (p. ej., sustantivos coordinados seguidos de "que…", "y/o", "plazo razonable") es un candidato: examínala y regístrala como hallazgo sólo si genera una duda real en su contexto.
+- Limitaciones: no reconoce remisiones relativas ("artículo anterior"), párrafos, sinónimos de una palabra ni formatos atípicos; en compilaciones muy extensas (códigos, Constitución) produce más ruido. Si el script falla o no hay ejecución de código, haz las comprobaciones manualmente y dilo en "Limitaciones".
 
 ## 5. Clasificación de hallazgos
 

@@ -66,7 +66,7 @@ El Centro de ayuda no describe un procedimiento para reemplazar una Skill person
 1. **Conserve la versión anterior**: cada versión queda en el repositorio (`dist/tecnica-legislativa-vX.Y.Z.zip`, en el historial de git y, si lo desea, en una etiqueta git `vX.Y.Z`). Descargue y guarde el ZIP vigente antes de cambiar nada.
 2. Edite los archivos fuente en `skill-tecnica-legislativa/tecnica-legislativa/`.
 3. Cambie el número en `VERSION` y en la línea "Versión" de `SKILL.md`; registre el cambio en `CHANGELOG.md`.
-4. Ejecute `python3 herramientas/empaquetar.py` y, si cambió la metodología, repita las pruebas (`pruebas/README.md`).
+4. Ejecute `python3 herramientas/probar_script.py` (si cambió el script) y `python3 herramientas/empaquetar.py`; si cambió la metodología, repita las pruebas (`pruebas/README.md`).
 5. En Claude.ai: abra la Skill en *Customize > Skills*, desactive el interruptor, pulse **"..." > Delete**, confirme y suba el ZIP nuevo.
 6. Si la versión nueva falla, elimine la nueva y vuelva a subir el ZIP anterior guardado en el paso 1.
 

@@ -24,6 +24,8 @@ Cada carpeta contiene `prompt.md` (petición del usuario), el o los documentos d
 3. **Línea base.** Cuando el presupuesto de ejecución lo permite, el mismo caso se ejecuta sin la Skill (`without_skill`) para medir su aporte.
 4. **Calificación.** Cada respuesta se califica contra `clave.md` con estos criterios: detección (defectos sembrados detectados con localización correcta), justificación, prudencia de la corrección (no inventa contenido; marca lo que requiere decisión), respeto de límites (sin conclusiones de fondo; uso de "Punto que requiere análisis jurídico independiente"), falsos positivos (hallazgos de prioridad media o superior sin defecto real) y formato proporcional.
 5. **Iteración.** Los fallos se corrigen en la Skill y se repiten los casos relevantes.
+6. **Modelos.** Iteración 1 con Opus (con y sin Skill); iteración 2 con Sonnet (seis casos), Opus (casos 03 y 06) y Haiku (casos 01 y 06); iteración 3, verificación dirigida.
+7. **Script.** Además de los casos ficticios, el script auxiliar se probó con textos reales en PDF descargados de la Cámara de Diputados (Ley del DOF, LNETB, LOPJF, LFPA, CPEUM y CCF). `herramientas/probar_script.py` automatiza la regresión del script contra los casos ficticios.
 
 Los resultados de cada iteración se guardan en `resultados/iteracion-N/` y se resumen en [matriz-resultados.md](matriz-resultados.md).
 
