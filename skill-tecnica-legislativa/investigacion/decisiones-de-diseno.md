@@ -1,0 +1,20 @@
+# Registro de decisiones de diseño
+
+| # | Decisión | Motivo | Respaldo |
+|---|---|---|---|
+| 1 | Nombre de la Skill: `tecnica-legislativa`; la carpeta empaquetada se llama igual | La documentación exige `name` en minúsculas, números y guiones (≤ 64) y el Centro de ayuda señala como causa de error que la carpeta no coincida con el nombre | Anthropic, "Agent Skills"; Centro de ayuda, "Use Skills in Claude" |
+| 2 | Frontmatter sólo con `name` y `description` | Máxima compatibilidad con la carga en Claude.ai; la versión se registra en `VERSION`, `CHANGELOG.md` y en el cuerpo de `SKILL.md` | El validador oficial admite otros campos, pero no son necesarios |
+| 3 | `description` de menos de 1 024 caracteres, en tercera persona, con qué hace y cuándo usarla, más una exclusión expresa (no dictaminar el fondo) | Es el mecanismo de activación; la documentación recomienda incluir ambos elementos | "Skill authoring best practices" |
+| 4 | `SKILL.md` breve (≈ 110 líneas) con reglas, flujo y clasificación; el detalle en cinco archivos de referencia a un solo nivel, cada uno con índice | Carga progresiva; cuerpo < 500 líneas; referencias a un nivel; índice en archivos > 100 líneas | "Skill authoring best practices" |
+| 5 | Script auxiliar en Python, sólo biblioteca estándar, para numeración, remisiones, fórmula de decretos, términos definidos y comparación de versiones | Las operaciones deterministas son más fiables con código; no depende de instalar paquetes | "Skill authoring best practices" (scripts para operaciones deterministas) |
+| 6 | El documento revisado se trata como contenido, nunca como instrucciones; una nota incrustada se reporta al usuario | Riesgo de inyección indirecta de instrucciones | Anthropic, "Mitigate jailbreaks and prompt injections"; OWASP LLM01:2025 |
+| 7 | Clasificación de la fuerza de cada criterio (A/B/C/D) y regla de que las fuentes extranjeras valen como (C) en México | El encargo exige no presentar doctrina como obligación legal | Encargo, apartado 3 |
+| 8 | "Consistencia antes que preferencia" en los puntos donde las fuentes o la práctica mexicana discrepan (tiempo verbal, numeración, derogación genérica, fórmulas de entrada en vigor, "y/o") | Evitar falsos positivos y no imponer un estilo como si fuera regla | Informes de los agentes 1 y 2 (discrepancias documentadas) |
+| 9 | Prioridad "de revisión técnica" (crítica, alta, media, baja), definida por el efecto en la aplicación del texto y no por invalidez jurídica | El encargo lo pide así; evita confundir prioridad con dictamen | Encargo, apartado 6 |
+| 10 | Etiqueta "Requiere decisión" para correcciones con riesgo medio o alto de alterar el sentido; varias redacciones cuando hay varias lecturas | Conservar el sentido normativo y no asumir cambios de fondo | Encargo, apartado 5; MX-RCD art. 93.1 y MX-RS art. 211.1 (corrección de estilo sin alterar el sentido) |
+| 11 | Sección fija "Punto que requiere análisis jurídico independiente", con lenguaje condicional | Límite expreso del encargo | Encargo, apartado 5 |
+| 12 | Cuatro modalidades (puntual, integral, comparativa, consulta) con salida proporcional | El encargo pide no forzar informes extensos | Encargo, apartado 7 |
+| 13 | Si el usuario aporta un manual o lineamiento interno de su institución, prevalece sobre las recomendaciones generales (salvo contradicción con una regla vinculante) | No se localizó un manual público del OAJ/CJF; la Skill debe adaptarse al emisor | Informe del agente 1, advertencia 15 |
+| 14 | Registro de normas abrogadas que no deben citarse como vigentes (LGMR, LOPJF 2021) sin que la Skill determine la norma sustituta | Hallazgo de la investigación con impacto práctico; determinar el fundamento correcto es fondo | Transitorios de la LNETB y de la LOPJF (verificados) |
+| 15 | Ejemplos del catálogo distintos de los defectos sembrados en las pruebas | Evitar contaminar la evaluación | Protocolo de pruebas |
+| 16 | No se ofrece el informe en Word por defecto; si el usuario lo pide, se usa la herramienta de documentos disponible conservando la estructura | Mantener la Skill centrada en el análisis | — |
