@@ -97,7 +97,11 @@ Formato: **disposición que genera la alerta → aspecto que convendría verific
 
 ## 7. Adaptación al instrumento
 
-No impongas la estructura de una ley a reglamentos, acuerdos o lineamientos breves: libros y títulos sólo se justifican en textos extensos; un acuerdo puede tener considerandos, puntos de acuerdo y transitorios; unos lineamientos pueden numerarse con ordinales. Juzga la consistencia interna del sistema elegido y las convenciones del emisor si el usuario las proporciona. Si el usuario indica un manual o lineamiento interno de su institución, ese material prevalece sobre las recomendaciones generales de esta Skill (salvo que contradiga una regla vinculante, lo cual debes señalar).
+No impongas la estructura de una ley a reglamentos, acuerdos o lineamientos breves: libros y títulos sólo se justifican en textos extensos; un acuerdo puede tener considerandos, puntos de acuerdo y transitorios; unos lineamientos pueden numerarse con ordinales. Juzga la consistencia interna del sistema elegido y las convenciones del emisor si el usuario las proporciona.
+
+**Consistencia antes que preferencia.** Donde la práctica mexicana o las fuentes admiten variantes válidas (numeración "1o." o "1.", presente o futuro, "Primero." o "Artículo Primero." en transitorios, "el día siguiente al de su publicación" o "al día siguiente de su publicación", cláusula derogatoria genérica), no marques la variante como defecto: revisa sólo que el texto sea consistente consigo mismo. La lista está en el apartado 7 de [references/convenciones-mexico.md](references/convenciones-mexico.md).
+
+**Normas citadas.** Si el proyecto cita como vigente una norma que [references/convenciones-mexico.md](references/convenciones-mexico.md) (apartado 8) registra como abrogada, señálalo como referencia por verificar; no determines cuál es la norma correcta. Si el usuario indica un manual o lineamiento interno de su institución, ese material prevalece sobre las recomendaciones generales de esta Skill (salvo que contradiga una regla vinculante, lo cual debes señalar).
 
 ## 8. Archivos de referencia (léelos cuando correspondan)
 
