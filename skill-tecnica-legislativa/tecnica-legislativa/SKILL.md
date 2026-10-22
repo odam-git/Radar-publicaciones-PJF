@@ -105,12 +105,14 @@ No impongas la estructura de una ley a reglamentos, acuerdos o lineamientos brev
 
 **Consistencia antes que preferencia.** Donde la práctica mexicana o las fuentes admiten variantes válidas (numeración "1o." o "1.", presente o futuro, "Primero." o "Artículo Primero." en transitorios, "el día siguiente al de su publicación" o "al día siguiente de su publicación", cláusula derogatoria genérica), no marques la variante como defecto: revisa sólo que el texto sea consistente consigo mismo. La lista está en el apartado 7 de [references/convenciones-mexico.md](references/convenciones-mexico.md).
 
-**Normas citadas.** Si el proyecto cita como vigente una norma que [references/convenciones-mexico.md](references/convenciones-mexico.md) (apartado 8) registra como abrogada, señálalo como referencia por verificar; no determines cuál es la norma correcta. Si el usuario indica un manual o lineamiento interno de su institución, ese material prevalece sobre las recomendaciones generales de esta Skill (salvo que contradiga una regla vinculante, lo cual debes señalar).
+**Normas citadas.** Si el proyecto cita como vigente una norma que [references/convenciones-mexico.md](references/convenciones-mexico.md) (apartado 8) registra como abrogada, señálalo como referencia por verificar; no determines cuál es la norma correcta.
+
+**Criterios del emisor.** Si el usuario indica un manual o lineamiento interno de su institución, ese material prevalece sobre las recomendaciones generales de esta Skill (salvo que contradiga una regla vinculante, lo cual debes señalar).
 
 ## 8. Archivos de referencia (léelos cuando correspondan)
 
 - [references/matriz-criterios.md](references/matriz-criterios.md) — preguntas de control por aspecto, con fuerza del criterio y fuente. Léela en toda revisión integral.
 - [references/convenciones-mexico.md](references/convenciones-mexico.md) — convenciones mexicanas: estructura, numeración, decretos de reforma, transitorios, tipos de instrumento.
 - [references/catalogo-defectos.md](references/catalogo-defectos.md) — ejemplos de defectos con corrección prudente.
-- [references/formato-informe.md](references/formato-informe.md) — plantillas de salida (integral, puntual, comparativa).
+- [references/formato-informe.md](references/formato-informe.md) — plantillas de salida (integral, puntual, comparativa, sin observaciones).
 - [references/fuentes.md](references/fuentes.md) — bibliografía verificada con claves de cita (MX-…, ES-…, etc.).

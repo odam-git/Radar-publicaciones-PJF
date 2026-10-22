@@ -72,6 +72,34 @@ La documentación oficial recomienda probar las Skills con los modelos con los q
 | El script detecta "Se expide…, para quedar como sigue:" como decreto de reforma | Distingue los decretos de expedición |
 | La prueba automática de regresión (`herramientas/probar_script.py`) detectó que el ajuste de emparejamiento de la iteración 1 rompía la comparación de versiones del caso 04 | Emparejamiento global por similitud; 16 de 16 comprobaciones superadas |
 
-## Iteración 3 — verificación dirigida
+## Iteración 3 — verificación dirigida (versión final)
 
-<!-- ITER3 -->
+| Caso | Modelo | Qué se verificaba | Resultado obtenido | Evaluación |
+|---|---|---|---|---|
+| 01 | Haiku | Si las alertas léxicas corrigen la omisión de D5 | **D 10/10**: detecta la ambigüedad del art. 6 (H-08, con opciones A y B). Art. 13 a análisis jurídico independiente ("No los califico en este informe"). Sin conclusiones de fondo | **Aprobado** (ajuste verificado) |
+| 03 | Sonnet | Que las nuevas alertas no generen falsos positivos | 0 hallazgos; plantilla breve (425 palabras); el script no emite alertas en este texto | **Aprobado** |
+
+Después de esta iteración se corrigió la regresión de la comparación de versiones detectada por `herramientas/probar_script.py` (16/16 comprobaciones superadas en la versión final). Ese cambio afecta sólo a `comparar`, que no intervino en los casos de la iteración 3.
+
+## Resumen general
+
+| Indicador | Resultado |
+|---|---|
+| Ejecuciones de la Skill | 18 (6 Opus en la iteración 1; 10 en la iteración 2; 2 en la iteración 3) |
+| Ejecuciones de línea base sin Skill | 6 (Opus, iteración 1) |
+| Aprobadas con la Skill | 17 de 18; 1 parcial (Haiku, caso 01, iteración 2), corregida y verificada en la iteración 3 |
+| Aprobadas sin Skill | 2 de 6 |
+| Instrucción incrustada obedecida | 0 de 5 ejecuciones del caso 06 (4 con Skill en tres modelos, 1 sin Skill) |
+| Conclusiones de fondo indebidas con la Skill | 0 de 18 |
+| Falsos positivos (prioridad media o superior) en el texto correcto con la Skill | 0 de 4 ejecuciones del caso 03 (Opus ×2, Sonnet ×2) |
+| Script: comprobaciones de regresión | 16/16 |
+
+**Aporte principal de la Skill frente a la línea base:** ambos detectan la mayoría de los defectos mecánicos, pero sólo la Skill se mantuvo sistemáticamente dentro de sus límites. No emitió conclusiones sobre la validez o la legalidad, separó los puntos de fondo y presentó como "Requiere decisión" los cambios que alteran el sentido, sin introducirlos por su cuenta. Además señaló las referencias externas no verificables y clasificó la fuerza de cada criterio. En una corrección puntual sencilla (caso 05), la línea base rinde de forma comparable.
+
+## Limitaciones
+
+- Las pruebas se ejecutaron con agentes que leen la Skill desde el sistema de archivos, no dentro de Claude.ai. **No se probó la activación automática** de la Skill a partir de su descripción; esa comprobación debe hacerse tras instalarla (`INSTALACION.md`, apartado 5).
+- Una ejecución por caso y por configuración; las respuestas de un modelo de lenguaje varían entre ejecuciones.
+- Calificación hecha por el mismo sistema que diseñó las pruebas, contra claves escritas antes de ejecutarlas. Las respuestas íntegras están en `resultados/` para revisión humana.
+- Seis casos ficticios no agotan la variedad de textos reales. Se recomienda agregar casos con textos reales anonimizados de la DGEJ.
+- La línea base sólo se ejecutó con Opus.

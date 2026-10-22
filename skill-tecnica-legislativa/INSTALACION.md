@@ -18,6 +18,9 @@ Los nombres de menús de Claude.ai cambian con el tiempo (la propia documentaci�
 
 El paquete instalable es `dist/tecnica-legislativa-v1.0.0.zip` en la rama `claude/skill-tecnica-legislativa` del repositorio `odam-git/Radar-publicaciones-PJF`.
 
+Enlace directo (requiere haber iniciado sesión en GitHub si el repositorio es privado):
+https://github.com/odam-git/Radar-publicaciones-PJF/raw/claude/skill-tecnica-legislativa/skill-tecnica-legislativa/dist/tecnica-legislativa-v1.0.0.zip
+
 Desde GitHub en el navegador:
 1. Abra el repositorio y cambie a la rama `claude/skill-tecnica-legislativa` (selector de ramas).
 2. Entre a `skill-tecnica-legislativa/dist/`.
