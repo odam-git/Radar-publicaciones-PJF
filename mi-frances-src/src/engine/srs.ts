@@ -16,6 +16,8 @@ export interface CardRecord {
   fsrs: Card;
   introducedAt: Date;
   leech: boolean;
+  /** Sembrada por el diagnóstico (ya conocida): no cuenta como palabra nueva del día. */
+  seeded?: boolean;
   lastRating?: number;
   lastLatencyMs?: number;
   lastHints?: number;
@@ -111,7 +113,7 @@ export function applyAttempt(rec: CardRecord, attempt: Attempt, now: Date, reten
 /** Siembra una tarjeta como ya conocida (diagnóstico): un primer repaso «Easy» la pasa a Review. */
 export function seedKnown(rec: CardRecord, now: Date, retention = 0.9): CardRecord {
   const { card } = scheduler(retention).next(rec.fsrs, now, Rating.Easy);
-  return { ...rec, fsrs: card };
+  return { ...rec, fsrs: card, seeded: true };
 }
 
 /** Desvanecimiento del mediador (informe §4.2): a partir de 14 días de estabilidad no se muestra la escena. */

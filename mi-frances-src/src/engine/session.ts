@@ -163,7 +163,7 @@ export function buildDailySession(input: BuildInput): Step[] {
     const ranked = [...input.dialogues]
       .map((d) => ({ d, score: d.items.filter((id) => knownIds.has(id)).length / d.items.length - (d.id === input.lastDialogueId ? 0.5 : 0) }))
       .sort((a, b) => b.score - a.score);
-    if (ranked.length && ranked[0].score >= 0.4) steps.push({ kind: 'dialogue', phase: 'oral', dialogueId: ranked[0].d.id });
+    if (ranked.length && ranked[0].score >= 0.3) steps.push({ kind: 'dialogue', phase: 'oral', dialogueId: ranked[0].d.id });
   }
   if (minutes >= 15 && (newItems.length || oldItems.length)) {
     steps.push({ kind: 'write', phase: 'oral', itemIds: (newItems.length ? newItems : oldItems).slice(0, 3).map((i) => i.id) });

@@ -9,7 +9,7 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "e2e": "node tests/e2e/run-e2e.mjs",
+    "e2e": "node --experimental-strip-types --no-warnings tests/e2e/run-e2e.mjs",
     "check": "npm run test && npm run build && npm run e2e"
   },
   "dependencies": {
